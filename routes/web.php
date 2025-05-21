@@ -11,3 +11,4 @@ Route::get('/checkout', function () {
 Route::post('/checkout', function () {
     return view('checkout');
 })->name('checkout.process');
+Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
