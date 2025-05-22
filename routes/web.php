@@ -23,3 +23,7 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
+
+Route::get('/search', function () {
+    return view('search');
+})->name('search');
