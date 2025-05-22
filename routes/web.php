@@ -27,3 +27,7 @@ Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
 Route::get('/search', function () {
     return view('search');
 })->name('search');
+
+Route::get('/category', function () {
+    return view('category');
+})->name('category');
