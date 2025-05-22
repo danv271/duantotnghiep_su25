@@ -19,3 +19,7 @@ Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
 Route::get('/search', function () {
     return view('search');
 })->name('search');
+
+Route::get('/product-details', function () {
+    return view('product-details');
+})->name('product-detail');
