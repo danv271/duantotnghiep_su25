@@ -3,18 +3,31 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('client.index');
+    return view('index');
 });
+Route::get('/account', function () {
+    return view('account');
+})->name('account');
 Route::get('/checkout', function () {
-    return view('client.checkout');
+    return view('checkout');
 })->name('checkout');
 Route::post('/checkout', function () {
-    return view('client.checkout');
+    return view('checkout');
 })->name('checkout.process');
-Route::view('/cart', 'client.cart'); // Trang giỏ hàng hiển thị HTML
-Route::get('/product-detail', function () {
-    return view('client.product-detail');
-})->name('product-detail');
+
+Route::get('/login', function () {
+    return view('auth.login-register');
+})->name('login');
+Route::get('/register', function () {
+    return view('auth.login-register');
+})->name('register');
+
+Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
+
+Route::get('/search', function () {
+    return view('search');
+})->name('search');
+
 Route::get('/category', function () {
-    return view('client.category');
+    return view('category');
 })->name('category');
