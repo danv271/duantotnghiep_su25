@@ -171,8 +171,8 @@
                                 <li><a href="#">Dropdown 4</a></li>
                             </ul>
                         </li>
-                        @include('client.partials.megamenu-1')
-                        @include('client.partials.megamenu-2')
+                        @include('partials.megamenu-1')
+                        @include('partials.megamenu-2')
                         <li><a href="{{ url('contact') }}">Contact</a></li>
                     </ul>
                 </nav>

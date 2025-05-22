@@ -1,4 +1,4 @@
-@extends('client.layouts.app') {{-- Sử dụng layout chung --}}
+@extends('layouts.app') {{-- Sử dụng layout chung --}}
 
 @section('content')
 <div class="container mt-5">
@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             @for ($i = 0; $i < 3; $i++)
-                @include('client.partials.cart-item')
+                @include('partials.cart-item')
             @endfor
         </tbody>
     </table>

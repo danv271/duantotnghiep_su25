@@ -30,13 +30,13 @@
     @stack('styles')
 </head>
 <body class="@yield('body-class', 'index-page')">
-    @include('client.partials.header')
+    @include('partials.header')
 
     <main class="main">
         @yield('content')
     </main>
 
-    @include('client.partials.footer')
+    @include('partials.footer')
 
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
