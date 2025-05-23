@@ -31,3 +31,7 @@ Route::get('/search', function () {
 Route::get('/category', function () {
     return view('category');
 })->name('category');
+
+Route::get('/product-details', function () {
+    return view('product-details');
+})->name('product-details');

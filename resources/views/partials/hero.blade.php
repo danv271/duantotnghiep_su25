@@ -4,7 +4,8 @@
             <div class="col-lg-6 content-col" data-aos="fade-right" data-aos-delay="100">
                 <div class="content">
                     <span class="promo-badge">New Collection 2025</span>
-                    <h1>Discover Stylish <span>Fashion</span> For Every Season</h1>
+                      
+                    <h1>Khám phá <span>các thiết bị điện tử </span> hiện đại cho mọi nhu cầu</h1>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Vestibulum ante ipsum primis in faucibus.</p>
                     <div class="hero-cta">
                         <a href="#" class="btn btn-shop">Shop Now <i class="bi bi-arrow-right"></i></a>
@@ -28,18 +29,13 @@
             </div>
             <div class="col-lg-6 image-col" data-aos="fade-left" data-aos-delay="200">
                 <div class="hero-image">
-                    <img src="{{ asset('assets/img/product/product-f-9.webp') }}" alt="Fashion Product" class="main-product" loading="lazy">
-                    <div class="floating-product product-1" data-aos="fade-up" data-aos-delay="300">
-                        <img src="{{ asset('assets/img/product/product-4.webp') }}" alt="Product 2">
-                        <div class="product-info">
-                            <h4>Summer Collection</h4>
-                            <span class="price">$89.99</span>
-                        </div>
-                    </div>
+                    <img src="{{ asset('estore/assets/img/product/product-f-10.jpg') }}" alt="Fashion Product" class="main-product" loading="lazy">
                     <div class="floating-product product-2" data-aos="fade-up" data-aos-delay="400">
-                        <img src="{{ asset('assets/img/product/product-3.webp') }}" alt="Product 3">
+                        <img src="{{ asset('estore/assets/img/product/product-f-10.jpg') }}" alt="Product 3">
                         <div class="product-info">
-                            <h4>Casual Wear</h4>
+                            <a href="product-details.html">
+                                <h4>Đế sạc RP-W53</h4>
+                            </a>
                             <span class="price">$59.99</span>
                         </div>
                     </div>
