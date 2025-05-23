@@ -29,7 +29,7 @@ Route::get('/search', function () {
 })->name('search');
 
 Route::get('/product-details', function () {
-    return view('product-details');
+    return view('product-detail');
 })->name('product-detail');// Trang chi tiết sản phẩm hiển thị HTML
 
 Route::get('/category', function () {
