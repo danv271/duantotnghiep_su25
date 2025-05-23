@@ -11,7 +11,7 @@
         <h1 class="mb-2 mb-lg-0">Login</h1>
         <nav class="breadcrumbs">
             <ol>
-                <li><a href="{{ route('/') }}">Home</a></li>
+                    <li><a href="{{ url('/') }}">Home</a></li>
                 <li class="current">Login</li>
             </ol>
         </nav>
