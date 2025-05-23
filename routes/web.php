@@ -30,7 +30,7 @@ Route::get('/search', function () {
 
 Route::get('/product-details', function () {
     return view('product-details');
-})->name('product-detail');
+})->name('product-detail');// Trang chi tiết sản phẩm hiển thị HTML
 
 Route::get('/category', function () {
     return view('category');
