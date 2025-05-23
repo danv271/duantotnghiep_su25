@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('title', 'Category - eStore')
 
 @section('body-class', 'category-page')

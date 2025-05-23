@@ -10,5 +10,4 @@
     @include('partials.category-cards')
     @include('partials.best-sellers')
     @include('partials.product-list')
-</div>
 @endsection

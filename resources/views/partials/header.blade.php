@@ -116,9 +116,9 @@
                                     <span>Settings</span>
                                 </a>
                             </div>
-                            <div class="dropdown-footer">
-                                <a href="{{ url('login-register') }}" class="btn btn-primary w-100 mb-2">Sign In</a>
-                                <a href="{{ url('login-register') }}" class="btn btn-outline-primary w-100">Register</a>
+                           <div class="dropdown-footer">
+                                <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">Sign In</a>
+                                <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">Register</a>
                             </div>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                         <li><a href="{{ url('/') }}" class="@if(Route::is('home')) active @endif">Home</a></li>
                         <li><a href="{{ url('about') }}">About</a></li>
                         <li><a href="{{ url('category') }}">Category</a></li>
-                        <li><a href="{{ url('product-detail') }}">Product Detail</a></li>
+                        <li><a href="{{ url('product-details') }}">Product Details</a></li>
                         <li><a href="{{ url('cart') }}">Cart</a></li>
                         <li><a href="{{ route('checkout') }}">Checkout</a></li>
                         <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
