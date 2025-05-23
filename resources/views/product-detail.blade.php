@@ -32,7 +32,7 @@
             <div class="product-images">
               <div class="main-image-container mb-3">
                 <div class="image-zoom-container">
-                  <img src="{{asset('eStore')}}/assets/img/product/product-details-1.webp" alt="Product Image" class="img-fluid main-image drift-zoom" id="main-product-image" data-zoom="assets/img/product/product-details-1.webp">
+                  <img src="{{asset('eStore')}}/assets/img/product/product-details-1.webp" alt="Product Image" class="img-fluid main-image drift-zoom" id="main-product-image" data-zoom="{{asset('eStore')}}/assets/img/product/product-details-1.webp">
                 </div>
               </div>
 
@@ -59,19 +59,19 @@
                     }
                   </script>
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide thumbnail-item active" data-image="assets/img/product/product-details-1.webp">
+                    <div class="swiper-slide thumbnail-item active" data-image="{{asset('eStore')}}/assets/img/product/product-details-1.webp">
                       <img src="{{asset('eStore')}}/assets/img/product/product-details-1.webp" alt="Product Thumbnail" class="img-fluid">
                     </div>
-                    <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-2.webp">
+                    <div class="swiper-slide thumbnail-item" data-image="{{asset('eStore')}}/assets/img/product/product-details-2.webp">
                       <img src="{{asset('eStore')}}/assets/img/product/product-details-2.webp" alt="Product Thumbnail" class="img-fluid">
                     </div>
-                    <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-3.webp">
+                    <div class="swiper-slide thumbnail-item" data-image="{{asset('eStore')}}/assets/img/product/product-details-3.webp">
                       <img src="{{asset('eStore')}}/assets/img/product/product-details-3.webp" alt="Product Thumbnail" class="img-fluid">
                     </div>
-                    <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-4.webp">
+                    <div class="swiper-slide thumbnail-item" data-image="{{asset('eStore')}}/assets/img/product/product-details-4.webp">
                       <img src="{{asset('eStore')}}/assets/img/product/product-details-4.webp" alt="Product Thumbnail" class="img-fluid">
                     </div>
-                    <div class="swiper-slide thumbnail-item" data-image="assets/img/product/product-details-5.webp">
+                    <div class="swiper-slide thumbnail-item" data-image="{{asset('eStore')}}/assets/img/product/product-details-5.webp">
                       <img src="{{asset('eStore')}}/assets/img/product/product-details-5.webp" alt="Product Thumbnail" class="img-fluid">
                     </div>
                   </div>
@@ -284,7 +284,7 @@
                         </div>
                         <div class="specs-row">
                           <div class="specs-label">Microphone</div>
-                          <div class="specs-value">Dual beamforming microphones</div>
+                          <div class="specs-value">Dual beaming microphones</div>
                         </div>
                         <div class="specs-row">
                           <div class="specs-label">Water Resistance</div>
@@ -350,7 +350,7 @@
                       </div>
                     </div>
 
-                    <div class="review-form-container">
+                    <div class="review--container">
                       <h4>Write a Review</h4>
                       <form class="review-form">
                         <div class="rating-select mb-4">
