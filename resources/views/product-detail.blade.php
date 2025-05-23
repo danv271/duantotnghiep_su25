@@ -1,15 +1,21 @@
 @extends('layouts.app')
 
+@section('title', 'Product Detail - eStore')
+
+@section('body-class', 'product-detail-page')
+
 @section('content')
-  <main class="main">
+
+<main class="main">
+
     <!-- Page Title -->
     <div class="page-title light-background">
       <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Product Details</h1>
+        <h1 class="mb-2 mb-lg-0">Product Detail</h1>
         <nav class="breadcrumbs">
           <ol>
-            <li><a href="{{ url('/') }}">Home</a></li>
-            <li class="current">Product Details</li>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Product Detail</li>
           </ol>
         </nav>
       </div>

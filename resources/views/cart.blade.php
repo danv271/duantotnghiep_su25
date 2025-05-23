@@ -1,5 +1,4 @@
 @extends('layouts.app') {{-- Sử dụng layout chung --}}
-
 @section('title', 'eStore - Cart')
 
 
