@@ -40,6 +40,6 @@ Route::get('/product-details', function () {
     return view('product-details');
 })->name('product-details');
 
-Route::get('/admin', function () {
-    return view('index');
-})->name('admin');
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');

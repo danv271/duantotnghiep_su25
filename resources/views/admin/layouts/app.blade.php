@@ -33,7 +33,11 @@
     <!-- START Wrapper -->
     <div class="wrapper">
         @include('admin.partials.topbar')
+        <!-- Activity Timeline -->
+        @include('admin.partials.activity-offcanvas')
 
+        <!-- Right Sidebar (Theme Settings) -->
+        @include('admin.partials.settings-offcanvas')
         @include('admin.partials.sidebar')
 
         <!-- ==================================================== -->

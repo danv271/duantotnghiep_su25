@@ -59,12 +59,16 @@
                                 <div class="d-flex">
                                     <div class="flex-shrink-0">
                                         <div class="avatar-sm me-2">
-                                            <span class="avatar-title bg-soft-info text-info fs-20 rounded-circle">D</span>
+                                            <span class="avatar-title bg-soft-info text-info fs-20 rounded-circle">
+                                                D
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-0 fw-semibold">Donoghue Susan</p>
-                                        <p class="mb-0 text-wrap">Hi, How are you? What about our next meeting</p>
+                                        <p class="mb-0 text-wrap">
+                                            Hi, How are you? What about our next meeting
+                                        </p>
                                     </div>
                                 </div>
                             </a>
@@ -154,7 +158,7 @@
                             <i class="bx bx-lock text-muted fs-18 align-middle me-1"></i><span class="align-middle">Lock screen</span>
                         </a>
                         <div class="dropdown-divider my-1"></div>
-                        <a class="dropdown-item text-danger" href="">
+                        <a class="dropdown-item text-danger" href="auth-signin.html">
                             <i class="bx bx-log-out fs-18 align-middle me-1"></i><span class="align-middle">Logout</span>
                         </a>
                     </div>
@@ -171,13 +175,3 @@
         </div>
     </div>
 </header>
-
-<!-- Activity Timeline -->
-<div>
-    @include('activity-offcanvas')
-</div>
-
-<!-- Right Sidebar (Theme Settings) -->
-<div>
-    @include('settings-offcanvas')
-</div>
