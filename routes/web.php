@@ -39,3 +39,7 @@ Route::get('/category', function () {
 Route::get('/product-details', function () {
     return view('product-details');
 })->name('product-details');
+
+Route::get('/admin', function () {
+    return view('index');
+})->name('admin');
