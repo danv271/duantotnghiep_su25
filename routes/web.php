@@ -43,3 +43,13 @@ Route::get('/product-details', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
+
+Route::get('/admin/attributes', function () {
+    return view('admin.attributes.index');
+})->name('admin.attributes.index');
+Route::get('/admin/attributes/create', function () {
+    return view('admin.attributes.create');
+})->name('admin.attributes.create');
+Route::get('/admin/attributes/edit', function () {
+    return view('admin.attributes.edit');
+})->name('admin.attributes.edit');
