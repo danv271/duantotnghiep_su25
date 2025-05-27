@@ -491,7 +491,8 @@
                   <div class="product-box">
                     <div class="product-thumb">
                       <span class="product-label">New Season</span>
-                      <img src="assets/img/product/product-3.webp" alt="Product Image" class="main-img" loading="lazy">
+                      {{-- <img src="{{ asset('eStore/assets/img/product/product-3.webp')}}" alt="Product Image" class="main-img" loading="lazy"> --}}
+                      <img src="{{ asset( 'eStore/assets/img/product/product-3.webp') }}" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
@@ -541,7 +542,7 @@
                   <div class="product-box">
                     <div class="product-thumb">
                       <span class="product-label product-label-sale">-30%</span>
-                      <img src="assets/img/product/product-6.webp" alt="Product Image" class="main-img" loading="lazy">
+                      <img src="{{ asset('eStore/assets/img/product/product-6.webp')}}" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
@@ -591,7 +592,7 @@
                 <div class="col-lg-6">
                   <div class="product-box">
                     <div class="product-thumb">
-                      <img src="assets/img/product/product-9.webp" alt="Product Image" class="main-img" loading="lazy">
+                      <img src="{{ asset('eStore/assets/img/product/product-9.webp')}}" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
@@ -640,7 +641,7 @@
                 <div class="col-lg-6">
                   <div class="product-box">
                     <div class="product-thumb">
-                      <img src="assets/img/product/product-11.webp" alt="Product Image" class="main-img" loading="lazy">
+                      <img src="{{ asset('eStore/assets/img/product/product-11.web')}}p" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
@@ -690,7 +691,7 @@
                   <div class="product-box">
                     <div class="product-thumb">
                       <span class="product-label product-label-sold">Sold Out</span>
-                      <img src="assets/img/product/product-2.webp" alt="Product Image" class="main-img" loading="lazy">
+                      <img src="{{ asset('eStore/assets/img/product/product-2.webp')}}" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
@@ -740,7 +741,7 @@
                   <div class="product-box">
                     <div class="product-thumb">
                       <span class="product-label product-label-hot">Hot</span>
-                      <img src="assets/img/product/product-12.webp" alt="Product Image" class="main-img" loading="lazy">
+                      <img src="{{ asset('eStore/assets/img/product/product-12.web')}}p" alt="Product Image" class="main-img" loading="lazy">
                       <div class="product-overlay">
                         <div class="product-quick-actions">
                           <button type="button" class="quick-action-btn">
