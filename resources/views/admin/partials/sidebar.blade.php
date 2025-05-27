@@ -30,7 +30,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarProducts">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
                     </span>
@@ -58,29 +59,32 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarCategory" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategory">
+                <a class="nav-link menu-arrow" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarCategory">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Category </span>
+                    <span class="nav-text">Category</span>
                 </a>
                 <div class="collapse" id="sidebarCategory">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-list.html">List</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.index') }}">List</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-edit.html">Edit</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.edit') }}">Edit</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-add.html">Create</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.create') }}">Create</a>
                         </li>
                     </ul>
                 </div>
             </li>
 
+
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarInventory" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInventory">
+                <a class="nav-link menu-arrow" href="#sidebarInventory" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarInventory">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:box-bold-duotone"></iconify-icon>
                     </span>
@@ -99,7 +103,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarOrders">
+                <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarOrders">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                     </span>
@@ -124,7 +129,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarPurchases" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPurchases">
+                <a class="nav-link menu-arrow" href="#sidebarPurchases" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarPurchases">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:card-send-bold-duotone"></iconify-icon>
                     </span>
@@ -146,7 +152,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarAttributes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttributes">
+                <a class="nav-link menu-arrow" href="#sidebarAttributes" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarAttributes">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:confetti-minimalistic-bold-duotone"></iconify-icon>
                     </span>
@@ -168,7 +175,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoice">
+                <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarInvoice">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bill-list-bold-duotone"></iconify-icon>
                     </span>
@@ -210,7 +218,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarRoles" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarRoles">
+                <a class="nav-link menu-arrow" href="#sidebarRoles" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarRoles">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:user-speak-rounded-bold-duotone"></iconify-icon>
                     </span>
@@ -241,7 +250,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarCustomers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCustomers">
+                <a class="nav-link menu-arrow" href="#sidebarCustomers" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarCustomers">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon>
                     </span>
@@ -260,7 +270,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarSellers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSellers">
+                <a class="nav-link menu-arrow" href="#sidebarSellers" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarSellers">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:shop-bold-duotone"></iconify-icon>
                     </span>
@@ -287,7 +298,8 @@
             <li class="menu-title mt-2">Other</li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCoupons">
+                <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarCoupons">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
                     </span>
@@ -384,7 +396,8 @@
             <li class="menu-title mt-2">Custom</li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                <a class="nav-link menu-arrow" href="#sidebarPages" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarPages">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:gift-bold-duotone"></iconify-icon>
                     </span>
@@ -418,7 +431,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarAuthentication" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuthentication">
+                <a class="nav-link menu-arrow" href="#sidebarAuthentication" data-bs-toggle="collapse"
+                    role="button" aria-expanded="false" aria-controls="sidebarAuthentication">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:lock-keyhole-bold-duotone"></iconify-icon>
                     </span>
@@ -455,7 +469,8 @@
             <li class="menu-title mt-2">Components</li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarBaseUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarBaseUI">
+                <a class="nav-link menu-arrow" href="#sidebarBaseUI" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarBaseUI">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bookmark-square-bold-duotone"></iconify-icon>
                     </span>
@@ -534,7 +549,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarExtendedUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarExtendedUI">
+                <a class="nav-link menu-arrow" href="#sidebarExtendedUI" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarExtendedUI">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:case-round-bold-duotone"></iconify-icon>
                     </span>
@@ -562,7 +578,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarCharts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCharts">
+                <a class="nav-link menu-arrow" href="#sidebarCharts" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarCharts">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:pie-chart-2-bold-duotone"></iconify-icon>
                     </span>
@@ -623,7 +640,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                <a class="nav-link menu-arrow" href="#sidebarForms" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarForms">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:book-bookmark-bold-duotone"></iconify-icon>
                     </span>
@@ -669,7 +687,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarTables" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTables">
+                <a class="nav-link menu-arrow" href="#sidebarTables" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarTables">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:tuning-2-bold-duotone"></iconify-icon>
                     </span>
@@ -688,7 +707,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
+                <a class="nav-link menu-arrow" href="#sidebarIcons" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarIcons">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:ufo-2-bold-duotone"></iconify-icon>
                     </span>
@@ -707,7 +727,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarMaps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMaps">
+                <a class="nav-link menu-arrow" href="#sidebarMaps" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="sidebarMaps">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:streets-map-point-bold-duotone"></iconify-icon>
                     </span>
@@ -736,7 +757,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link menu-arrow" href="#sidebarMultiLevelDemo" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultiLevelDemo">
+                <a class="nav-link menu-arrow" href="#sidebarMultiLevelDemo" data-bs-toggle="collapse"
+                    role="button" aria-expanded="false" aria-controls="sidebarMultiLevelDemo">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:share-circle-bold-duotone"></iconify-icon>
                     </span>
@@ -748,7 +770,9 @@
                             <a class="sub-nav-link" href="javascript:void(0);">Menu Item 1</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link menu-arrow" href="#sidebarItemDemoSubItem" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarItemDemoSubItem">
+                            <a class="sub-nav-link menu-arrow" href="#sidebarItemDemoSubItem"
+                                data-bs-toggle="collapse" role="button" aria-expanded="false"
+                                aria-controls="sidebarItemDemoSubItem">
                                 <span> Menu Item 2 </span>
                             </a>
                             <div class="collapse" id="sidebarItemDemoSubItem">
