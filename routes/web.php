@@ -43,3 +43,23 @@ Route::get('/product-details', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
+
+Route::get('/admin/products/add', function () {
+    return view('admin.products.add');
+})->name('admin.products.add');
+
+Route::get('/admin/products/detail', function () {
+    return view('admin.products.detail');
+})->name('admin.products.detail');
+
+Route::get('/admin/products/edit', function () {
+    return view('admin.products.edit');
+})->name('admin.products.edit');
+
+Route::get('/admin/products/grid', function () {
+    return view('admin.products.grid');
+})->name('admin.products.grid');
+
+Route::get('/admin/products/list', function () {
+    return view('admin.products.list');
+})->name('admin.products.list');

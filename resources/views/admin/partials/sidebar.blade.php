@@ -21,7 +21,7 @@
             <li class="menu-title">General</li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/') }}">
+                <a class="nav-link" href="{{ url('/admin/dashboard') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                     </span>
@@ -39,19 +39,19 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-list.html">List</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/list') }}">List</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-grid.html">Grid</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-details.html">Details</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/detail') }}">Details</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-edit.html">Edit</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/edit') }}">Edit</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-add.html">Create</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/add') }}">Create</a>
                         </li>
                     </ul>
                 </div>
