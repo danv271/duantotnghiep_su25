@@ -53,3 +53,20 @@ Route::get('/admin/attributes/create', function () {
 Route::get('/admin/attributes/edit', function () {
     return view('admin.attributes.edit');
 })->name('admin.attributes.edit');
+
+
+Route::get('/admin/roles', function () {
+    return view('admin.roles.index');
+    
+    Route::get('/roles/create', function () {
+        return view('admin.roles.create');
+    })->name('roles.create');
+    
+    Route::get('/roles/{id}', function ($id) {
+        return view('admin.roles.show', ['id' => $id]);
+    })->name('roles.show');
+    
+    Route::get('/roles/{id}/edit', function ($id) {
+        return view('admin.roles.edit', ['id' => $id]);
+    })->name('roles.edit');
+});
