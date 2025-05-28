@@ -35,3 +35,11 @@ Route::get('/product-details', function () {
 Route::get('/category', function () {
     return view('category');
 })->name('category');
+
+Route::get('/product-details', function () {
+    return view('product-details');
+})->name('product-details');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
