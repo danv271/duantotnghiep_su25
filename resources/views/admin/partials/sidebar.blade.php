@@ -64,22 +64,23 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Category </span>
+                    <span class="nav-text">Category</span>
                 </a>
                 <div class="collapse" id="sidebarCategory">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-list.html">List</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.index') }}">List</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-edit.html">Edit</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.edit') }}">Edit</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="category-add.html">Create</a>
+                            <a class="sub-nav-link" href="{{ route('admin.category.create') }}">Create</a>
                         </li>
                     </ul>
                 </div>
             </li>
+
 
             <li class="nav-item">
                 <a class="nav-link menu-arrow" href="#sidebarInventory" data-bs-toggle="collapse" role="button"

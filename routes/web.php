@@ -44,6 +44,19 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 
+Route::get('/admin/category', function () {
+    return view('admin.category.index');
+})->name('admin.category.index');
+
+Route::get('/admin/category/create', function () {
+    return view('admin.category.create');
+})->name('admin.category.create');
+
+Route::get('/admin/category/edit', function () {
+    return view('admin.category.edit');
+})->name('admin.category.edit');
+
+
 Route::get('/admin/attributes', function () {
     return view('admin.attributes.index');
 })->name('admin.attributes.index');
