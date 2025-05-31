@@ -29,7 +29,7 @@ Route::get('/search', function () {
 })->name('search');
 
 Route::get('/product-details', function () {
-    return view('product-details');
+    return view('product-detail');
 })->name('product-detail');// Trang chi tiết sản phẩm hiển thị HTML
 
 Route::get('/category', function () {
@@ -43,6 +43,7 @@ Route::get('/product-details', function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
+
 Route::get('/admin/category', function () {
     return view('admin.category.index');
 })->name('admin.category.index');
@@ -54,3 +55,31 @@ Route::get('/admin/category/create', function () {
 Route::get('/admin/category/edit', function () {
     return view('admin.category.edit');
 })->name('admin.category.edit');
+
+
+Route::get('/admin/attributes', function () {
+    return view('admin.attributes.index');
+})->name('admin.attributes.index');
+Route::get('/admin/attributes/create', function () {
+    return view('admin.attributes.create');
+})->name('admin.attributes.create');
+Route::get('/admin/attributes/edit', function () {
+    return view('admin.attributes.edit');
+})->name('admin.attributes.edit');
+
+
+Route::get('/admin/roles', function () {
+    return view('admin.roles.index');
+    
+    Route::get('/roles/create', function () {
+        return view('admin.roles.create');
+    })->name('roles.create');
+    
+    Route::get('/roles/{id}', function ($id) {
+        return view('admin.roles.show', ['id' => $id]);
+    })->name('roles.show');
+    
+    Route::get('/roles/{id}/edit', function ($id) {
+        return view('admin.roles.edit', ['id' => $id]);
+    })->name('roles.edit');
+});
