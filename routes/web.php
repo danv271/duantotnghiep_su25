@@ -88,7 +88,7 @@ Route::prefix('admin/products')->group(function () {
         return view('admin.products.create',compact('categories', 'attributes', 'attributeValues'));
     })->name('admin.products-create');
     Route::post('/store', function () {
-        
+
     })->name('admin.products-store');
 
     // Chỉnh sửa sản phẩm
@@ -133,17 +133,19 @@ Route::get('/admin/attributes/edit', function () {
 })->name('admin.attributes.edit');
 
 
-Route::get('/admin/roles', function () {
-    return view('admin.roles.index');
-    
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/roles', function () {
+        return view('admin.roles.index');
+    })->name('roles.index');
+
     Route::get('/roles/create', function () {
         return view('admin.roles.create');
     })->name('roles.create');
-    
+
     Route::get('/roles/{id}', function ($id) {
         return view('admin.roles.show', ['id' => $id]);
     })->name('roles.show');
-    
+
     Route::get('/roles/{id}/edit', function ($id) {
         return view('admin.roles.edit', ['id' => $id]);
     })->name('roles.edit');

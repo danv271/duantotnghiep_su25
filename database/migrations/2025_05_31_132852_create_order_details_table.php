@@ -20,9 +20,7 @@ return new class extends Migration
             $table->decimal('total_price', 15, 2);
             $table->timestamps();
 
-            
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            
             $table->foreign('variant_id')->references('id')->on('variants')->onDelete('cascade');
         });
     }
