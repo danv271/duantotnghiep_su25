@@ -21,7 +21,7 @@
             <li class="menu-title">General</li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/') }}">
+                <a class="nav-link" href="{{ url(route('admin.dashboard')) }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                     </span>

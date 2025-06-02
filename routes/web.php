@@ -2,57 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('index');
-});
-Route::get('/account', function () {
-    return view('account');
-})->name('account');
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
-Route::post('/checkout', function () {
-    return view('checkout');
-})->name('checkout.process');
+// =================== Giao diện người dùng ===================
+Route::get('/', fn () => view('index'));
 
-Route::get('/login', function () {
-    return view('auth.login-register');
-})->name('login');
-Route::get('/register', function () {
-    return view('auth.login-register');
-})->name('register');
+Route::get('/account', fn () => view('account'))->name('account');
 
-Route::view('/cart', 'cart'); // Trang giỏ hàng hiển thị HTML
+Route::get('/checkout', fn () => view('checkout'))->name('checkout');
+Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
 
-Route::get('/search', function () {
-    return view('search');
-})->name('search');
+Route::get('/login', fn () => view('auth.login-register'))->name('login');
+Route::get('/register', fn () => view('auth.login-register'))->name('register');
 
-Route::get('/product-details', function () {
-    return view('product-detail');
-})->name('product-detail');// Trang chi tiết sản phẩm hiển thị HTML
+Route::view('/cart', 'cart')->name('cart');
 
-Route::get('/category', function () {
-    return view('category');
-})->name('category');
+Route::get('/search', fn () => view('search'))->name('search');
 
-Route::get('/product-details', function () {
-    return view('product-details');
-})->name('product-details');
+Route::get('/product-details', fn () => view('product-detail'))->name('product-detail');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+Route::get('/category', fn () => view('category'))->name('category');
 
+// =================== Quản trị admin ===================
+Route::get('/admin/dashboard', fn () => view('admin.dashboard'))->name('admin.dashboard');
 
+// ------------------- Product -------------------
 Route::prefix('admin/products')->group(function () {
-    // Danh sách sản phẩm
-    Route::get('/list', function () {
-        return view('admin.products.list');
-    })->name('admin.products-list');
+    Route::get('/list', fn () => view('admin.products.list'))->name('admin.products-list');
 
-    // Tạo sản phẩm
-    Route::get('/create',function(){
+    Route::get('/create', function () {
         $categories = [
             (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
             (object) ['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
@@ -61,7 +37,6 @@ Route::prefix('admin/products')->group(function () {
             (object) ['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
         ];
 
-        // Demo data for attributes
         $attributes = [
             (object) ['attribute_id' => 1, 'name' => 'Color'],
             (object) ['attribute_id' => 2, 'name' => 'Size'],
@@ -69,7 +44,6 @@ Route::prefix('admin/products')->group(function () {
             (object) ['attribute_id' => 4, 'name' => 'Brand'],
         ];
 
-        // Demo data for attribute values
         $attributeValues = [
             (object) ['attribute_value_id' => 1, 'value' => 'Red'],
             (object) ['attribute_value_id' => 2, 'value' => 'Blue'],
@@ -85,67 +59,44 @@ Route::prefix('admin/products')->group(function () {
             (object) ['attribute_value_id' => 12, 'value' => 'Adidas'],
             (object) ['attribute_value_id' => 13, 'value' => 'Samsung'],
         ];
-        return view('admin.products.create',compact('categories', 'attributes', 'attributeValues'));
+
+        return view('admin.products.create', compact('categories', 'attributes', 'attributeValues'));
     })->name('admin.products-create');
-    Route::post('/store', function () {
-        
-    })->name('admin.products-store');
 
-    // Chỉnh sửa sản phẩm
-    Route::get('/id/edit',function(){
-        return view('admin.products.edit');
-    })->name('admin.products-edit');
-    Route::put('/{id}',function(){
+    Route::post('/store', fn () => 'Store logic here')->name('admin.products-store');
 
-    })->name('admin.products-update'); // Thêm route PUT để cập nhật
+    Route::get('/{id}/edit', fn ($id) => view('admin.products.edit'))->name('admin.products-edit');
+    Route::put('/{id}', fn ($id) => 'Update logic here')->name('admin.products-update');
 
-    // Chi tiết sản phẩm
-    Route::get('/id',function(){
-        return view('admin.products.detail');
-    })->name('admin.products-detail');
+    Route::get('/{id}', fn ($id) => view('admin.products.detail'))->name('admin.products-detail');
 
-    // Upload file (dùng POST thay vì GET)
-    Route::post('/upload-file', function () {
-        // Xử lý upload file
-    })->name('admin.products.upload-file');
-});
-Route::get('/admin/category', function () {
-    return view('admin.category.index');
-})->name('admin.category.index');
-
-Route::get('/admin/category/create', function () {
-    return view('admin.category.create');
-})->name('admin.category.create');
-
-Route::get('/admin/category/edit', function () {
-    return view('admin.category.edit');
-})->name('admin.category.edit');
-
-
-Route::get('/admin/attributes', function () {
-    return view('admin.attributes.index');
-})->name('admin.attributes.index');
-Route::get('/admin/attributes/create', function () {
-    return view('admin.attributes.create');
-})->name('admin.attributes.create');
-Route::get('/admin/attributes/edit', function () {
-    return view('admin.attributes.edit');
-})->name('admin.attributes.edit');
-
-
-Route::get('/admin/roles', function () {
-    return view('admin.roles.index');
-    
-    Route::get('/roles/create', function () {
-        return view('admin.roles.create');
-    })->name('roles.create');
-    
-    Route::get('/roles/{id}', function ($id) {
-        return view('admin.roles.show', ['id' => $id]);
-    })->name('roles.show');
-    
-    Route::get('/roles/{id}/edit', function ($id) {
-        return view('admin.roles.edit', ['id' => $id]);
-    })->name('roles.edit');
+    Route::post('/upload-file', fn () => 'File upload logic')->name('admin.products.upload-file');
 });
 
+// ------------------- Category -------------------
+Route::prefix('admin/category')->name('admin.category.')->group(function () {
+    Route::get('/', fn () => view('admin.category.index'))->name('index');
+    Route::get('/create', fn () => view('admin.category.create'))->name('create');
+    Route::get('/edit', fn () => view('admin.category.edit'))->name('edit');
+});
+
+// ------------------- Attributes -------------------
+Route::prefix('admin/attributes')->name('admin.attributes.')->group(function () {
+    Route::get('/', fn () => view('admin.attributes.index'))->name('index');
+    Route::get('/create', fn () => view('admin.attributes.create'))->name('create');
+    Route::get('/edit', fn () => view('admin.attributes.edit'))->name('edit');
+});
+
+// ------------------- Roles -------------------
+Route::prefix('admin/roles')->name('admin.roles.')->group(function () {
+    Route::get('/', fn () => view('admin.roles.index'))->name('index');
+    Route::get('/create', fn () => view('admin.roles.create'))->name('create');
+    Route::get('/{id}', fn ($id) => view('admin.roles.show', ['id' => $id]))->name('show');
+    Route::get('/{id}/edit', fn ($id) => view('admin.roles.edit', ['id' => $id]))->name('edit');
+});
+
+// ------------------- Admin layout pages -------------------
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
+    Route::get('/products', fn () => view('admin.products'))->name('products');
+});
