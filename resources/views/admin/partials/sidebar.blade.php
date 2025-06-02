@@ -167,9 +167,6 @@
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.attributes.create') }}">Create</a>
                         </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.attributes.edit') }}">Edit</a>
-                        </li>
                     </ul>
                 </div>
             </li>
