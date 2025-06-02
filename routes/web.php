@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -50,7 +51,12 @@ Route::prefix('admin/products')->group(function () {
     Route::get('/list', function () {
         return view('admin.products.list');
     })->name('admin.products-list');
-
+Route::prefix('admin/oders')->group(function () {
+    // Danh sách đơn hàng
+    Route::get('/list', OderController::class . '@index')->name('admin.orders.index');
+    Route::get('/detail/{id?}',OderController::class . '@show')->name('admin.orders.show'); // Chi tiết đơn hàng
+});
+});
     // Tạo sản phẩm
     Route::get('/create',function(){
         $categories = [
@@ -108,7 +114,6 @@ Route::prefix('admin/products')->group(function () {
     Route::post('/upload-file', function () {
         // Xử lý upload file
     })->name('admin.products.upload-file');
-});
 Route::get('/admin/category', function () {
     return view('admin.category.index');
 })->name('admin.category.index');
