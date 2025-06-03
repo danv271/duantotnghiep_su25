@@ -399,28 +399,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        // Example script for initializing charts (to be implemented with ApexCharts or similar)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Performance Chart
-            if (document.getElementById('dash-performance-chart')) {
-                // Placeholder for ApexCharts initialization
-                console.log('Performance chart initialized');
-            }
-
-            // Conversions Chart
-            if (document.getElementById('conversions')) {
-                // Placeholder for ApexCharts initialization
-                console.log('Conversions chart initialized');
-            }
-
-            // World Map
-            if (document.getElementById('world-map-markers')) {
-                // Placeholder for Vector Map initialization
-                console.log('World map initialized');
-            }
-        });
-    </script>
-@endpush

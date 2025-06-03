@@ -25,7 +25,10 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{ asset('admin/assets/js/config.js') }}"></script>
 
-    @stack('styles') <!-- Nơi để thêm CSS tùy chỉnh -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    @yield('styles') <!-- Nơi để thêm CSS tùy chỉnh -->
 </head>
 
 <body>
@@ -70,7 +73,7 @@
     <!-- Dashboard Js -->
     <script src="{{ asset('admin/assets/js/pages/dashboard.js') }}"></script>
 
-    @stack('scripts') <!-- Nơi để thêm JS tùy chỉnh -->
+    @yield('scripts') <!-- Nơi để thêm JS tùy chỉnh -->
 </body>
 
 </html>
