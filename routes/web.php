@@ -1,10 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HomeController::class, 'index']);
+
+// Route::get('/', function () {
+//     return view('index');
+// });
 Route::get('/account', function () {
     return view('account');
 })->name('account');
@@ -151,3 +155,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('roles.edit');
 });
 
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
