@@ -5,6 +5,47 @@
 @section('title_topbar')
     Quản lý thuộc tính sản phẩm
 @endsection
+
+@push('styles')
+<style>
+    .pagination {
+        --bs-pagination-padding-x: 0.5rem;
+        --bs-pagination-padding-y: 0.25rem;
+        --bs-pagination-font-size: 0.75rem;
+        --bs-pagination-border-radius: 0.25rem;
+        gap: 0.25rem;
+    }
+    .pagination .page-link {
+        border-radius: var(--bs-pagination-border-radius) !important;
+        min-width: 24px;
+        height: 24px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        color: #6c757d;
+        border: none;
+        background: #f5f5f5;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--bs-primary);
+        color: #fff;
+        border: none;
+    }
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: var(--bs-primary);
+        border: none;
+    }
+    .pagination .page-item.disabled .page-link {
+        background-color: #f5f5f5;
+        color: #adb5bd;
+        border: none;
+    }
+</style>
+@endpush
+
 @section('content')
     <div class="container-xxl">
         <div class="row">
@@ -14,7 +55,7 @@
                         <div>
                             <h4 class="card-title">Danh sách thuộc tính</h4>
                         </div>
-                        <div>
+                        <div class="d-flex align-items-center gap-2"></div>
                             <a href="{{ route('admin.attributes.create') }}" class="btn btn-primary">Thêm thuộc tính</a>
                         </div>
                     </div>
@@ -59,8 +100,30 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="card-footer py-2">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <span class="text-muted fs-13">
+                                    Hiển thị {{ $attributes->firstItem() ?? 0 }}-{{ $attributes->lastItem() ?? 0 }} của {{ $attributes->total() }} bản ghi
+                                </span>
+                            </div>
+                            <div class="col-auto">
+                                {{ $attributes->appends(request()->query())->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        function changePerPage(select) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('per_page', select.value);
+            window.location.search = params.toString();
+        }
+    </script>
+    @endpush
 @endsection

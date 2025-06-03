@@ -21,13 +21,13 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Tên thuộc tính</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Nhập tên thuộc tính" required>
+                                        <input type="text" name="name" class="form-control" placeholder="Nhập tên thuộc tính" >
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Giá trị thuộc tính</label>
-                                        <input type="text" name="values" class="form-control" placeholder="Nhập các giá trị, phân cách bằng dấu phẩy" required>
+                                        <input type="text" name="values" class="form-control" placeholder="Nhập các giá trị, phân cách bằng dấu phẩy" >
                                         <small class="text-muted">Ví dụ: Đỏ, Xanh, Vàng</small>
                                     </div>
                                 </div>

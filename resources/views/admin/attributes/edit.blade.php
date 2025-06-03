@@ -22,14 +22,14 @@
                                     <div class="mb-3">
                                         <label class="form-label">Tên thuộc tính</label>
                                         <input type="text" name="name" class="form-control"
-                                            value="{{ old('name', $attribute->name) }}" required>
+                                            value="{{ old('name', $attribute->name) }}" >
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Giá trị thuộc tính</label>
                                         <input type="text" name="values" class="form-control"
-                                            value="{{ old('values', $attribute->values->pluck('value')->implode(', ')) }}" required>
+                                            value="{{ old('values', $attribute->values->pluck('value')->implode(', ')) }}" >
                                         <small class="text-muted">Nhập các giá trị, phân cách bằng dấu phẩy</small>
                                     </div>
                                 </div>

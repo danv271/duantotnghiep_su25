@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class AttributeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $attributes = Attribute::with('values')->get();
+        $per_page = $request->per_page ?? 10;
+        $attributes = Attribute::with('values')->paginate($per_page);
         return view('admin.attributes.index', compact('attributes'));
     }
 
