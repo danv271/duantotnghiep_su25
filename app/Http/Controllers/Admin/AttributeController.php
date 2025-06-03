@@ -24,8 +24,14 @@ class AttributeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:attributes',
+            'name' => 'required|string|min:2|max:255|unique:attributes',
             'values' => 'required|string'
+        ], [
+            'name.required' => 'Tên thuộc tính là bắt buộc',
+            'name.min' => 'Tên thuộc tính phải có ít nhất 2 ký tự',
+            'name.max' => 'Tên thuộc tính không được vượt quá 255 ký tự',
+            'name.unique' => 'Tên thuộc tính này đã tồn tại',
+            'values.required' => 'Giá trị thuộc tính là bắt buộc'
         ]);
 
         try {
@@ -33,7 +39,7 @@ class AttributeController extends Controller
 
             // Tạo thuộc tính mới
             $attribute = Attribute::create([
-                'name' => $request->name
+                'name' => trim($request->name)
             ]);
 
             // Xử lý các giá trị thuộc tính
@@ -66,8 +72,14 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:attributes,name,'.$id,
+            'name' => 'required|string|min:2|max:255|unique:attributes,name,'.$id,
             'values' => 'required|string'
+        ], [
+            'name.required' => 'Tên thuộc tính là bắt buộc',
+            'name.min' => 'Tên thuộc tính phải có ít nhất 2 ký tự',
+            'name.max' => 'Tên thuộc tính không được vượt quá 255 ký tự',
+            'name.unique' => 'Tên thuộc tính này đã tồn tại',
+            'values.required' => 'Giá trị thuộc tính là bắt buộc'
         ]);
 
         try {
@@ -75,7 +87,7 @@ class AttributeController extends Controller
 
             $attribute = Attribute::findOrFail($id);
             $attribute->update([
-                'name' => $request->name
+                'name' => trim($request->name)
             ]);
 
             // Xóa các giá trị cũ

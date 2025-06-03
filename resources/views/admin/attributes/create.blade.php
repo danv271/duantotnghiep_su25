@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="card-footer border-top">
-                                <button type="submit" class="btn btn-primary">Lưu thuộc tính</button>
+                                <button type="submit" class="btn btn-primary">Thêm thuộc tính</button>
                                 <a href="{{ route('admin.attributes.index') }}" class="btn btn-light ms-2">Hủy</a>
                             </div>
                         </form>
