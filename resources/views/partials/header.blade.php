@@ -40,7 +40,8 @@
                                 <i class="bi bi-translate me-2"></i>EN
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>English</a></li>
+                                <li><a class="dropdown-item" href="#"><i
+                                            class="bi bi-check2 me-2 selected-icon"></i>English</a></li>
                                 <li><a class="dropdown-item" href="#">Español</a></li>
                                 <li><a class="dropdown-item" href="#">Français</a></li>
                                 <li><a class="dropdown-item" href="#">Deutsch</a></li>
@@ -51,7 +52,8 @@
                                 <i class="bi bi-currency-dollar me-2"></i>USD
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
+                                <li><a class="dropdown-item" href="#"><i
+                                            class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
                                 <li><a class="dropdown-item" href="#">EUR</a></li>
                                 <li><a class="dropdown-item" href="#">GBP</a></li>
                             </ul>
@@ -84,7 +86,9 @@
                 <!-- Actions -->
                 <div class="header-actions d-flex align-items-center justify-content-end">
                     <!-- Mobile Search Toggle -->
-                    <button class="header-action-btn mobile-search-toggle d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileSearch" aria-expanded="false" aria-controls="mobileSearch">
+                    <button class="header-action-btn mobile-search-toggle d-xl-none" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mobileSearch" aria-expanded="false"
+                        aria-controls="mobileSearch">
                         <i class="bi bi-search"></i>
                     </button>
 
@@ -116,10 +120,19 @@
                                     <span>Settings</span>
                                 </a>
                             </div>
-                            <div class="dropdown-footer">
-                                <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">Sign In</a>
-                                <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">Register</a>
-                            </div>
+                            @if (isset(session('user')->id) && session('user')->id > 0)
+                                <div class="dropdown-footer">
+                                    <form method="POST" action="{{ route('destroy') }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-secondary w-100">Logout</button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="dropdown-footer">
+                                    <a class="btn btn-primary w-100" href="{{ url('login') }}">Login</a>
+                                    <a class="btn btn-secondary w-100 mt-2" href="{{ url('register') }}">Register</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -148,16 +161,19 @@
             <div class="position-relative">
                 <nav id="navmenu" class="navmenu">
                     <ul>
-                        <li><a href="{{ url('/') }}" class="@if(Route::is('home')) active @endif">Home</a></li>
+                        <li><a href="{{ url('/') }}"
+                                class="@if (Route::is('home')) active @endif">Home</a></li>
                         <li><a href="{{ url('about') }}">About</a></li>
                         <li><a href="{{ url('category') }}">Category</a></li>
                         <li><a href="{{ url('product-details') }}">Product Details</a></li>
                         <li><a href="{{ url('cart') }}">Cart</a></li>
                         <li><a href="{{ route('checkout') }}">Checkout</a></li>
-                        <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <li class="dropdown"><a href="#"><span>Dropdown</span> <i
+                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                                 <li><a href="#">Dropdown 1</a></li>
-                                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
+                                            class="bi bi-chevron-down toggle-dropdown"></i></a>
                                     <ul>
                                         <li><a href="#">Deep Dropdown 1</a></li>
                                         <li><a href="#">Deep Dropdown 2</a></li>

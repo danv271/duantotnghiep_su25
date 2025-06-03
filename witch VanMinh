@@ -1,0 +1,86 @@
+[33m59f3c49[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mVanMinh[m[33m)[m Cập nhật giao diện order
+[33ma16916d[m[33m ([m[1;32mmain[m[33m)[m Cập nhật giao diện order
+[33m0c718a2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #35 from danv271/QuocPhong
+[33mfbc2e63[m fix route roles
+[33m26b2fa4[m fix lỗi migrate
+[33m90f64ae[m Merge pull request #33 from danv271/DangVy
+[33m4b1d43c[m Merge branch 'main' into DangVy
+[33m2fe95cc[m migration và giao diện quản lý sản phẩm
+[33me1fd2a2[m Merge pull request #32 from danv271/TuanAnh
+[33m7b67e1d[m[33m ([m[1;31morigin/TuanAnh[m[33m)[m Merge branch 'main' into TuanAnh
+[33m0e5efd4[m Merge pull request #31 from danv271/PhuHieu
+[33mbccce25[m Merge pull request #30 from danv271/QuocPhong
+[33m9014dff[m Merge pull request #29 from danv271/ManhThang
+[33m816724b[m[33m ([m[1;31morigin/ManhThang[m[33m)[m Tạo bảng user orders order_details
+[33m7770135[m Add attribute va payment
+[33m994cc15[m[33m ([m[1;31morigin/PhuHieu[m[33m)[m Hoàn
+[33ma44f181[m Quản lý người dùng
+[33m3aad9d6[m cat giao dien admin danh muc
+[33m83027f4[m Merge pull request #28 from danv271/QuocPhong
+[33mad1ae0d[m  create attributes
+[33m5cf7891[m update
+[33md98806a[m Merge pull request #27 from danv271/main
+[33ma7a5457[m[33m ([m[1;31morigin/VanMinh[m[33m, [m[1;31morigin/DucTruong[m[33m)[m Merge pull request #26 from danv271/DangVy
+[33m609f8af[m cap nhat khung giao dien admin
+[33md09c7b3[m khung giao dien admin
+[33m7558a37[m Merge branch 'DangVy' of https://github.com/danv271/duantotnghiep_su25 into DangVy
+[33m1138ac9[m Merge pull request #25 from danv271/main
+[33mbb4c237[m Merge pull request #24 from danv271/DangVy
+[33m1e4f013[m Merge pull request #23 from danv271/ManhThang
+[33mfd63526[m Cập nhật giao diện đang ký đăng nhập
+[33m953cf2a[m Merge branch 'DangVy' of https://github.com/danv271/duantotnghiep_su25 into DangVy
+[33mb46a4bb[m Merge pull request #22 from danv271/main
+[33m8c82967[m Merge pull request #21 from danv271/ManhThang
+[33mbe94782[m commit
+[33m25c7317[m xulyloi img không hiển thị
+[33m7f63605[m update imga
+[33m225170b[m Cập nhật trang đăng ký đăng nhập
+[33m42127c3[m Merge branch 'DangVy' of https://github.com/danv271/duantotnghiep_su25 into DangVy
+[33m0deabdf[m Merge pull request #20 from danv271/main
+[33mbbd48d1[m Merge pull request #17 from danv271/DucTruong
+[33m3623b88[m Merge branch 'main' into DucTruong
+[33m6241404[m Merge branch 'DangVy' of https://github.com/danv271/duantotnghiep_su25 into DangVy
+[33m784ccc8[m sua route va hero
+[33mcdedfc6[m Merge pull request #19 from danv271/DangVy
+[33m56c9234[m Merge pull request #18 from danv271/PhuHieu
+[33m558b656[m sửa lại
+[33m167014f[m giao diện sản phẩm chi tiết
+[33m987137c[m Merge pull request #16 from danv271/main
+[33mdf76d1d[m Merge pull request #12 from danv271/PhuHieu
+[33ma062c18[m Merge pull request #15 from danv271/main
+[33m7c84e65[m Merge branch 'main' into PhuHieu
+[33m8ea70f6[m Merge pull request #14 from danv271/DangVy
+[33m7f054e6[m Merge pull request #13 from danv271/main
+[33m61a6eb2[m Merge pull request #11 from danv271/TuanAnh
+[33md7c269b[m giao diện sản phẩm chi tiết
+[33meda8338[m gio hang
+[33m9cac28a[m Update Category and Product Detail
+[33mb4f4eff[m Merge pull request #10 from danv271/TuanAnh
+[33m0277110[m gio hang vua fix
+[33m3b51509[m Merge pull request #9 from danv271/main
+[33mbecda04[m Delete resources/views/client directory
+[33madfd917[m Rename resources/views/client/category.blade.php to resources/views/category.blade.php
+[33m7b4b841[m Merge pull request #8 from danv271/DucTruong
+[33m8d80249[m Merge branch 'main' into DucTruong
+[33m842bdd2[m Delete public/forms directory
+[33m43d71d1[m Delete public/assets directory
+[33m93ae9ca[m Merge pull request #7 from danv271/PhuHieu
+[33mb04b859[m giao diện của tìm kiếm sản phẩm
+[33mcf51474[m Merge pull request #6 from danv271/ManhThang
+[33m6763c4b[m Merge branch 'main' into ManhThang
+[33m8cd7e1c[m Merge pull request #5 from danv271/VanMinh
+[33mb345c78[m Rename resources/views/partials/product-details.blade.php to resources/views/product-details.blade.php
+[33m0f4dfa7[m Merge pull request #4 from danv271/QuocPhong
+[33m7d6cf9f[m Merge branch 'main' into QuocPhong
+[33m7fe7ddf[m Category and Product Detail
+[33mdbdf16f[m Merge pull request #3 from danv271/TuanAnh
+[33mb0ab65b[m product detail
+[33m5ff62bd[m Gio hang
+[33m71b8140[m Cắt giao diện đang ký đăng nhập
+[33m7511aae[m cắt giao diện trang chủ
+[33md01865b[m account
+[33m93157c6[m Merge pull request #2 from danv271/DangVy
+[33me0c11be[m add main layout
+[33m31a7ce9[m Merge pull request #1 from danv271/DangVy
+[33m3e39b49[m add file .env
+[33m816b4c7[m[33m ([m[1;31morigin/demo[m[33m)[m first commit
