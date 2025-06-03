@@ -50,7 +50,7 @@ Route::get('/product-details', function () {
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
-})->name('admin.dashboard');
+})->name('admin.dashboard')->middleware('check.role');
 
 
 Route::prefix('admin/products')->group(function () {
@@ -63,7 +63,7 @@ Route::prefix('admin/products')->group(function () {
         Route::get('/list', OderController::class . '@index')->name('admin.orders.index');
         Route::get('/detail/{id?}', OderController::class . '@show')->name('admin.orders.show'); // Chi tiết đơn hàng
     });
-});
+})->middleware('check.role');
 // Tạo sản phẩm
 Route::get('/create', function () {
     $categories = [
