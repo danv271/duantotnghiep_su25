@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -109,17 +110,6 @@ Route::prefix('admin/products')->group(function () {
         // Xử lý upload file
     })->name('admin.products.upload-file');
 });
-Route::get('/admin/category', function () {
-    return view('admin.category.index');
-})->name('admin.category.index');
-
-Route::get('/admin/category/create', function () {
-    return view('admin.category.create');
-})->name('admin.category.create');
-
-Route::get('/admin/category/edit', function () {
-    return view('admin.category.edit');
-})->name('admin.category.edit');
 
 
 Route::get('/admin/attributes', function () {
@@ -151,3 +141,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('roles.edit');
 });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index')->name('categories.index');
+        Route::get('/categories/create', 'create')->name('categories.create');
+        Route::post('/categories', 'store')->name('categories.store');
+        Route::get('/categories/{category}', 'show')->name('categories.show');
+        Route::get('/categories/{category}/edit', 'edit')->name('categories.edit');
+        Route::put('/categories/{category}', 'update')->name('categories.update');
+        Route::delete('/categories/{category}', 'destroy')->name('categories.destroy');
+    });
+});
