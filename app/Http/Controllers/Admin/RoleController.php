@@ -60,24 +60,30 @@ class RoleController extends Controller
     public function edit($id)
     {
         $data = Roles::findOrFail($id);
+        $listUser = User::all();
         if ($data) {
-            return view('admin.roles.edit', compact('data'));
+            return view('admin.roles.edit', compact('data', 'listUser'));
         }
     }
     public function update(Request $request, $id)
     {
         $dataValidate = $request->validate([
-            'role_name' => 'required|string|max:255',
+            'role_name' => 'required|string|max:255|unique:roles,role_name,' . $id,
             'description' => 'nullable|string|max:500',
         ]);
         $role = Roles::findOrFail($id);
-        if($role){
+        if ($role) {
             $role->update($dataValidate);
-            return redirect()->route('admin.roles.index')->with('success','Update success');
-        }
-        else{
+            if ($request->has('user_id')) {
+                $user = User::findOrFail($request->user_id);
+                // Kiểm tra xem người dùng có thuộc vai trò này không
+                if ($user->id != $role->id) {
+                    $user->update(['role_id' => $role->id]);
+                }
+            }
+            return redirect()->route('admin.roles.index')->with('success', 'Update success');
+        } else {
             return redirect()->route('admin.roles.edit');
         }
-       
     }
 }

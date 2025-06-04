@@ -21,7 +21,7 @@
                                 <label for="roles-name" class="form-label">Role Name</label>
                                 <input type="text" name="role_name" id="roles-name" class="form-control"
                                     placeholder="Enter role name" value="{{ old('role_name', $data->role_name) }}">
-                                     @error('role_name')
+                                @error('role_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -43,25 +43,22 @@
                                 <label for="description" class="form-label">Description</label>
                                 <input type="text" name="description" id="description" class="form-control"
                                     placeholder="Enter role description"value="{{ old('role_name', $data->description) }}">
-                                 @error('description')
+                                @error('description')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
-                        {{-- <div class="col-lg-6">
+                        <div class="col-lg-6">
                             <div class="mb-3">
                                 <label for="user-name" class="form-label">Users</label>
-                                <select class="form-control" id="choices-multiple-remove-button-users" data-choices
+                                <select class="form-control" name="user_id" id="choices-multiple-remove-button-users" data-choices
                                     data-choices-removeItem name="choices-multiple-remove-button-users" multiple>
-                                    @foreach ($data as $user)
-                                    <option value="John Doe">John Doe</option>
+                                    @foreach ($listUser as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
-                                    <option value="Jane Smith">Jane Smith</option>
-                                    <option value="Mike Johnson">Mike Johnson</option>
-                                    <option value="Sarah Williams">Sarah Williams</option>
                                 </select>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="card-footer border-top">
                         <div class="d-flex gap-2">
