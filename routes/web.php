@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\OderController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,8 +61,8 @@ Route::prefix('admin/products')->group(function () {
     })->name('admin.products-list');
     Route::prefix('admin/oders')->group(function () {
         // Danh sách đơn hàng
-        Route::get('/list', OderController::class . '@index')->name('admin.orders.index');
-        Route::get('/detail/{id?}', OderController::class . '@show')->name('admin.orders.show'); // Chi tiết đơn hàng
+        Route::get('/list', OrderController::class . '@index')->name('admin.orders.index');
+        Route::get('/detail/{id?}', OrderController::class . '@show')->name('admin.orders.show'); // Chi tiết đơn hàng
     });
 })->middleware('check.role');
 // Tạo sản phẩm
@@ -142,19 +143,13 @@ Route::get('/admin/attributes/edit', function () {
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/roles', function () {
-        return view('admin.roles.index');
-    })->name('roles.index');
+    Route::get('/roles', RoleController::class . '@index')->name('roles.index');
 
-    Route::get('/roles/create', function () {
-        return view('admin.roles.create');
-    })->name('roles.create');
+    Route::get('/roles/create', RoleController::class . "@create")->name('roles.create');
+    Route::post('/roles/store', RoleController::class . "@store")->name('roles.store');
 
-    Route::get('/roles/{id}', function ($id) {
-        return view('admin.roles.show', ['id' => $id]);
-    })->name('roles.show');
+    Route::get('/roles/{id}', RoleController::class . "@show")->name('roles.show');
 
-    Route::get('/roles/{id}/edit', function ($id) {
-        return view('admin.roles.edit', ['id' => $id]);
-    })->name('roles.edit');
+    Route::get('/roles/{id}/edit', RoleController::class . "@edit")->name('roles.edit');
+    Route::put('/roles/update/{id}', RoleController::class . "@update")->name('roles.update');
 });

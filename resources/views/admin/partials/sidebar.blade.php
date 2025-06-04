@@ -230,9 +230,6 @@
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.roles.create') }}">Create</a>
                         </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.roles.edit', 1) }}">Edit</a>
-                        </li>
                     </ul>
                 </div>
             </li>
