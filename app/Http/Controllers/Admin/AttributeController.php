@@ -13,7 +13,9 @@ class AttributeController extends Controller
     public function index(Request $request)
     {
         $per_page = $request->per_page ?? 10;
-        $attributes = Attribute::with('values')->paginate($per_page);
+        $attributes = Attribute::with('values')
+            ->orderBy('created_at', 'desc')
+            ->paginate($per_page);
         return view('admin.attributes.index', compact('attributes'));
     }
 

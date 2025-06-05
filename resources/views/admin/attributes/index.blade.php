@@ -63,7 +63,7 @@
                         <table class="table align-middle mb-0 table-hover table-centered">
                             <thead class="bg-light-subtle">
                                 <tr>
-                                    <th>ID</th>
+                                    <th>STT</th>
                                     <th>Tên thuộc tính</th>
                                     <th>Giá trị</th>
                                     <th>Ngày tạo</th>
@@ -71,9 +71,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($attributes as $attribute)
+                                @foreach($attributes as $key => $attribute)
                                 <tr>
-                                    <td>{{ $attribute->id }}</td>
+                                    <td>{{ ($attributes->currentPage() - 1) * $attributes->perPage() + $key + 1 }}</td>
                                     <td>{{ $attribute->name }}</td>
                                     <td>
                                         @foreach($attribute->values as $value)
