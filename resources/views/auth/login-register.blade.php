@@ -83,7 +83,7 @@
                                             <label class="form-check-label" for="login-register-remember-me">Remember
                                                 me</label>
                                         </div>
-                                        <a href="#" class="forgot-password">Forgot Password?</a>
+                                        <a href="{{route('forgot-password')}}" class="forgot-password">Forgot Password?</a>
                                     </div>
 
                                     <div class="d-grid">

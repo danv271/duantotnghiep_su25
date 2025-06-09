@@ -29,7 +29,12 @@ Route::get('/register', function () {
     return view('auth.login-register');
 })->name('register');
 Route::post('/register-process', AuthController::class . '@handleRegister')->name('register.process');
-
+Route::get('/forgot-password', AuthController::class . '@forgotPassword')->name('forgot-password');
+Route::post('/forgot-password-process', AuthController::class . '@handleForgotPassword')->name('forgot-password.process');
+Route::get('/reset-password', function () {
+    return view('auth.resetPassword');
+})->name('reset.password');
+Route::put('/reset-password-process', AuthController::class . '@handleResetPassword')->name('reset.password.process');
 // Trang giỏ hàng hiển thị HTML
 Route::view('/cart', 'cart');
 
