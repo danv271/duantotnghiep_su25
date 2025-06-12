@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         VariantAttributeSeeder::class,
         CartSeeder::class,
         CartItemSeeder::class,
+        ProductImageSeeder::class,
     ]);
 }
 

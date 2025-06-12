@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CartController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,6 +10,22 @@ use App\Http\Controllers\Admin\CartController;
 | Đây là nơi định nghĩa tất cả route cho web. 
 | Các route người dùng và quản trị được tách riêng gọn gàng.
 */
+Route::get('/test-cart', function() {
+    $cart = [
+        '1' => [
+            'id' => '1',
+            'name' => 'Test Product',
+            'price' => 100000,
+            'quantity' => 2,
+            'image' => 'images/default-product.jpg',
+            'color' => 'Red',
+            'size' => 'L'
+        ]
+    ];
+    
+    session()->put('cart', $cart);
+    return redirect()->route('cart.index');
+});
 
 // ===================== Giao diện người dùng =====================
 Route::view('/', 'index');
@@ -18,7 +34,16 @@ Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
 Route::view('/login', 'auth.login-register')->name('login');
 Route::view('/register', 'auth.login-register')->name('register');
-Route::view('/cart', 'cart')->name('cart');
+
+// ===================== Cart Routes =====================
+Route::prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+});
+
+
 Route::view('/search', 'search')->name('search');
 Route::view('/product-detail', 'product-detail')->name('product-detail');
 Route::view('/product-details', 'product-details')->name('product-details');
@@ -26,6 +51,8 @@ Route::view('/category', 'category')->name('category');
 
 // ===================== Trang quản trị (admin) =====================
 Route::prefix('admin')->name('admin.')->group(function () {
+
+     Route::view('/', '/admin/dashboard');
 
     Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
 
@@ -97,11 +124,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/{id}/edit', fn ($id) => view('admin.roles.edit', compact('id')))->name('edit');
     });
 
-    // --------- Quản lý giỏ hàng (cart) ---------
-    Route::prefix('cart')->name('cart.')->group(function () {
-        Route::get('/cart', [CartController::class, 'index'])->name('index');
-        Route::view('/create', 'admin.cart.create')->name('create');
-        Route::view('/edit', 'admin.cart.edit')->name('edit');
-    });
 
 });
