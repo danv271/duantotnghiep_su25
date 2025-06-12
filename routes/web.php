@@ -37,12 +37,12 @@ Route::view('/register', 'auth.login-register')->name('register');
 
 // ===================== Cart Routes =====================
 Route::prefix('cart')->name('cart.')->group(function () {
-    Route::get('/', [CartController::class, 'index'])->name('index');
-    Route::post('/update', [CartController::class, 'update'])->name('update');
-    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
-    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    Route::get('/', [CartController::class, 'index'])->name('index');           // Hiển thị giỏ hàng
+    Route::post('/update', [CartController::class, 'update'])->name('update');  // Cập nhật số lượng
+    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');   // Xóa toàn bộ giỏ hàng
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove'); // Xóa 1 item
+    
 });
-
 
 Route::view('/search', 'search')->name('search');
 Route::view('/product-detail', 'product-detail')->name('product-detail');

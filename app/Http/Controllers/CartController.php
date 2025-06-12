@@ -12,7 +12,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $userId = Auth::check() ? Auth::id() : 1;
+        $userId = Auth::check() ? Auth::id() : 8;
 
         $cartItems = Cart::join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
             ->join('variants', 'cart_items.variant_id', '=', 'variants.id')
@@ -27,6 +27,7 @@ class CartController extends Controller
                 'cart_items.quantity',
                 'products.name as product_name',
                 'variants.price as variant_price',
+                'variants.stock_quantity as max_quantity', 
                 'products_images.path as image_path'
             )
             ->where('carts.user_id', $userId)
@@ -46,58 +47,42 @@ class CartController extends Controller
                 }
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart updated successfully!'
-            ]);
+            return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error updating cart: ' . $e->getMessage()
-            ], 500);
+            return redirect()->route('cart.index')->with('error', 'Error updating cart: ' . $e->getMessage());
         }
     }
 
     public function clear()
     {
         try {
-            $userId = Auth::check() ? Auth::id() : 1;
-            
+            $userId = Auth::check() ? Auth::id() : 8;
+
             $cart = Cart::where('user_id', $userId)->first();
             
             if ($cart) {
                 CartItem::where('cart_id', $cart->id)->delete();
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart cleared successfully!'
-            ]);
+            return redirect()->route('cart.index')->with('success', 'Cart cleared successfully!');
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error clearing cart: ' . $e->getMessage()
-            ], 500);
+            return redirect()->route('cart.index')->with('error', 'Error clearing cart: ' . $e->getMessage());
         }
     }
 
     public function remove($id)
-    {
-        try {
-            CartItem::where('id', $id)->delete();
+{
+    try {
+        CartItem::where('id', $id)->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Item removed successfully!'
-            ]);
+        return redirect()->route('cart.index')->with('success', 'Item removed successfully!');
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error removing item: ' . $e->getMessage()
-            ], 500);
-        }
+    } catch (\Exception $e) {
+        return redirect()->route('cart.index')->with('error', 'Error removing item: ' . $e->getMessage());
     }
+}
+
+
 }
