@@ -3,10 +3,14 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HomeController::class, 'index']);
+
+// Route::get('/', function () {
+//     return view('index');
+// });
 Route::get('/account', function () {
     return view('account');
 })->name('account');
@@ -142,6 +146,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('roles.edit');
 });
 
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
@@ -159,3 +167,4 @@ Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.
 Route::get('/admin/orders/{id}/edit', [OrderController::class, 'edit'])->name('admin.orders.edit');
 Route::put('admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
 Route::delete('/admin/orders/{id}/destroy', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+
