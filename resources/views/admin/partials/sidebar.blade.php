@@ -21,7 +21,7 @@
             <li class="menu-title">General</li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/') }}">
+                <a class="nav-link" href="{{ url('/admin/dashboard') }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                     </span>
@@ -43,16 +43,16 @@
                             <a class="sub-nav-link" href="{{route('admin.products-list')}}">List</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-grid.html">Grid</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-details.html">Details</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/detail') }}">Details</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-edit.html">Edit</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/edit') }}">Edit</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="product-add.html">Create</a>
+                            <a class="sub-nav-link" href="{{ url('/admin/products/add') }}">Create</a>
                         </li>
                     </ul>
                 </div>
@@ -69,13 +69,27 @@
                 <div class="collapse" id="sidebarCategory">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.category.index') }}">List</a>
+                            <a class="sub-nav-link" href="{{ route('admin.categories.index') }}">List</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.category.edit') }}">Edit</a>
+                            <a class="sub-nav-link" href="{{ route('admin.categories.create') }}">Create</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.category.create') }}">Create</a>
+                            <a class="sub-nav-link menu-arrow" href="#sidebarCategoryEdit" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarCategoryEdit">
+                                <span>Edit</span>
+                            </a>
+                            <div class="collapse" id="sidebarCategoryEdit">
+                                <ul class="nav sub-navbar-nav">
+                                    @foreach($categories as $category)
+                                    <li class="sub-nav-item">
+                                        <a class="sub-nav-link" href="{{ route('admin.categories.edit', ['category' => $category->id]) }}">
+                                            {{ $category->name }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -113,10 +127,7 @@
                 <div class="collapse" id="sidebarOrders">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="orders-list.html">List</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="order-detail.html">Details</a>
+                            <a class="sub-nav-link" href="{{ route('admin.orders.index') }}">List</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="order-cart.html">Cart</a>

@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HomeController::class, 'index']);
+
+// Route::get('/', function () {
+//     return view('index');
+// });
 Route::get('/account', function () {
     return view('account');
 })->name('account');
@@ -109,17 +115,6 @@ Route::prefix('admin/products')->group(function () {
         // Xử lý upload file
     })->name('admin.products.upload-file');
 });
-Route::get('/admin/category', function () {
-    return view('admin.category.index');
-})->name('admin.category.index');
-
-Route::get('/admin/category/create', function () {
-    return view('admin.category.create');
-})->name('admin.category.create');
-
-Route::get('/admin/category/edit', function () {
-    return view('admin.category.edit');
-})->name('admin.category.edit');
 
 
 Route::get('/admin/attributes', function () {
@@ -150,4 +145,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.roles.edit', ['id' => $id]);
     })->name('roles.edit');
 });
+
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index')->name('categories.index');
+        Route::get('/categories/create', 'create')->name('categories.create');
+        Route::post('/categories', 'store')->name('categories.store');
+        Route::get('/categories/{category}', 'show')->name('categories.show');
+        Route::get('/categories/{category}/edit', 'edit')->name('categories.edit');
+        Route::put('/categories/{category}', 'update')->name('categories.update');
+        Route::delete('/categories/{category}', 'destroy')->name('categories.destroy');
+    });
+});
+
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+Route::get('/admin/orders/{id}/edit', [OrderController::class, 'edit'])->name('admin.orders.edit');
+Route::put('admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
+Route::delete('/admin/orders/{id}/destroy', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
 
