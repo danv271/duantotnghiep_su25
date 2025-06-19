@@ -25,6 +25,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="{{ asset('admin/assets/js/config.js') }}"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
     @yield('styles') <!-- Nơi để thêm CSS tùy chỉnh -->
 </head>
 

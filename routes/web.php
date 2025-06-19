@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -152,3 +153,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/categories/{category}', 'destroy')->name('categories.destroy');
     });
 });
+
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+Route::get('/admin/orders/{id}/edit', [OrderController::class, 'edit'])->name('admin.orders.edit');
+Route::put('admin/orders/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
+Route::delete('/admin/orders/{id}/destroy', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
