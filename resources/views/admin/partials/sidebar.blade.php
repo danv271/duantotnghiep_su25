@@ -40,7 +40,7 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{route('admin.products-list')}}">List</a>
+                            <a class="sub-nav-link" href="{{route('admin.products.list')}}">List</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
@@ -177,9 +177,6 @@
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.attributes.create') }}">Create</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.attributes.edit') }}">Edit</a>
                         </li>
                     </ul>
                 </div>
