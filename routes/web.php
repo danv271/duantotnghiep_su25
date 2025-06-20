@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\OderController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Frontend routes
@@ -30,6 +31,10 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.login-register');
 })->name('register');
+Route::post('/logout',[AuthController::class ,'destroy'])->name('auth.destroy');
+Route::post('login-process',AuthController::class . '@handleLogin')->name('login.process');
+Route::post('register-process',AuthController::class . '@handleregister')->name('register.process');
+Route::post('forgot-password', AuthController::class . '@handleForgotPassword')->name('forgot-password');
 
 Route::view('/cart', 'cart');
 
@@ -46,7 +51,6 @@ Route::get('/category', function () {
 })->name('category');
 
 
-// Routes từ nhánh của bạn (HEAD)
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
@@ -57,8 +61,17 @@ Route::prefix('admin/products')->group(function () {
     Route::get('/list', function () {
         return view('admin.products.list');
     })->name('admin.products-list');
-
-    // Tạo sản phẩm (đã được kéo ra ngoài group trong code bạn cung cấp, nên tôi giữ nguyên)
+Route::prefix('admin/oders')->group(function () {
+    // Danh sách đơn hàng
+    Route::get('/list', function(){
+        return view('admin.orders.index');
+    })->name('admin.orders.index');
+    Route::get('/detail/{id?}',function (){
+        return view('admin.orders.show');
+    })->name('admin.orders.show'); // Chi tiết đơn hàng
+});
+});
+    // Tạo sản phẩm
     Route::get('/create',function(){
         $categories = [
             (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
@@ -115,15 +128,6 @@ Route::prefix('admin/products')->group(function () {
     Route::post('/upload-file', function () {
         // Xử lý upload file
     })->name('admin.products.upload-file');
-}); // Đóng group của admin/products
-
-
-Route::prefix('admin/oders')->group(function () { // Đã sửa từ 'admin/oders' thành 'admin/orders' cho đúng chính tả nếu đây là lỗi gõ
-    // Danh sách đơn hàng
-    Route::get('/list', OderController::class . '@index')->name('admin.orders.index');
-    Route::get('/detail/{id?}',OderController::class . '@show')->name('admin.orders.show'); // Chi tiết đơn hàng
-});
-
 Route::get('/admin/category', function () {
     return view('admin.category.index');
 })->name('admin.category.index');
@@ -146,8 +150,6 @@ Route::get('/admin/attributes/create', function () {
 Route::get('/admin/attributes/edit', function () {
     return view('admin.attributes.edit');
 })->name('admin.attributes.edit');
-
-// Routes từ nhánh khác (được thêm vào cuối)
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
