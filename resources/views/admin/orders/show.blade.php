@@ -1,484 +1,357 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.app') {{-- Đảm bảo bạn đang extend đúng layout của admin --}}
 
-@section('title', 'Trang Chi Tiết Đơn Hàng  | Larkon - Responsive Admin Dashboard Template')
-
-@section('page-title', 'Trang Chi Tiết Đơn Hàng  ')
+@section('title', 'Trang Chi Tiết Đơn Hàng | Larkon - Responsive Admin Dashboard Template')
+@section('page-title', 'Chi tiết đơn hàng #' . $order->id) {{-- Đảm bảo biến $order được truyền vào --}}
 
 @section('content')
 <div class="page-content">
 
-               <!-- Start Container -->
-               <div class="container-xxl">
+    <div class="container-xxl">
 
-                    <div class="row">
-                         <div class="col-xl-9 col-lg-8">
-                              <div class="row">
-                                   <div class="col-lg-12">
-                                        <div class="card">
-                                             <div class="card-body">
-                                                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-                                                       <div>
-                                                            <h4 class="fw-medium text-dark d-flex align-items-center gap-2">#0758267/90 <span class="badge bg-success-subtle text-success  px-2 py-1 fs-13">Paid</span><span class="border border-warning text-warning fs-13 px-2 py-1 rounded">In Progress</span></h4>
-                                                            <p class="mb-0">Order / Order Details / #0758267/90 - April 23 , 2024 at 6:23 pm</p>
-                                                       </div>
-                                                       <div>
-                                                            <a href="order-detail.html#!" class="btn btn-outline-secondary">Refund</a>
-                                                            <a href="order-detail.html#!" class="btn btn-outline-secondary">Return</a>
-                                                            <a href="order-detail.html#!" class="btn btn-primary">Edit Order</a>
-                                                       </div>
+        <div class="row">
+            <div class="col-xl-9 col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <div>
+                                        <h4 class="fw-medium text-dark d-flex align-items-center gap-2">
+                                            #{{ $order->id }}
+                                            @if($order->status_payment == 'paid')
+                                                <span class="badge bg-success-subtle text-success px-2 py-1 fs-13">Đã Thanh Toán</span>
+                                            @elseif($order->status_payment == 'unpaid')
+                                                <span class="badge bg-danger-subtle text-danger px-2 py-1 fs-13">Chưa Thanh Toán</span>
+                                            @else
+                                                <span class="badge bg-secondary-subtle text-secondary px-2 py-1 fs-13">{{ ucfirst($order->status_payment) }}</span>
+                                            @endif
 
-                                                  </div>
+                                            @if($order->status_order == 'pending')
+                                                <span class="badge border border-warning text-warning fs-13 px-2 py-1 rounded">Chờ xử lý</span>
+                                            @elseif($order->status_order == 'processing')
+                                                <span class="badge border border-info text-info fs-13 px-2 py-1 rounded">Đang xử lý</span>
+                                            @elseif($order->status_order == 'shipped')
+                                                <span class="badge border border-primary text-primary fs-13 px-2 py-1 rounded">Đã giao hàng</span>
+                                            @elseif($order->status_order == 'completed')
+                                                <span class="badge border border-success text-success fs-13 px-2 py-1 rounded">Hoàn thành</span>
+                                            @elseif($order->status_order == 'cancelled')
+                                                <span class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">Đã hủy</span>
+                                            @else
+                                                <span class="badge border border-secondary text-secondary fs-13 px-2 py-1 rounded">{{ ucfirst($order->status_order) }}</span>
+                                            @endif
+                                        </h4>
+                                        <p class="mb-0">Order / Order Details / #{{ $order->id }} - {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y \l\ú\c H:i') }}</p>
+                                    </div>
+                                    <div>
+                                        <a href="#!" class="btn btn-outline-secondary">Hoàn tiền</a>
+                                        <a href="#!" class="btn btn-outline-secondary">Trả hàng</a>
+                                        {{-- Thay thế bằng route edit thực tế nếu có --}}
+                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh sửa đơn hàng</a>
+                                    </div>
+                                </div>
 
-                                                  <div class="mt-4">
-                                                       <h4 class="fw-medium text-dark">Progress</h4>
-                                                  </div>
-                                                  <div class="row row-cols-xxl-5 row-cols-md-2 row-cols-1">
-                                                       <div class="col">
-                                                            <div class="progress mt-3" style="height: 10px;">
-                                                                 <div class="progress-bar progress-bar  progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70">
-                                                                 </div>
-                                                            </div>
-                                                            <p class="mb-0 mt-2">Order Confirming</p>
-                                                       </div>
-                                                       <div class="col">
-                                                            <div class="progress mt-3" style="height: 10px;">
-                                                                 <div class="progress-bar progress-bar  progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70">
-                                                                 </div>
-                                                            </div>
-                                                            <p class="mb-0 mt-2">Payment Pending</p>
-                                                       </div>
-                                                       <div class="col">
-                                                            <div class="progress mt-3" style="height: 10px;">
-                                                                 <div class="progress-bar progress-bar  progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70">
-                                                                 </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center gap-2 mt-2">
-                                                                 <p class="mb-0">Processing</p>
-                                                                 <div class="spinner-border spinner-border-sm text-warning" role="status">
-                                                                      <span class="visually-hidden">Loading...</span>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="col">
-                                                            <div class="progress mt-3" style="height: 10px;">
-                                                                 <div class="progress-bar progress-bar  progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70">
-                                                                 </div>
-                                                            </div>
-                                                            <p class="mb-0 mt-2">Shipping</p>
-                                                       </div>
-                                                       <div class="col">
-                                                            <div class="progress mt-3" style="height: 10px;">
-                                                                 <div class="progress-bar progress-bar  progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70">
-                                                                 </div>
-                                                            </div>
-                                                            <p class="mb-0 mt-2">Delivered</p>
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                             <div class="card-footer d-flex flex-wrap align-items-center justify-content-between bg-light-subtle gap-2">
-                                                  <p class="border rounded mb-0 px-2 py-1 bg-body"><i class="bx bx-arrow-from-left align-middle fs-16"></i> Estimated shipping date : <span class="text-dark fw-medium">Apr 25 , 2024</span></p>
-                                                  <div>
-                                                       <a href="order-detail.html#!" class="btn btn-primary">Make As Ready To Ship</a>
-                                                  </div>
-                                             </div>
+                                {{-- Phần tiến trình (Progress) - giữ lại cấu trúc từ HEAD, có thể cần dữ liệu động sau này --}}
+                                <div class="mt-4">
+                                    <h4 class="fw-medium text-dark">Tiến trình đơn hàng</h4>
+                                </div>
+                                <div class="row row-cols-xxl-5 row-cols-md-2 row-cols-1">
+                                    {{-- Các cột tiến trình này đang dùng dữ liệu tĩnh, bạn có thể cần cập nhật chúng với dữ liệu động từ $order->status_order --}}
+                                    <div class="col">
+                                        <div class="progress mt-3" style="height: 10px;">
+                                            <div class="progress-bar {{ $order->status_order == 'pending' || $order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: {{ $order->status_order == 'pending' || $order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <div class="card">
-                                             <div class="card-header">
-                                                  <h4 class="card-title">Product</h4>
-                                             </div>
-                                             <div class="card-body">
-                                                  <div class="table-responsive">
-                                                       <table class="table align-middle mb-0 table-hover table-centered">
-                                                            <thead class="bg-light-subtle border-bottom">
-                                                                 <tr>
-                                                                      <th>Product Name &amp; Size</th>
-                                                                      <th>Status</th>
-                                                                      <th>Quantity</th>
-                                                                      <th>Price</th>
-                                                                      <th>Text</th>
-                                                                      <th>Amount</th>
-                                                                 </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-flex align-items-center gap-2">
-                                                                                <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                                                     <img src="assets/images/product/p-1.png" alt="" class="avatar-md">
-                                                                                </div>
-                                                                                <div>
-                                                                                     <a href="order-detail.html#!" class="text-dark fw-medium fs-15">Men Black Slim Fit T-shirt</a>
-                                                                                     <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>M</p>
-                                                                                </div>
-                                                                           </div>
-
-                                                                      </td>
-
-                                                                      <td>
-                                                                           <span class="badge bg-success-subtle text-success  px-2 py-1 fs-13">Ready</span>
-                                                                      </td>
-                                                                      <td> 1</td>
-                                                                      <td>$80.00</td>
-                                                                      <td> $3.00</td>
-                                                                      <td>
-                                                                           $83.00
-                                                                      </td>
-                                                                 </tr>
-
-
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-flex align-items-center gap-2">
-                                                                                <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                                                     <img src="assets/images/product/p-5.png" alt="" class="avatar-md">
-                                                                                </div>
-                                                                                <div>
-                                                                                     <a href="order-detail.html#!" class="text-dark fw-medium fs-15">Dark Green Cargo Pent</a>
-                                                                                     <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>M</p>
-                                                                                </div>
-                                                                           </div>
-
-                                                                      </td>
-
-                                                                      <td>
-                                                                           <span class="badge bg-light text-dark  px-2 py-1 fs-13">Packaging</span>
-                                                                      </td>
-                                                                      <td> 3</td>
-                                                                      <td>$330.00</td>
-                                                                      <td> $4.00</td>
-                                                                      <td>
-                                                                           $334.00
-                                                                      </td>
-                                                                 </tr>
-
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-flex align-items-center gap-2">
-                                                                                <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                                                     <img src="assets/images/product/p-8.png" alt="" class="avatar-md">
-                                                                                </div>
-                                                                                <div>
-                                                                                     <a href="order-detail.html#!" class="text-dark fw-medium fs-15">Men Dark Brown Wallet</a>
-                                                                                     <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>S</p>
-                                                                                </div>
-                                                                           </div>
-
-                                                                      </td>
-
-                                                                      <td>
-                                                                           <span class="badge bg-success-subtle text-success  px-2 py-1 fs-13">Ready</span>
-                                                                      </td>
-                                                                      <td> 1</td>
-                                                                      <td>$132.00</td>
-                                                                      <td> $5.00</td>
-                                                                      <td>
-                                                                           $137.00
-                                                                      </td>
-                                                                 </tr>
-
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-flex align-items-center gap-2">
-                                                                                <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                                                     <img src="assets/images/product/p-10.png" alt="" class="avatar-md">
-                                                                                </div>
-                                                                                <div>
-                                                                                     <a href="order-detail.html#!" class="text-dark fw-medium fs-15">Kid's Yellow T-shirt</a>
-                                                                                     <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>S </p>
-                                                                                </div>
-                                                                           </div>
-
-                                                                      </td>
-
-                                                                      <td>
-                                                                           <span class="badge bg-light text-dark  px-2 py-1 fs-13">Packaging</span>
-                                                                      </td>
-                                                                      <td> 2</td>
-                                                                      <td>$220.00</td>
-                                                                      <td> $3.00</td>
-                                                                      <td>
-                                                                           $223.00
-                                                                      </td>
-                                                                 </tr>
-                                                            </tbody>
-                                                       </table>
-                                                  </div>
-                                             </div>
+                                        <p class="mb-0 mt-2">Xác nhận đơn hàng</p>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress mt-3" style="height: 10px;">
+                                            <div class="progress-bar {{ $order->status_payment == 'paid' ? 'bg-success' : 'bg-warning' }}" role="progressbar" style="width: {{ $order->status_payment == 'paid' ? '100%' : '60%' }}" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <div class="card">
-                                             <div class="card-header">
-                                                  <h4 class="card-title">Order Timeline</h4>
-                                             </div>
-                                             <div class="card-body">
-                                                  <div class="position-relative ms-2">
-                                                       <span class="position-absolute start-0  top-0 border border-dashed h-100"></span>
-                                                       <div class="position-relative ps-4">
-                                                            <div class="mb-4">
-                                                                 <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle">
-                                                                      <div class="spinner-border spinner-border-sm text-warning" role="status">
-                                                                           <span class="visually-hidden">Loading...</span>
-                                                                      </div>
-                                                                 </span>
-                                                                 <div class="ms-2 d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                                      <div>
-                                                                           <h5 class="mb-1 text-dark fw-medium fs-15">The packing has been started</h5>
-                                                                           <p class="mb-0">Confirmed by Gaston Lapierre</p>
-                                                                      </div>
-                                                                      <p class="mb-0">April 23, 2024, 09:40 am</p>
-
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="position-relative ps-4">
-                                                            <div class="mb-4">
-                                                                 <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
-                                                                      <i class="bx bx-check-circle"></i>
-                                                                 </span>
-                                                                 <div class="ms-2 d-flex flex-wrap gap-2  align-items-center justify-content-between">
-                                                                      <div>
-                                                                           <h5 class="mb-1 text-dark fw-medium fs-15">The Invoice has been sent to the customer</h5>
-                                                                           <p class="mb-2">Invoice email was sent to <a href="order-detail.html#!" class="link-primary">hello@dundermuffilin.com</a></p>
-                                                                           <a href="order-detail.html#!" class="btn btn-light">Resend Invoice</a>
-                                                                      </div>
-                                                                      <p class="mb-0">April 23, 2024, 09:40 am</p>
-
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="position-relative ps-4">
-                                                            <div class="mb-4">
-                                                                 <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
-                                                                      <i class="bx bx-check-circle"></i>
-                                                                 </span>
-                                                                 <div class="ms-2 d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                                      <div>
-                                                                           <h5 class="mb-1 text-dark fw-medium fs-15">The Invoice has been created</h5>
-                                                                           <p class="mb-2">Invoice created by Gaston Lapierre</p>
-                                                                           <a href="order-detail.html#!" class="btn btn-primary">Download Invoice</a>
-                                                                      </div>
-                                                                      <p class="mb-0">April 23, 2024, 09:40 am</p>
-
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="position-relative ps-4">
-                                                            <div class="mb-4">
-                                                                 <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
-                                                                      <i class="bx bx-check-circle"></i>
-                                                                 </span>
-                                                                 <div class="ms-2 d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                                                      <div>
-                                                                           <h5 class="mb-1 text-dark fw-medium fs-15">Order Payment</h5>
-                                                                           <p class="mb-2">Using Master Card</p>
-                                                                           <div class="d-flex align-items-center gap-2">
-                                                                                <p class="mb-1 text-dark fw-medium">Status :</p>
-                                                                                <span class="badge bg-success-subtle text-success  px-2 py-1 fs-13">Paid</span>
-                                                                           </div>
-                                                                      </div>
-                                                                      <p class="mb-0">April 23, 2024, 09:40 am</p>
-
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="position-relative ps-4">
-                                                            <div class="mb-2">
-                                                                 <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
-                                                                      <i class="bx bx-check-circle"></i>
-                                                                 </span>
-                                                                 <div class="ms-2 d-flex flex-wrap gap-2  align-items-center justify-content-between">
-                                                                      <div>
-                                                                           <h5 class="mb-2 text-dark fw-medium fs-15">4 Order conform by Gaston Lapierre</h5>
-                                                                           <a href="order-detail.html#!" class="badge bg-light text-dark fw-normal  px-2 py-1 fs-13">Order 1</a>
-                                                                           <a href="order-detail.html#!" class="badge bg-light text-dark fw-normal  px-2 py-1 fs-13">Order 2</a>
-                                                                           <a href="order-detail.html#!" class="badge bg-light text-dark fw-normal  px-2 py-1 fs-13">Order 3</a>
-                                                                           <a href="order-detail.html#!" class="badge bg-light text-dark fw-normal  px-2 py-1 fs-13">Order 4</a>
-                                                                      </div>
-                                                                      <p class="mb-0">April 23, 2024, 09:40 am</p>
-
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                             </div>
+                                        <p class="mb-0 mt-2">Chờ thanh toán</p>
+                                        @if($order->status_payment == 'unpaid')
+                                            <div class="d-flex align-items-center gap-2 mt-2">
+                                                <div class="spinner-border spinner-border-sm text-warning" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress mt-3" style="height: 10px;">
+                                            <div class="progress-bar {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}" role="progressbar" style="width: {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <div class="card bg-light-subtle">
-                                             <div class="card-body">
-                                                  <div class="row g-3 g-lg-0">
-                                                       <div class="col-lg-3 border-end">
-                                                            <div class="d-flex align-items-center gap-3 justify-content-between px-3">
-                                                                 <div>
-                                                                      <p class="text-dark fw-medium fs-16 mb-1">Vender</p>
-                                                                      <p class="mb-0">Catpiller</p>
-                                                                 </div>
-                                                                 <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
-                                                                      <iconify-icon icon="solar:shop-2-bold-duotone" class="fs-35 text-primary"></iconify-icon>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="col-lg-3 border-end">
-                                                            <div class="d-flex align-items-center gap-3 justify-content-between px-3">
-                                                                 <div>
-                                                                      <p class="text-dark fw-medium fs-16 mb-1">Date</p>
-                                                                      <p class="mb-0">April 23 , 2024</p>
-                                                                 </div>
-                                                                 <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
-                                                                      <iconify-icon icon="solar:calendar-date-bold-duotone" class="fs-35 text-primary"></iconify-icon>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="col-lg-3 border-end">
-                                                            <div class="d-flex align-items-center gap-3 justify-content-between px-3">
-                                                                 <div>
-                                                                      <p class="text-dark fw-medium fs-16 mb-1">Paid By</p>
-                                                                      <p class="mb-0">Gaston Lapierre</p>
-                                                                 </div>
-                                                                 <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
-                                                                      <iconify-icon icon="solar:user-circle-bold-duotone" class="fs-35 text-primary"></iconify-icon>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                       <div class="col-lg-3">
-                                                            <div class="d-flex align-items-center gap-3 justify-content-between px-3">
-                                                                 <div>
-                                                                      <p class="text-dark fw-medium fs-16 mb-1">Reference #IMEMO</p>
-                                                                      <p class="mb-0">#0758267/90</p>
-                                                                 </div>
-                                                                 <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
-                                                                      <iconify-icon icon="solar:clipboard-text-bold-duotone" class="fs-35 text-primary"></iconify-icon>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                             </div>
+                                        <p class="mb-0 mt-2">Đang xử lý</p>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress mt-3" style="height: 10px;">
+                                            <div class="progress-bar {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}" role="progressbar" style="width: {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                   </div>
-                              </div>
-                         </div>
-                         <div class="col-xl-3 col-lg-4">
-                              <div class="card">
-                                   <div class="card-header">
-                                        <h4 class="card-title">Order Summary</h4>
-                                   </div>
-                                   <div class="card-body">
-                                        <div class="table-responsive">
-                                             <table class="table mb-0">
-                                                  <tbody>
-                                                       <tr>
-                                                            <td class="px-0">
-                                                                 <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:clipboard-text-broken"></iconify-icon> Sub Total : </p>
-                                                            </td>
-                                                            <td class="text-end text-dark fw-medium px-0">$777.00</td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td class="px-0">
-                                                                 <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:ticket-broken" class="align-middle"></iconify-icon> Discount : </p>
-                                                            </td>
-                                                            <td class="text-end text-dark fw-medium px-0">-$60.00</td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td class="px-0">
-                                                                 <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:kick-scooter-broken" class="align-middle"></iconify-icon> Delivery Charge : </p>
-                                                            </td>
-                                                            <td class="text-end text-dark fw-medium px-0">$00.00</td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td class="px-0">
-                                                                 <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:calculator-minimalistic-broken" class="align-middle"></iconify-icon> Estimated Tax (15.5%) : </p>
-                                                            </td>
-                                                            <td class="text-end text-dark fw-medium px-0">$20.00</td>
-                                                       </tr>
+                                        <p class="mb-0 mt-2">Đang giao hàng</p>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress mt-3" style="height: 10px;">
+                                            <div class="progress-bar {{ $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}" role="progressbar" style="width: {{ $order->status_order == 'completed' ? '100%' : '0%' }}" aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
+                                        </div>
+                                        <p class="mb-0 mt-2">Đã giao</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex flex-wrap align-items-center justify-content-between bg-light-subtle gap-2">
+                                {{-- Bạn có thể thay thế bằng ngày giao hàng ước tính thực tế từ $order --}}
+                                <p class="border rounded mb-0 px-2 py-1 bg-body"><i class="bx bx-arrow-from-left align-middle fs-16"></i> Ngày giao hàng ước tính : <span class="text-dark fw-medium">{{ \Carbon\Carbon::parse($order->expected_delivery_date ?? $order->created_at->addDays(3))->format('d M , Y') }}</span></p>
+                                <div>
+                                    <a href="#!" class="btn btn-primary">Chuẩn bị giao hàng</a> {{-- Nút này cần xử lý logic backend --}}
+                                </div>
+                            </div>
+                        </div>
 
-                                                  </tbody>
-                                             </table>
-                                        </div>
-                                   </div>
-                                   <div class="card-footer d-flex align-items-center justify-content-between bg-light-subtle">
-                                        <div>
-                                             <p class="fw-medium text-dark mb-0">Total Amount</p>
-                                        </div>
-                                        <div>
-                                             <p class="fw-medium text-dark mb-0">$737.00</p>
-                                        </div>
+                        {{-- Phần Sản Phẩm trong Đơn Hàng --}}
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Sản phẩm</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0 table-hover table-centered">
+                                        <thead class="bg-light-subtle border-bottom">
+                                            <tr>
+                                                <th>Tên sản phẩm & Kích thước</th>
+                                                <th>Trạng thái</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá</th>
+                                                <th>Thuế</th>
+                                                <th>Thành tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($order->products as $product) {{-- Giả sử $order có mối quan hệ với products --}}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
+                                                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="avatar-md"> {{-- Sử dụng ảnh sản phẩm thật --}}
+                                                        </div>
+                                                        <div>
+                                                            <a href="#!" class="text-dark fw-medium fs-15">{{ $product->name }}</a>
+                                                            <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>{{ $product->pivot->size ?? 'N/A' }}</p> {{-- Lấy size từ pivot table nếu có --}}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success-subtle text-success px-2 py-1 fs-13">Sẵn sàng</span> {{-- Trạng thái sản phẩm trong kho --}}
+                                                </td>
+                                                <td>{{ $product->pivot->quantity }}</td> {{-- Số lượng sản phẩm --}}
+                                                <td>{{ number_format($product->pivot->price) }} đ</td> {{-- Giá sản phẩm --}}
+                                                <td>{{ number_format($product->pivot->tax ?? 0) }} đ</td> {{-- Thuế nếu có --}}
+                                                <td>{{ number_format($product->pivot->quantity * $product->pivot->price + ($product->pivot->tax ?? 0)) }} đ</td> {{-- Tổng thành tiền cho SP này --}}
+                                            </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Không có sản phẩm nào trong đơn hàng này.</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
-                                   </div>
-                              </div>
-                              <div class="card">
-                                   <div class="card-header">
-                                        <h4 class="card-title">Payment Information</h4>
-                                   </div>
-                                   <div class="card-body">
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                             <div class="rounded-3 bg-light avatar d-flex align-items-center justify-content-center">
-                                                  <img src="assets/images/card/mastercard.svg" alt="" class="avatar-sm">
-                                             </div>
-                                             <div>
-                                                  <p class="mb-1 text-dark fw-medium">Master Card</p>
-                                                  <p class="mb-0 text-dark">xxxx xxxx xxxx 7812</p>
-                                             </div>
-                                             <div class="ms-auto">
-                                                  <iconify-icon icon="solar:check-circle-broken" class="fs-22 text-success"></iconify-icon>
-                                             </div>
+                        {{-- Phần Dòng Thời Gian Đơn Hàng (Order Timeline) --}}
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Dòng thời gian đơn hàng</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="position-relative ms-2">
+                                    <span class="position-absolute start-0 top-0 border border-dashed h-100"></span>
+                                    {{-- Mỗi div này là một mốc thời gian --}}
+                                    <div class="position-relative ps-4 mb-4">
+                                        <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
+                                            <i class="bx bx-check-circle"></i>
+                                        </span>
+                                        <div class="ms-2 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                            <div>
+                                                <h5 class="mb-1 text-dark fw-medium fs-15">Đơn hàng được tạo</h5>
+                                                <p class="mb-0">Đơn hàng đã được đặt thành công.</p>
+                                            </div>
+                                            <p class="mb-0">{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y, H:i') }}</p>
                                         </div>
-                                        <p class="text-dark mb-1 fw-medium">Transaction ID : <span class="text-muted fw-normal fs-13"> #IDN768139059</span></p>
-                                        <p class="text-dark mb-0 fw-medium">Card Holder Name : <span class="text-muted fw-normal fs-13"> Gaston Lapierre</span></p>
-
-                                   </div>
-                              </div>
-                              <div class="card">
-                                   <div class="card-header">
-                                        <h4 class="card-title">Customer Details</h4>
-                                   </div>
-                                   <div class="card-body">
-                                        <div class="d-flex align-items-center gap-2">
-                                             <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar rounded-3 border border-light border-3">
-                                             <div>
-                                                  <p class="mb-1">Gaston Lapierre</p>
-                                                  <a href="order-detail.html#!" class="link-primary fw-medium">hello@dundermuffilin.com</a>
-                                             </div>
+                                    </div>
+                                    {{-- Các mốc thời gian khác có thể được thêm vào đây dựa trên lịch sử trạng thái của $order --}}
+                                    {{-- Ví dụ: --}}
+                                    @if($order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed')
+                                    <div class="position-relative ps-4 mb-4">
+                                        <span class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
+                                            <i class="bx bx-check-circle"></i>
+                                        </span>
+                                        <div class="ms-2 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                            <div>
+                                                <h5 class="mb-1 text-dark fw-medium fs-15">Đơn hàng đang được xử lý</h5>
+                                                <p class="mb-0">Đơn hàng đang được chuẩn bị để đóng gói.</p>
+                                            </div>
+                                            {{-- Bạn cần lưu lại thời gian chuyển trạng thái trong DB để hiển thị chính xác --}}
+                                            <p class="mb-0">{{ \Carbon\Carbon::parse($order->updated_at)->format('d/m/Y, H:i') }}</p>
                                         </div>
-                                        <div class="d-flex justify-content-between mt-3">
-                                             <h5 class="">Contact Number</h5>
-                                             <div>
-                                                  <a href="order-detail.html#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                                             </div>
-                                        </div>
-                                        <p class="mb-1">(723) 732-760-5760</p>
-
-                                        <div class="d-flex justify-content-between mt-3">
-                                             <h5 class="">Shipping Address</h5>
-                                             <div>
-                                                  <a href="order-detail.html#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                                             </div>
-                                        </div>
-
-                                        <div>
-                                             <p class="mb-1">Wilson's Jewelers LTD</p>
-                                             <p class="mb-1">1344 Hershell Hollow Road ,</p>
-                                             <p class="mb-1">Tukwila, WA 98168 ,</p>
-                                             <p class="mb-1">United States</p>
-                                             <p class="">(723) 732-760-5760</p>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between mt-3">
-                                             <h5 class="">Billing Address</h5>
-                                             <div>
-                                                  <a href="order-detail.html#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                                             </div>
-                                        </div>
-
-                                        <p class="mb-1">Same as shipping address</p>
-                                   </div>
-                              </div>
-                              <div class="card">
-                                   <div class="card-body">
-                                        <div class="mapouter">
-                                             <div class="gmap_canvas"><iframe class="gmap_iframe rounded" width="100%" style="height: 418px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=1980&amp;height=400&amp;hl=en&amp;q=University of Oxford&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe></div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
+                                    </div>
+                                    @endif
+                                    {{-- Tương tự cho shipped, delivered, v.v. --}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-               </div>
+                </div>
+            </div>
 
-          </div>
-          @endsection
+            {{-- Cột bên phải: Tổng quan đơn hàng, Thông tin thanh toán, Thông tin khách hàng --}}
+            <div class="col-xl-3 col-lg-4">
+                {{-- Tổng quan đơn hàng (Order Summary) --}}
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Tổng quan đơn hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:clipboard-text-broken"></iconify-icon> Tổng phụ : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">{{ number_format($order->total_price - ($order->shipping_fee ?? 0) + ($order->discount_amount ?? 0)) }} đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:ticket-broken" class="align-middle"></iconify-icon> Giảm giá : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">-{{ number_format($order->discount_amount ?? 0) }} đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:kick-scooter-broken" class="align-middle"></iconify-icon> Phí giao hàng : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">{{ number_format($order->shipping_fee ?? 0) }} đ</td>
+                                    </tr>
+                                    {{-- Nếu có thuế, bạn có thể thêm dòng này --}}
+                                    {{-- <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon icon="solar:calculator-minimalistic-broken" class="align-middle"></iconify-icon> Thuế ({{ $order->tax_rate ?? '0' }}%) : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">{{ number_format($order->tax_amount ?? 0) }} đ</td>
+                                    </tr> --}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between bg-light-subtle">
+                        <div>
+                            <p class="fw-medium text-dark mb-0">Tổng cộng</p>
+                        </div>
+                        <div>
+                            <p class="fw-medium text-dark mb-0">{{ number_format($order->total_price) }} đ</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Thông tin thanh toán (Payment Information) --}}
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Thông tin thanh toán</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            {{-- Bạn có thể hiển thị icon dựa trên $order->type_payment --}}
+                            <div class="rounded-3 bg-light avatar d-flex align-items-center justify-content-center">
+                                @if($order->type_payment == 'cod')
+                                    <i class="bx bx-money fs-3"></i> {{-- Icon tiền mặt --}}
+                                @elseif($order->type_payment == 'bank_transfer')
+                                    <i class="bx bx-bank fs-3"></i> {{-- Icon ngân hàng --}}
+                                @else
+                                    <img src="{{ asset('assets/images/card/mastercard.svg') }}" alt="" class="avatar-sm"> {{-- Icon thẻ --}}
+                                @endif
+                            </div>
+                            <div>
+                                <p class="mb-1 text-dark fw-medium">
+                                    @if($order->type_payment == 'cod')
+                                        Thanh toán khi nhận hàng (COD)
+                                    @elseif($order->type_payment == 'bank_transfer')
+                                        Chuyển khoản ngân hàng
+                                    @else
+                                        Thẻ tín dụng (Master Card) {{-- Giả sử là Master Card nếu không phải COD/Bank --}}
+                                    @endif
+                                </p>
+                                <p class="mb-0 text-dark">{{ $order->card_number ?? 'N/A' }}</p> {{-- Hiển thị 4 số cuối thẻ nếu có --}}
+                            </div>
+                            <div class="ms-auto">
+                                @if($order->status_payment == 'paid')
+                                    <iconify-icon icon="solar:check-circle-broken" class="fs-22 text-success"></iconify-icon>
+                                @else
+                                    <iconify-icon icon="solar:clock-circle-broken" class="fs-22 text-warning"></iconify-icon>
+                                @endif
+                            </div>
+                        </div>
+                        <p class="text-dark mb-1 fw-medium">ID Giao dịch : <span class="text-muted fw-normal fs-13"> #{{ $order->transaction_id ?? 'N/A' }}</span></p>
+                        <p class="text-dark mb-0 fw-medium">Tên chủ thẻ/Người thanh toán : <span class="text-muted fw-normal fs-13"> {{ $order->user_name ?? 'N/A' }}</span></p>
+                    </div>
+                </div>
+
+                {{-- Thông tin khách hàng (Customer Details) --}}
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Thông tin khách hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="" class="avatar rounded-3 border border-light border-3"> {{-- Ảnh đại diện --}}
+                            <div>
+                                <p class="mb-1">{{ $order->user_name ?? 'N/A' }}</p>
+                                <a href="mailto:{{ $order->user_email }}" class="link-primary fw-medium">{{ $order->user_email }}</a>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Số điện thoại liên hệ</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
+                            </div>
+                        </div>
+                        <p class="mb-1">{{ $order->user_phone }}</p>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Địa chỉ giao hàng</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1">{{ $order->user_name ?? 'N/A' }}</p>
+                            <p class="mb-1">{{ $order->user_address ?? 'N/A' }}</p>
+                            <p class="mb-1">{{ $order->user_city ?? 'N/A' }}, {{ $order->user_zip ?? 'N/A' }}</p>
+                            <p class="mb-1">{{ $order->user_country ?? 'N/A' }}</p>
+                            <p class="">{{ $order->user_phone ?? 'N/A' }}</p>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Địa chỉ thanh toán</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
+                            </div>
+                        </div>
+                        <p class="mb-1">{{ $order->billing_address ?? 'Giống địa chỉ giao hàng' }}</p> {{-- Nếu có địa chỉ thanh toán riêng --}}
+                    </div>
+                </div>
+
+                {{-- Bản đồ (Map) - Nếu bạn muốn hiển thị vị trí trên bản đồ --}}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mapouter">
+                            {{-- Bạn cần thay đổi src của iframe để hiển thị địa chỉ của đơn hàng --}}
+                            <div class="gmap_canvas">
+                                <iframe class="gmap_iframe rounded" width="100%" style="height: 418px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                                    src="https://maps.google.com/maps?q={{ urlencode($order->user_address ?? '') }}&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+@endsection
