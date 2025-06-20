@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Frontend routes
@@ -29,6 +31,10 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.login-register');
 })->name('register');
+Route::post('/logout',[AuthController::class ,'destroy'])->name('auth.destroy');
+Route::post('login-process',AuthController::class . '@handleLogin')->name('login.process');
+Route::post('register-process',AuthController::class . '@handleregister')->name('register.process');
+Route::post('forgot-password', AuthController::class . '@handleForgotPassword')->name('forgot-password');
 
 Route::view('/cart', 'cart');
 

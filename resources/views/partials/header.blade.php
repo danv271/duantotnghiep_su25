@@ -122,7 +122,7 @@
                             </div>
                             @if (isset(session('user')->id) && session('user')->id > 0)
                                 <div class="dropdown-footer">
-                                    <form method="POST" action="{{ route('destroy') }}">
+                                    <form method="POST" action="{{ route('auth.destroy') }}">
                                         @csrf
                                         <button type="submit" class="btn btn-secondary w-100">Logout</button>
                                     </form>
