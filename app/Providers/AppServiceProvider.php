@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
+use App\Models\Category;
+use Illuminate\Support\Facades\View;
 use App\Http\Middleware\CheckUserRole; // Từ nhánh HEAD
 use Illuminate\Support\Facades\Route;  // Từ nhánh HEAD
 
@@ -24,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Paginator::useBootstrapFive();
+        
+        // Share categories with sidebar
         // Alias cho middleware CheckUserRole
         Route::aliasMiddleware('check.role', CheckUserRole::class);
 

@@ -3,5 +3,4 @@
 
 @section('content')
     @include('partials.product-list', ['products' => $products])
-    
 @endsection

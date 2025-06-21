@@ -1,9 +1,9 @@
 <?php
-
-use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Container\Attributes\Auth;
@@ -58,76 +58,19 @@ Route::get('/admin/dashboard', function () {
 
 Route::prefix('admin/products')->group(function () {
     // Danh sách sản phẩm
-    Route::get('/list', function () {
-        return view('admin.products.list');
-    })->name('admin.products-list');
-Route::prefix('admin/oders')->group(function () {
-    // Danh sách đơn hàng
-    Route::get('/list', function(){
-        return view('admin.orders.index');
-    })->name('admin.orders.index');
-    Route::get('/detail/{id?}',function (){
-        return view('admin.orders.show');
-    })->name('admin.orders.show'); // Chi tiết đơn hàng
-});
-});
+    Route::get('/list',[ProductController::class,'index'])->name('admin.products-list');
     // Tạo sản phẩm
-    Route::get('/create',function(){
-        $categories = [
-            (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
-            (object) ['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
-            (object) ['category_id' => 3, 'description' => 'Footwear', 'parent_category_id' => 1, 'status' => 'active'],
-            (object) ['category_id' => 4, 'description' => 'Smartphones', 'parent_category_id' => 2, 'status' => 'active'],
-            (object) ['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
-        ];
-
-        // Demo data for attributes
-        $attributes = [
-            (object) ['attribute_id' => 1, 'name' => 'Color'],
-            (object) ['attribute_id' => 2, 'name' => 'Size'],
-            (object) ['attribute_id' => 3, 'name' => 'Material'],
-            (object) ['attribute_id' => 4, 'name' => 'Brand'],
-        ];
-
-        // Demo data for attribute values
-        $attributeValues = [
-            (object) ['attribute_value_id' => 1, 'value' => 'Red'],
-            (object) ['attribute_value_id' => 2, 'value' => 'Blue'],
-            (object) ['attribute_value_id' => 3, 'value' => 'Green'],
-            (object) ['attribute_value_id' => 4, 'value' => 'XS'],
-            (object) ['attribute_value_id' => 5, 'value' => 'S'],
-            (object) ['attribute_value_id' => 6, 'value' => 'M'],
-            (object) ['attribute_value_id' => 7, 'value' => 'L'],
-            (object) ['attribute_value_id' => 8, 'value' => 'Cotton'],
-            (object) ['attribute_value_id' => 9, 'value' => 'Leather'],
-            (object) ['attribute_value_id' => 10, 'value' => 'Polyester'],
-            (object) ['attribute_value_id' => 11, 'value' => 'Nike'],
-            (object) ['attribute_value_id' => 12, 'value' => 'Adidas'],
-            (object) ['attribute_value_id' => 13, 'value' => 'Samsung'],
-        ];
-        return view('admin.products.create',compact('categories', 'attributes', 'attributeValues'));
-    })->name('admin.products-create');
-    Route::post('/store', function () {
-
-    })->name('admin.products-store');
+    Route::get('/create',[ProductController::class,'create'])->name('admin.products-create');
+    Route::post('/store',[ProductController::class,'store'])->name('admin.products-store');
 
     // Chỉnh sửa sản phẩm
-    Route::get('/id/edit',function(){
-        return view('admin.products.edit');
-    })->name('admin.products-edit');
-    Route::put('/{id}',function(){
-
-    })->name('admin.products-update'); // Thêm route PUT để cập nhật
+    Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products-edit');
+    Route::put('/update/{id}',[ProductController::class,'update'])->name('admin.products-update'); // Thêm route PUT để cập nhật
 
     // Chi tiết sản phẩm
-    Route::get('/id',function(){
-        return view('admin.products.detail');
-    })->name('admin.products-detail');
+    Route::get('/detail/{id}',[ProductController::class,'show'])->name('admin.products-detail');
 
-    // Upload file (dùng POST thay vì GET)
-    Route::post('/upload-file', function () {
-        // Xử lý upload file
-    })->name('admin.products.upload-file');
+});
 Route::get('/admin/category', function () {
     return view('admin.category.index');
 })->name('admin.category.index');
@@ -139,7 +82,15 @@ Route::get('/admin/category/create', function () {
 Route::get('/admin/category/edit', function () {
     return view('admin.category.edit');
 })->name('admin.category.edit');
-
+Route::prefix('admin/oders')->group(function () {
+    // Danh sách đơn hàng
+    Route::get('/list', function(){
+        return view('admin.orders.index');
+    })->name('admin.orders.index');
+    Route::get('/detail/{id?}',function (){
+        return view('admin.orders.show');
+    })->name('admin.orders.show'); // Chi tiết đơn hàng
+});
 
 Route::get('/admin/attributes', function () {
     return view('admin.attributes.index');
@@ -244,7 +195,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{category}', 'update')->name('update');
         Route::delete('/{category}', 'destroy')->name('destroy');
     });
-
+Route::get('/products', [ProductController::class, 'indexClient']);
+Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
     // Orders
     Route::controller(OrderController::class)->prefix('orders')->name('orders.')->group(function () {
         Route::get('/', 'index')->name('index');
