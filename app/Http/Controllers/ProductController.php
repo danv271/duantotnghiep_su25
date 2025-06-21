@@ -283,4 +283,17 @@ class ProductController extends Controller
     {
         //
     }
+
+    public function indexClient()
+    {
+        $products = Product::all();
+        return view('products', compact('products'));
+    }
+
+
+    public function showClient($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('product-detail', compact('product'));
+    }
 }
