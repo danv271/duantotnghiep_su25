@@ -40,7 +40,7 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{route('admin.products-list')}}">List</a>
+                            <a class="sub-nav-link" href="{{route('admin.products.list')}}">List</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
@@ -127,7 +127,7 @@
                 <div class="collapse" id="sidebarOrders">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.orders.index') }}">List</a>
+                            <a class="sub-nav-link" href="{{route('admin.oders.index')}}">List</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="order-cart.html">Cart</a>
@@ -177,9 +177,6 @@
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.attributes.create') }}">Create</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.attributes.edit') }}">Edit</a>
                         </li>
                     </ul>
                 </div>
@@ -243,9 +240,6 @@
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.roles.create') }}">Create</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.roles.edit', 1) }}">Edit</a>
                         </li>
                     </ul>
                 </div>
