@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
-use App\Models\Category;
-use Illuminate\Support\Facades\View;
 use App\Http\Middleware\CheckUserRole; // Từ nhánh HEAD
 use Illuminate\Support\Facades\Route;  // Từ nhánh HEAD
-
 use App\Models\Category;               // Từ nhánh main
 use Illuminate\Support\Facades\View;   // Từ nhánh main
 use Illuminate\Support\ServiceProvider;
@@ -36,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Chia sẻ các danh mục với sidebar
         View::composer('admin.partials.sidebar', function ($view) {
-            $view->with('categories', Category::orderBy('name')->get());
+            $view->with('categories', Category::orderBy('category_name')->get());
         });
     }
 }
