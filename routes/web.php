@@ -1,8 +1,9 @@
 <?php
-use App\Http\Controllers\ProductController;
+
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 // use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -122,68 +123,68 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     // Products
-    Route::prefix('products')->name('products.')->group(function () {
-        // Danh sách sản phẩm
-        Route::get('/', function () {
-            return view('admin.products.list');
-        })->name('list');
+    // Route::prefix('products')->name('products.')->group(function () {
+    //     // Danh sách sản phẩm
+    //     Route::get('/', function () {
+    //         return view('admin.products.list');
+    //     })->name('list');
 
-        // Tạo sản phẩm
-        Route::get('/create', function () {
-            $categories = [
-                (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
-                (object) ['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
-                (object) ['category_id' => 3, 'description' => 'Footwear', 'parent_category_id' => 1, 'status' => 'active'],
-                (object) ['category_id' => 4, 'description' => 'Smartphones', 'parent_category_id' => 2, 'status' => 'active'],
-                (object) ['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
-            ];
+    //     // Tạo sản phẩm
+    //     Route::get('/create', function () {
+    //         $categories = [
+    //             (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
+    //             (object) ['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
+    //             (object) ['category_id' => 3, 'description' => 'Footwear', 'parent_category_id' => 1, 'status' => 'active'],
+    //             (object) ['category_id' => 4, 'description' => 'Smartphones', 'parent_category_id' => 2, 'status' => 'active'],
+    //             (object) ['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
+    //         ];
 
-            $attributes = [
-                (object) ['attribute_id' => 1, 'name' => 'Color'],
-                (object) ['attribute_id' => 2, 'name' => 'Size'],
-                (object) ['attribute_id' => 3, 'name' => 'Material'],
-                (object) ['attribute_id' => 4, 'name' => 'Brand'],
-            ];
+    //         $attributes = [
+    //             (object) ['attribute_id' => 1, 'name' => 'Color'],
+    //             (object) ['attribute_id' => 2, 'name' => 'Size'],
+    //             (object) ['attribute_id' => 3, 'name' => 'Material'],
+    //             (object) ['attribute_id' => 4, 'name' => 'Brand'],
+    //         ];
 
-            $attributeValues = [
-                (object) ['attribute_value_id' => 1, 'value' => 'Red'],
-                (object) ['attribute_value_id' => 2, 'value' => 'Blue'],
-                (object) ['attribute_value_id' => 3, 'value' => 'Green'],
-                (object) ['attribute_value_id' => 4, 'value' => 'XS'],
-                (object) ['attribute_value_id' => 5, 'value' => 'S'],
-                (object) ['attribute_value_id' => 6, 'value' => 'M'],
-                (object) ['attribute_value_id' => 7, 'value' => 'L'],
-                (object) ['attribute_value_id' => 8, 'value' => 'Cotton'],
-                (object) ['attribute_value_id' => 9, 'value' => 'Leather'],
-                (object) ['attribute_value_id' => 10, 'value' => 'Polyester'],
-                (object) ['attribute_value_id' => 11, 'value' => 'Nike'],
-                (object) ['attribute_value_id' => 12, 'value' => 'Adidas'],
-                (object) ['attribute_value_id' => 13, 'value' => 'Samsung'],
-            ];
-            return view('admin.products.create', compact('categories', 'attributes', 'attributeValues'));
-        })->name('create');
-        Route::post('/', function () {
-            //
-        })->name('store');
+    //         $attributeValues = [
+    //             (object) ['attribute_value_id' => 1, 'value' => 'Red'],
+    //             (object) ['attribute_value_id' => 2, 'value' => 'Blue'],
+    //             (object) ['attribute_value_id' => 3, 'value' => 'Green'],
+    //             (object) ['attribute_value_id' => 4, 'value' => 'XS'],
+    //             (object) ['attribute_value_id' => 5, 'value' => 'S'],
+    //             (object) ['attribute_value_id' => 6, 'value' => 'M'],
+    //             (object) ['attribute_value_id' => 7, 'value' => 'L'],
+    //             (object) ['attribute_value_id' => 8, 'value' => 'Cotton'],
+    //             (object) ['attribute_value_id' => 9, 'value' => 'Leather'],
+    //             (object) ['attribute_value_id' => 10, 'value' => 'Polyester'],
+    //             (object) ['attribute_value_id' => 11, 'value' => 'Nike'],
+    //             (object) ['attribute_value_id' => 12, 'value' => 'Adidas'],
+    //             (object) ['attribute_value_id' => 13, 'value' => 'Samsung'],
+    //         ];
+    //         return view('admin.products.create', compact('categories', 'attributes', 'attributeValues'));
+    //     })->name('create');
+    //     Route::post('/', function () {
+    //         //
+    //     })->name('store');
 
-        // Chỉnh sửa sản phẩm
-        Route::get('/{id}/edit', function () {
-            return view('admin.products.edit');
-        })->name('edit');
-        Route::put('/{id}', function () {
-            //
-        })->name('update');
+    //     // Chỉnh sửa sản phẩm
+    //     Route::get('/{id}/edit', function () {
+    //         return view('admin.products.edit');
+    //     })->name('edit');
+    //     Route::put('/{id}', function () {
+    //         //
+    //     })->name('update');
 
-        // Chi tiết sản phẩm
-        Route::get('/{id}', function () {
-            return view('admin.products.detail');
-        })->name('detail');
+    //     // Chi tiết sản phẩm
+    //     Route::get('/{id}', function () {
+    //         return view('admin.products.detail');
+    //     })->name('detail');
 
-        // Upload file (dùng POST thay vì GET)
-        Route::post('/upload-file', function () {
-            // Xử lý upload file
-        })->name('upload-file');
-    });
+    //     // Upload file (dùng POST thay vì GET)
+    //     Route::post('/upload-file', function () {
+    //         // Xử lý upload file
+    //     })->name('upload-file');
+    // });
 
     // Categories
     Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function () {
@@ -195,8 +196,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{category}', 'update')->name('update');
         Route::delete('/{category}', 'destroy')->name('destroy');
     });
-Route::get('/products', [ProductController::class, 'indexClient']);
-Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
+    Route::get('/products', [ProductController::class, 'indexClient']);
+    Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
     // Orders
     Route::controller(OrderController::class)->prefix('orders')->name('orders.')->group(function () {
         Route::get('/', 'index')->name('index');
