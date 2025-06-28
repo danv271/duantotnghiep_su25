@@ -191,10 +191,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
+    
+        Route::get('/trashed', 'trashed')->name('trashed');
+        Route::patch('/restore-all', 'restoreAll')->name('restore-all');
+        Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');
+        
+        // Routes với parameter
         Route::get('/{category}', 'show')->name('show');
         Route::get('/{category}/edit', 'edit')->name('edit');
         Route::put('/{category}', 'update')->name('update');
         Route::delete('/{category}', 'destroy')->name('destroy');
+        
+        // Soft delete routes với parameter
+        Route::patch('/{id}/restore', 'restore')->name('restore');
+        Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
     });
     Route::get('/products', [ProductController::class, 'indexClient']);
     Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');

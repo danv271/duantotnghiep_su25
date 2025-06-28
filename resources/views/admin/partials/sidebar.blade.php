@@ -91,6 +91,9 @@
                                 </ul>
                             </div>
                         </li>
+                         <li class="sub-nav-item">
+                            <a class="sub-nav-link" href="{{ route('admin.categories.trashed') }}">Trashed</a>
+                        </li>
                     </ul>
                 </div>
             </li>
