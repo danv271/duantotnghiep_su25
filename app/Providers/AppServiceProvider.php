@@ -6,6 +6,7 @@ use Illuminate\Pagination\Paginator;
 use App\Http\Middleware\CheckUserRole; // Từ nhánh HEAD
 use Illuminate\Support\Facades\Route;  // Từ nhánh HEAD
 use App\Models\Category;               // Từ nhánh main
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;   // Từ nhánh main
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        URL::forceScheme('https');
         Paginator::useBootstrapFive();
         
         // Share categories with sidebar
