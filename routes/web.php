@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 // use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
@@ -162,7 +163,10 @@ Route::get('/register', function () {
 Route::post('/logout',[AuthController::class ,'destroy'])->name('auth.destroy');
 Route::post('login-process',AuthController::class . '@handleLogin')->name('login.process');
 Route::post('register-process',AuthController::class . '@handleregister')->name('register.process');
-Route::post('forgot-password', AuthController::class . '@handleForgotPassword')->name('forgot-password');
+Route::get('forgot-password', AuthController::class . '@forgotPassword')->name('forgot-password');
+route::post('/forgot-password/process', AuthController::class . '@handleForgotPassword')->name('forgot-password.process');
+route::get('/reset-password', AuthController::class . '@resetPassword')->name('reset.password');
+route::put('/rest-password-process', AuthController::class . '@handleResetPassword')->name('reset.password.process');
 
 Route::view('/cart', 'cart');
 
@@ -351,18 +355,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Roles
     Route::prefix('roles')->name('roles.')->group(function () {
-        Route::get('/', function () {
-            return view('admin.roles.index');
-        })->name('index');
-        Route::get('/create', function () {
-            return view('admin.roles.create');
-        })->name('create');
-        Route::get('/{id}', function ($id) {
-            return view('admin.roles.show', ['id' => $id]);
-        })->name('show');
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.roles.edit', ['id' => $id]);
-        })->name('edit');
+        Route::get('/',[RoleController::class , "index"])->name('index');
+        Route::get('/create',[RoleController::class , "create"] )->name('create');
+        Route::post('/',[RoleController::class , "store"])->name('store');
+        Route::get('/{id}', [RoleController::class , "show"])->name('show');
+        Route::get('/{id}/edit',[RoleController::class , "edit"])->name('edit');
     });
   
 });
