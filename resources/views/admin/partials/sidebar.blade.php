@@ -21,7 +21,7 @@
             <li class="menu-title">General</li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/admin/dashboard') }}">
+                <a class="nav-link" href="{{ url(route('admin.dashboard')) }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                     </span>
@@ -40,7 +40,7 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{route('admin.products-list')}}">List</a>
+                            <a class="sub-nav-link" href="#">List</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
