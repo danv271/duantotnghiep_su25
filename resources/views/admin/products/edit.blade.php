@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="#" method="POST" enctype="multipart/form-data" id="edit-product-form">
+                        <form action="{{ route('admin.products-update', $product->id) }}" method="POST" enctype="multipart/form-data" id="edit-product-form">
                             @csrf
                             @method('PUT')
 
@@ -27,23 +27,23 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="edit-product-name" class="form-label">Tên Sản Phẩm</label>
-                                    <input type="text" id="edit-product-name" name="name" class="form-control" value="Sample Product" required>
+                                    <input type="text" id="edit-product-name" name="name" class="form-control" value="{{ $product->name }}">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="edit-product-base-price" class="form-label">Giá Cơ Bản</label>
-                                    <input type="number" id="edit-product-base-price" name="base_price" class="form-control" step="0.01" value="99.99" required>
+                                    <input type="number" id="edit-product-base-price" name="base_price" class="form-control" step="0.01" value="{{ $product->base_price }}">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="edit-product-category" class="form-label">Danh Mục</label>
-                                    <select class="form-select" id="edit-product-category" name="category_id" required>
-                                        <option value="1" selected>Electronics</option>
-                                        <option value="2">Fashion</option>
-                                        <option value="3">Home</option>
+                                    <select class="form-select" id="edit-product-category" name="category_id">
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="edit-product-description" class="form-label">Mô Tả</label>
-                                    <textarea id="edit-product-description" name="description" class="form-control" rows="3">This is a sample product description.</textarea>
+                                    <textarea id="edit-product-description" name="description" class="form-control" rows="3">{{ $product->description }}</textarea>
                                 </div>
                             </div>
 
@@ -55,10 +55,10 @@
                                     <div class="dropzone featured-dropzone" id="edit-featured-dropzone" data-plugin="dropzone">
                                         <div class="dz-preview">
                                             <div class="dz-image">
-                                                <img src="https://via.placeholder.com/150" alt="Featured Image">
+                                                <img src="{{ asset('storage/' . $featuredImage) }}" width="100%" alt="Featured Image">
                                             </div>
-                                            <a class="dz-remove" href="javascript:undefined;">Xóa</a>
-                                        </div>
+                                            <a class="dz-remove" href="">Xóa</a>
+                                        </div>  
                                     </div>
                                     <input type="hidden" name="featured_image" id="edit-featured-image-input">
                                 </div>
@@ -88,149 +88,94 @@
                                     <input type="hidden" name="images[]" id="edit-images-input" multiple>
                                 </div>
                             </div>
-
+                            
                             <!-- Biến Thể -->
                             <h5 class="mb-3">Biến Thể</h5>
                             <div id="edit-variants-container">
-                                <!-- Biến Thể 1 -->
-                                <div class="variant-row mb-3 border p-3 rounded position-relative">
-                                    <span class="remove-variant-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Giá</label>
-                                            <input type="number" name="variants[0][price]" class="form-control" step="0.01" value="109.99" required>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Số Lượng</label>
-                                            <input type="number" name="variants[0][quantity]" class="form-control" value="50" required>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Trạng Thái</label>
-                                            <select class="form-select" name="variants[0][status]" required>
-                                                <option value="active" selected>Kích Hoạt</option>
-                                                <option value="inactive">Không Kích Hoạt</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div id="edit-variant-attributes-0">
-                                        <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
-                                            <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                            <div class="row">
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Thuộc Tính</label>
-                                                    <select class="form-select" name="variants[0][attributes][0][attribute_id]" required>
-                                                        <option value="1" selected>Color</option>
-                                                        <option value="2">Size</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Giá Trị</label>
-                                                    <select class="form-select" name="variants[0][attributes][0][attribute_value_id]" required>
-                                                        <option value="1" selected>Red</option>
-                                                        <option value="2">Blue</option>
-                                                        <option value="3">S</option>
-                                                        <option value="4">M</option>
-                                                        <option value="5">L</option>
-                                                    </select>
-                                                </div>
+                                <!-- Biến Thể -->
+                                @foreach ($product->variants as $index => $variant)
+                                    <div class="variant-row mb-3 border p-3 rounded position-relative">
+                                        <span class="remove-variant-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Giá</label>
+                                                <input type="number" name="variants[{{ $index }}][price]" class="form-control" step="0.01" value="{{ $variant->price }}">
+                                            </div>
+                                            <input type="hidden" name="variants[{{ $index }}][id]" class="form-control" value="{{ $variant->id ? $variant->id :'' }}">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Số Lượng</label>
+                                                <input type="number" name="variants[{{ $index }}][quantity]" class="form-control" value="{{ $variant->stock_quantity }}">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Trạng Thái</label>
+                                                <select class="form-select" name="variants[{{ $index }}][status]">
+                                                    <option value="active" {{ $variant->status == 'active' ? 'selected' : '' }}>Kích Hoạt</option>
+                                                    <option value="inactive" {{ $variant->status == 'inactive' ? 'selected' : '' }}>Không Kích Hoạt</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
-                                            <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                            <div class="row">
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Thuộc Tính</label>
-                                                    <select class="form-select" name="variants[0][attributes][1][attribute_id]" required>
-                                                        <option value="1">Color</option>
-                                                        <option value="2" selected>Size</option>
-                                                    </select>
+                                        <div id="edit-variant-attributes-{{ $index }}">
+                                            @foreach ($variant->attributesValue as $attrIndex => $attribute)
+                                                <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
+                                                    <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
+                                                    <div class="row">
+                                                        <div class="col-md-5 mb-3">
+                                                            <label class="form-label">Thuộc Tính</label>
+                                                            <select class="form-select" name="variants[{{ $index }}][attributes][{{ $attrIndex }}][attribute_id]">
+                                                                <option value="">Chọn giá trị</option>
+                                                                @foreach ($attributes as $attributeOption)
+                                                                    <option value="{{ $attributeOption->id }}" {{ $attribute->attribute_id == $attributeOption->id ? 'selected' : '' }}>
+                                                                        {{ $attributeOption->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-5 mb-3">
+                                                            <label class="form-label">Giá Trị</label>
+                                                            <select class="form-select" name="variants[{{ $index }}][attributes][{{ $attrIndex }}][attribute_value_id]">
+                                                                <option value="">Chọn giá trị</option>
+                                                                @foreach ($attributeValues as $value)
+                                                                    <option value="{{ $value->id }}" {{ $attribute->id == $value->id ? 'selected' : '' }}>
+                                                                        {{ $value->value }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Giá Trị</label>
-                                                    <select class="form-select" name="variants[0][attributes][1][attribute_value_id]" required>
-                                                        <option value="1">Red</option>
-                                                        <option value="2">Blue</option>
-                                                        <option value="3">S</option>
-                                                        <option value="4" selected>M</option>
-                                                        <option value="5">L</option>
-                                                    </select>
+                                            @endforeach
+                                            @if ($variant->attributesValue->isEmpty())
+                                                <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
+                                                    <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
+                                                    <div class="row">
+                                                        <div class="col-md-5 mb-3">
+                                                            <label class="form-label">Thuộc Tính</label>
+                                                            <select class="form-select" name="variants[{{ $index }}][attributes][0][attribute_id]">
+                                                                <option value="">Chọn giá trị</option>
+                                                                @foreach ($attributeValues as $attributeOption)
+                                                                    <option value="{{ $attributeOption->id }}">{{ $attributeOption->value }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-5 mb-3">
+                                                            <label class="form-label">Giá Trị</label>
+                                                            <select class="form-select" name="variants[{{ $index }}][attributes][0][attribute_value_id]">
+                                                                <option value="">Chọn giá trị</option>
+                                                                @foreach ($attributeValues as $value)
+                                                                    <option value="{{ $value->id }}">{{ $value->value }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </div>
+                                        <span class="add-variant-attribute-btn text-primary cursor-pointer mb-3 d-inline-block" data-variant-index="{{ $index }}">Thêm</span>
                                     </div>
-                                    <span class="add-variant-attribute-btn text-primary cursor-pointer mb-3 d-inline-block" data-variant-index="0">Thêm</span>
-                                </div>
-                                <!-- Biến Thể 2 -->
-                                <div class="variant-row mb-3 border p-3 rounded position-relative">
-                                    <span class="remove-variant-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Giá</label>
-                                            <input type="number" name="variants[1][price]" class="form-control" step="0.01" value="119.99" required>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Số Lượng</label>
-                                            <input type="number" name="variants[1][quantity]" class="form-control" value="30" required>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label class="form-label">Trạng Thái</label>
-                                            <select class="form-select" name="variants[1][status]" required>
-                                                <option value="active" selected>Kích Hoạt</option>
-                                                <option value="inactive">Không Kích Hoạt</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div id="edit-variant-attributes-1">
-                                        <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
-                                            <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                            <div class="row">
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Thuộc Tính</label>
-                                                    <select class="form-select" name="variants[1][attributes][0][attribute_id]" required>
-                                                        <option value="1" selected>Color</option>
-                                                        <option value="2">Size</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Giá Trị</label>
-                                                    <select class="form-select" name="variants[1][attributes][0][attribute_value_id]" required>
-                                                        <option value="1">Red</option>
-                                                        <option value="2" selected>Blue</option>
-                                                        <option value="3">S</option>
-                                                        <option value="4">M</option>
-                                                        <option value="5">L</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="variant-attribute-row mb-3 border p-2 rounded position-relative">
-                                            <span class="remove-variant-attribute-text position-absolute top-0 end-0 mt-2 me-2 text-danger cursor-pointer">Xóa</span>
-                                            <div class="row">
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Thuộc Tính</label>
-                                                    <select class="form-select" name="variants[1][attributes][1][attribute_id]" required>
-                                                        <option value="1">Color</option>
-                                                        <option value="2" selected>Size</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-5 mb-3">
-                                                    <label class="form-label">Giá Trị</label>
-                                                    <select class="form-select" name="variants[1][attributes][1][attribute_value_id]" required>
-                                                        <option value="1">Red</option>
-                                                        <option value="2">Blue</option>
-                                                        <option value="3">S</option>
-                                                        <option value="4">M</option>
-                                                        <option value="5" selected>L</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="add-variant-attribute-btn text-primary cursor-pointer mb-3 d-inline-block" data-variant-index="1">Thêm</span>
-                                </div>
+                                @endforeach
                             </div>
                             <button type="button" id="add-variant-btn" class="btn add-variant-attribute-btn text-primary cursor-pointer mb-3 d-inline-block">Thêm Biến Thể</button>
-
                             <div class="text-end mt-4">
                                 <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
                                 <a href="{{ url('/admin/products/1') }}" class="btn btn-secondary ms-2">Hủy</a>
@@ -302,61 +247,12 @@
 @endsection
 
 @section('scripts')
-    <!-- Dropzone JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" rel="stylesheet">
-
     <script>
-        let variantIndex = 2;
-
-        // Initialize Featured Image Dropzone
-        new Dropzone('#edit-featured-dropzone', {
-            url: '#',
-            maxFiles: 1,
-            acceptedFiles: 'image/jpeg,image/png,image/gif',
-            autoProcessQueue: false,
-            addRemoveLinks: true,
-            dictDefaultMessage: 'Kéo và thả một hình ảnh nổi bật tại đây, hoặc nhấn để duyệt',
-            init: function() {
-                this.on('addedfile', function(file) {
-                    if (this.files.length > 1) {
-                        this.removeFile(this.files[0]);
-                    }
-                    document.getElementById('edit-featured-image-input').value = file.name;
-                });
-                this.on('removedfile', function() {
-                    document.getElementById('edit-featured-image-input').value = '';
-                });
-            }
-        });
-
-        // Initialize Product Images Dropzone
-        new Dropzone('#edit-images-dropzone', {
-            url: '#',
-            maxFilesize: 5,
-            acceptedFiles: 'image/jpeg,image/png,image/gif',
-            autoProcessQueue: false,
-            addRemoveLinks: true,
-            dictDefaultMessage: 'Kéo và thả hình ảnh bổ sung tại đây, hoặc nhấn để duyệt',
-            init: function() {
-                this.on('addedfile', function(file) {
-                    let input = document.getElementById('edit-images-input');
-                    let files = input.value ? input.value.split(',') : [];
-                    files.push(file.name);
-                    input.value = files.join(',');
-                });
-                this.on('removedfile', function(file) {
-                    let input = document.getElementById('edit-images-input');
-                    let files = input.value.split(',');
-                    const index = files.indexOf(file.name);
-                    if (index > -1) files.splice(index, 1);
-                    input.value = files.join(',');
-                });
-            }
-        });
+        let variantIndex = {{ $product->variants->count() }};
 
         // Thêm hàng biến thể mới
         document.getElementById('add-variant-btn').addEventListener('click', function() {
+            variantIndex++;
             const container = document.getElementById('edit-variants-container');
             const row = document.createElement('div');
             row.className = 'variant-row mb-3 border p-3 rounded position-relative';
@@ -365,15 +261,15 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Giá</label>
-                        <input type="number" name="variants[${variantIndex}][price]" class="form-control" placeholder="0.00" step="0.01" required>
+                        <input type="number" name="variants[${variantIndex}][price]" class="form-control" placeholder="0.00" step="0.01">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Số Lượng</label>
-                        <input type="number" name="variants[${variantIndex}][quantity]" class="form-control" placeholder="0" required>
+                        <input type="number" name="variants[${variantIndex}][quantity]" class="form-control" placeholder="0">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Trs Trạng Thái</label>
-                        <select class="form-select" name="variants[${variantIndex}][status]" required>
+                        <label class="form-label">Trạng Thái</label>
+                        <select class="form-select" name="variants[${variantIndex}][status]">
                             <option value="active">Kích Hoạt</option>
                             <option value="inactive">Không Kích Hoạt</option>
                         </select>
@@ -385,19 +281,20 @@
                         <div class="row">
                             <div class="col-md-5 mb-3">
                                 <label class="form-label">Thuộc Tính</label>
-                                <select class="form-select" name="variants[${variantIndex}][attributes][0][attribute_id]" required>
-                                    <option value="1">Color</option>
-                                    <option value="2">Size</option>
+                                <select class="form-select" name="variants[${variantIndex}][attributes][0][attribute_id]">
+                                    <option value="">Chọn thuộc tính</option>
+                                    @foreach ($attributes as $attributeOption)
+                                        <option value="{{ $attributeOption->id }}">{{ $attributeOption->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-5 mb-3">
                                 <label class="form-label">Giá Trị</label>
-                                <select class="form-select" name="variants[${variantIndex}][attributes][0][attribute_value_id]" required>
-                                    <option value="1">Red</option>
-                                    <option value="2">Blue</option>
-                                    <option value="3">S</option>
-                                    <option value="4">M</option>
-                                    <option value="5">L</option>
+                                <select class="form-select" name="variants[${variantIndex}][attributes][0][attribute_value_id]">
+                                    <option value="">Chọn giá trị</option>
+                                    @foreach ($attributeValues as $value)
+                                        <option value="{{ $value->id }}">{{ $value->value }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -406,7 +303,6 @@
                 <span class="add-variant-attribute-btn text-primary cursor-pointer mb-3 d-inline-block" data-variant-index="${variantIndex}">Thêm</span>
             `;
             container.appendChild(row);
-            variantIndex++;
         });
 
         // Xóa hàng biến thể
@@ -433,19 +329,20 @@
                     <div class="row">
                         <div class="col-md-5 mb-3">
                             <label class="form-label">Thuộc Tính</label>
-                            <select class="form-select" name="variants[${variantIndex}][attributes][${container.children.length}][attribute_id]" required>
-                                <option value="1">Color</option>
-                                <option value="2">Size</option>
+                            <select class="form-select" name="variants[${variantIndex}][attributes][${container.children.length}][attribute_id]">
+                                <option value="">Chọn thuộc tính</option>
+                                @foreach ($attributes as $attributeOption)
+                                    <option value="{{ $attributeOption->id }}">{{ $attributeOption->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-5 mb-3">
                             <label class="form-label">Giá Trị</label>
-                            <select class="form-select" name="variants[${variantIndex}][attributes][${container.children.length}][attribute_value_id]" required>
-                                <option value="1">Red</option>
-                                <option value="2">Blue</option>
-                                <option value="3">S</option>
-                                <option value="4">M</option>
-                                <option value="5">L</option>
+                            <select class="form-select" name="variants[${variantIndex}][attributes][${container.children.length}][attribute_value_id]">
+                                <option value="">Chọn giá trị</option>
+                                @foreach ($attributeValues as $value)
+                                    <option value="{{ $value->id }}">{{ $value->value }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

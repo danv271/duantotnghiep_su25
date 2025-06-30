@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id('id');
+            $table->string('category_name');
             $table->unsignedBigInteger('parent_category_id')->nullable();
             $table->text('description')->nullable();
-            $table->string('status')->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
-
             // Khóa ngoại tự tham chiếu
             $table->foreign('parent_category_id')
                   ->references('id')

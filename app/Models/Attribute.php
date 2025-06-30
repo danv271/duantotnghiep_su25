@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends Model
 {
-    /** @use HasFactory<\Database\Factories\AttributeFactory> */
     use HasFactory;
     protected $table = 'attributes';
-    protected $fillable = [
-        'name',
-    ];
+
+    protected $fillable = ['name'];
+
+    public function attributesValues()
+    {
+        return $this->hasMany(AttributeValue::class,'attribute_id');
+    }
 }
