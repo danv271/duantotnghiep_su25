@@ -6,22 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory;
-
+     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'id',
         'category_name',
         'description',
         'parent_category_id',
         'status',
     ];
-
-    // protected $casts = [
-    //     'is_featured' => 'boolean',
-    //     'order' => 'integer'
-    // ];
 
     /**
      * Get the parent category of this category.
@@ -42,5 +38,9 @@ class Category extends Model
     /**
      * Get all products in this category.
      */
+       public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
    
 }
