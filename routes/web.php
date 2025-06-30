@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 // use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VariantController;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,9 @@ Route::prefix('admin/products')->group(function () {
     // Chi tiết sản phẩm
     Route::get('/detail/{id}',[ProductController::class,'show'])->name('admin.products-detail');
 
+    Route::put('/variant/update/{id}',[VariantController::class,'update'])->name('admin.products.variant-update');
+    Route::delete('/variant/delete/{id}',[VariantController::class,'destroy'])->name('admin.products.variant-delete');
+    Route::post('/variant/add',[VariantController::class,'store'])->name('admin.products.variant-add');
 });
 Route::get('/admin/category', function () {
     return view('admin.category.index');
