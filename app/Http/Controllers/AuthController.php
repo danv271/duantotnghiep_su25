@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+use function Psy\debug;
+
 class AuthController extends Controller
 {
     // 
@@ -31,12 +33,15 @@ class AuthController extends Controller
             'password.required' => 'Mật khẩu không được để trống',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
         ]);
+        // debug($error);
         $user = User::where('email', $validatedData['email'])->first();
+        // dd($user);
         if ($user) {
             $credentials = [
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
             ];
+            // dd($credentials);
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 // Lưu thông tin người dùng vào session
@@ -88,7 +93,6 @@ class AuthController extends Controller
             'is_active' => 1,
         ];
         if ($data) {
-            $data['password'] = bcrypt($data['password']);
             $user = User::create($data);
             return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
         } else {
@@ -111,6 +115,7 @@ class AuthController extends Controller
     }
     public function handleForgotPassword(Request $request)
     {
+        // dd($request->all());
         $error = [];
         $validatedData = $request->validate([
             'email' => 'required|string|email|max:255|exists:users,email',
@@ -143,6 +148,7 @@ class AuthController extends Controller
     }
     public function handleResetPassword(Request $request)
     {
+        // dd($request->all());
         $error = [];
         $validatedData = $request->validate([
             'email' => 'required|string|email|max:255|exists:users,email',
@@ -168,6 +174,7 @@ class AuthController extends Controller
         $user = User::where('email', $validatedData['email'])->first();
         if ($user) {
         // dd($validatedData);
+        $validatedData['password'] = Hash::make($validatedData['password']);
             $user->update(['password'=> $validatedData['password']]);
             // Xóa mã OTP sau khi đặt lại mật khẩu thành công
             $otpCode->delete();
@@ -177,4 +184,8 @@ class AuthController extends Controller
             return redirect()->route('reset.password')->withErrors($error)->withInput();
         }
     }
+    public function resetPassword()
+    {
+        return view('auth.resetPassword');
+    }   
 }

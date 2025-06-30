@@ -11,25 +11,16 @@
                     <h4 class="card-title">Edit Category</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Category Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                           id="name" name="name" value="{{ old('name', $category->name) }}" required>
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="slug" class="form-label">Slug</label>
-                                    <input type="text" class="form-control @error('slug') is-invalid @enderror" 
-                                           id="slug" name="slug" value="{{ old('slug', $category->slug) }}">
-                                    @error('slug')
+                                    <label for="category_name" class="form-label">Category Name</label>
+                                    <input type="text" class="form-control @error('category_name') is-invalid @enderror" 
+                                           id="category_name" name="category_name" value="{{ old('category_name', $category->category_name) }}" required>
+                                    @error('category_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -46,34 +37,20 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="image" class="form-label">Category Image</label>
-                                    @if($category->image)
-                                        <div class="mb-2">
-                                            <img src="{{ asset($category->image) }}" alt="Current Image" class="img-thumbnail" style="max-height: 200px;">
-                                        </div>
-                                    @endif
-                                    <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                                           id="image" name="image" accept="image/*">
-                                    @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="parent_id" class="form-label">Parent Category</label>
-                                    <select class="form-select @error('parent_id') is-invalid @enderror" 
-                                            id="parent_id" name="parent_id">
+                                    <label for="parent_category_id" class="form-label">Parent Category</label>
+                                    <select class="form-select @error('parent_category_id') is-invalid @enderror" 
+                                            id="parent_category_id" name="parent_category_id">
                                         <option value="">None</option>
                                         @foreach($categories as $cat)
                                             @if($cat->id !== $category->id)
                                                 <option value="{{ $cat->id }}" 
-                                                    {{ old('parent_id', $category->parent_id) == $cat->id ? 'selected' : '' }}>
-                                                    {{ $cat->name }}
+                                                    {{ old('parent_category_id', $category->parent_category_id) == $cat->id ? 'selected' : '' }}>
+                                                    {{ $cat->category_name }}
                                                 </option>
                                             @endif
                                         @endforeach
                                     </select>
-                                    @error('parent_id')
+                                    @error('parent_category_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -106,17 +83,5 @@
 </div>
 @endsection
 
-@section('scripts')
-<script>
-    // Auto-generate slug from name
-    document.getElementById('name').addEventListener('keyup', function() {
-        let slug = this.value
-            .toLowerCase()
-            .replace(/[^a-z0-9-]/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '');
-        document.getElementById('slug').value = slug;
-    });
-</script>
-@endsection
+
 

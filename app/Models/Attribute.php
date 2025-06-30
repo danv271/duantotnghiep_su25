@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     use HasFactory;
+    protected $table = 'attributes';
 
     protected $fillable = ['name'];
 
-    public function values()
+    public function attributesValues()
     {
-        return $this->hasMany(AttributeValue::class);
+        return $this->hasMany(AttributeValue::class,'attribute_id');
     }
 }
