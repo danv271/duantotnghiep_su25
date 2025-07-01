@@ -15,14 +15,12 @@ class CategoryController extends Controller
         $categories = Category::with(['parent', 'children'])->paginate(10);
         $totalCategories = Category::count();
         $activeCategories = Category::where('status', 'active')->count();
-        $featuredCategories = Category::where('is_featured', true)->count();
         $subcategories = Category::whereNotNull('parent_category_id')->count();
         
         return view('admin.categories.index', compact(
             'categories',
             'totalCategories',
             'activeCategories',
-            'featuredCategories',
             'subcategories'
         ));
     }
@@ -41,25 +39,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories',
+            'category_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'parent_category_id' => 'nullable|exists:categories,id',
             'status' => 'required|in:active,inactive'
         ]);
-
-        // Generate slug if not provided
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
-            $validated['image'] = $path;
-        }
-
         Category::create($validated);
 
         return redirect()
@@ -90,28 +74,11 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
+            'category_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'parent_category_id' => 'nullable|exists:categories,id',
             'status' => 'required|in:active,inactive'
         ]);
-
-        // Generate slug if not provided
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }
-            $path = $request->file('image')->store('categories', 'public');
-            $validated['image'] = $path;
-        }
 
         $category->update($validated);
 
@@ -139,15 +106,69 @@ class CategoryController extends Controller
                 ->with('error', 'Cannot delete category with associated products.');
         }
 
-        // Delete image if exists
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }
-
         $category->delete();
 
         return redirect()
             ->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');
+    }
+
+     /**
+     * Display a listing of trashed (soft deleted) categories.
+     */
+    public function trashed()
+    {
+        $trashedCategories = Category::onlyTrashed()->with(['parent', 'children'])->paginate(10);
+        return view('admin.categories.trashed', compact('trashedCategories'));
+    }
+    
+    /**
+     * Restore a specific trashed category.
+     */
+    public function restore($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()
+            ->route('admin.categories.trashed')
+            ->with('success', 'Category restored successfully.');
+    }
+
+    /**
+     * Restore all trashed categories.
+     */
+    public function restoreAll()
+    {
+        Category::onlyTrashed()->restore();
+
+        return redirect()
+            ->route('admin.categories.trashed')
+            ->with('success', 'All categories restored successfully.');
+    }
+
+    /**
+     * Permanently delete all trashed categories.
+     */
+    public function forceDeleteAll()
+    {
+        Category::onlyTrashed()->forceDelete();
+
+        return redirect()
+            ->route('admin.categories.trashed')
+            ->with('success', 'All trashed categories permanently deleted.');
+    }
+
+    /**
+     * Permanently delete a specific trashed category.
+     */
+    public function forceDelete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        return redirect()
+            ->route('admin.categories.trashed')
+            ->with('success', 'Category permanently deleted.');
     }
 }

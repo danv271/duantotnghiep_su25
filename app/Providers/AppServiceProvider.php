@@ -6,6 +6,7 @@ use Illuminate\Pagination\Paginator;
 use App\Http\Middleware\CheckUserRole;
 use Illuminate\Support\Facades\Route;
 use App\Models\Category;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        URL::forceScheme('https');
         Paginator::useBootstrapFive();
 
         // Alias cho middleware CheckUserRole

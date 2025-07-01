@@ -62,12 +62,12 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">Featured Categories</h5>
-                            <h2 class="mb-0">{{ $featuredCategories }}</h2>
+                            <h5 class="mb-1">Categories Without Parent</h5>
+                            <h2 class="mb-0">{{ $categories->where('parent_category_id', null)->count() }}</h2>
                         </div>
                         <div class="avatar-sm">
-                            <span class="avatar-title bg-warning-subtle rounded">
-                                <iconify-icon icon="solar:star-broken" class="text-warning fs-24"></iconify-icon>
+                            <span class="avatar-title bg-secondary-subtle rounded">
+                                <iconify-icon icon="solar:folder-broken" class="text-secondary fs-24"></iconify-icon>
                             </span>
                         </div>
                     </div>
@@ -113,6 +113,8 @@
                                 <li><a class="dropdown-item" href="#"><iconify-icon icon="solar:import-broken" class="align-middle me-1"></iconify-icon> Import</a></li>
                                 <li><a class="dropdown-item" href="#"><iconify-icon icon="solar:export-broken" class="align-middle me-1"></iconify-icon> Export</a></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.categories.trashed') }}"><iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle me-1"></iconify-icon> Thùng rác</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#"><iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle me-1"></iconify-icon> Delete Selected</a></li>
                             </ul>
                         </div>
@@ -147,28 +149,19 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                <img src="{{ asset($category->image) }}" alt="" class="avatar-md">
-                                            </div>
                                             <div>
                                                 <p class="text-dark fw-medium fs-15 mb-0">
                                                     @if($category->parent)
                                                         <span class="text-muted">{{ $category->parent->name }}</span>
                                                         <iconify-icon icon="solar:alt-arrow-right-broken" class="align-middle mx-1"></iconify-icon>
                                                     @endif
-                                                    {{ $category->name }}
+                                                    {{ $category->category_name }}
                                                 </p>
                                                 <div class="d-flex gap-2 mt-1">
                                                     @if($category->children->count() > 0)
                                                         <span class="badge bg-info-subtle text-info">
                                                             <iconify-icon icon="solar:folder-broken" class="align-middle"></iconify-icon>
                                                             {{ $category->children->count() }} subcategories
-                                                        </span>
-                                                    @endif
-                                                    @if($category->is_featured)
-                                                        <span class="badge bg-warning-subtle text-warning">
-                                                            <iconify-icon icon="solar:star-broken" class="align-middle"></iconify-icon>
-                                                            Featured
                                                         </span>
                                                     @endif
                                                 </div>
