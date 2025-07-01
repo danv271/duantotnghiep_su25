@@ -106,8 +106,8 @@ Route::get('/admin/attributes/create', function () {
 Route::get('/admin/attributes/edit', function () {
     return view('admin.attributes.edit');
 })->name('admin.attributes.edit');
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products', [ProductController::class, 'indexClient']);
+Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
 
 
 // Admin routes
