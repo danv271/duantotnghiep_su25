@@ -1,4 +1,4 @@
-@extends('admin.layout') {{-- Đảm bảo bạn đang extend đúng layout của admin --}}
+@extends('admin.layouts.app') {{-- Đảm bảo bạn đang extend đúng layout của admin --}}
 
 @section('title', 'Trang Đơn Hàng | Larkon - Responsive Admin Dashboard Template')
 @section('page-title', 'Danh sách đơn hàng') {{-- Hoặc tùy chỉnh tiêu đề trang --}}
