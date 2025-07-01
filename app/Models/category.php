@@ -10,22 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'category_name',
-        'description',
-        'parent_category_id',
-        'status',
-    ];
-
-    // protected $casts = [
-    //     'is_featured' => 'boolean',
-    //     'order' => 'integer'
-    // ];
-
-    /**
-     * Get the parent category of this category.
-     */
+        'category_name','parent_category_id','status',];
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_category_id');
