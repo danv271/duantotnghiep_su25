@@ -18,7 +18,7 @@ use App\Http\Controllers\CartController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| Đây là nơi định nghĩa tất cả route cho web. 
+| Đây là nơi định nghĩa tất cả route cho web.
 | Các route người dùng và quản trị được tách riêng gọn gàng.
 */
 Route::get('/test-cart', function() {
@@ -33,7 +33,7 @@ Route::get('/test-cart', function() {
             'size' => 'L'
         ]
     ];
-    
+
     session()->put('cart', $cart);
     return redirect()->route('cart.index');
 });
@@ -52,7 +52,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/update', [CartController::class, 'update'])->name('update');  // Cập nhật số lượng
     Route::delete('/clear', [CartController::class, 'clear'])->name('clear');   // Xóa toàn bộ giỏ hàng
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove'); // Xóa 1 item
-    
+
 });
 
 Route::view('/search', 'search')->name('search');
@@ -61,7 +61,7 @@ Route::view('/product-details', 'product-details')->name('product-details');
 Route::view('/category', 'category')->name('category');
 
 // ===================== Trang quản trị (admin) =====================
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group (function () {
 
      Route::view('/', '/admin/dashboard');
 
@@ -327,17 +327,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
-    
+
         Route::get('/trashed', 'trashed')->name('trashed');
         Route::patch('/restore-all', 'restoreAll')->name('restore-all');
         Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');
-        
+
         // Routes với parameter
         Route::get('/{category}', 'show')->name('show');
         Route::get('/{category}/edit', 'edit')->name('edit');
         Route::put('/{category}', 'update')->name('update');
         Route::delete('/{category}', 'destroy')->name('destroy');
-        
+
         // Soft delete routes với parameter
         Route::patch('/{id}/restore', 'restore')->name('restore');
         Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
@@ -361,5 +361,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/{id}', [RoleController::class , "show"])->name('show');
         Route::get('/{id}/edit',[RoleController::class , "edit"])->name('edit');
     });
-  
+
 });

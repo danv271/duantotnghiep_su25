@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AttributeValue extends Model
 {
-    use HasFactory;
+   use HasFactory;
 
     protected $table = 'attributes_values';
 
