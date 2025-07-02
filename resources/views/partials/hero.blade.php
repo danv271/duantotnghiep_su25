@@ -3,26 +3,25 @@
         <div class="row align-items-center">
             <div class="col-lg-6 content-col" data-aos="fade-right" data-aos-delay="100">
                 <div class="content">
-                    <span class="promo-badge">New Collection 2025</span>
+                    <span class="promo-badge">Bộ sưu tập 2025</span>
                       
                     <h1>Khám phá <span>các thiết bị điện tử </span> hiện đại cho mọi nhu cầu</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Vestibulum ante ipsum primis in faucibus.</p>
+                    <p>Tập hợp tất cả phụ kiện thông minh và đa năng dànnh cho smartphone của bạn từ cáp sạc, củ sạc, pin dự phòng đến tai nghe, loa bluetooth,…...</p>
                     <div class="hero-cta">
-                        <a href="#" class="btn btn-shop">Shop Now <i class="bi bi-arrow-right"></i></a>
-                        <a href="#" class="btn btn-collection">View Collection</a>
+                        <a href="#" class="btn btn-shop">Mua sắm ngay <i class="bi bi-arrow-right"></i></a>
                     </div>
                     <div class="hero-features">
                         <div class="feature-item">
                             <i class="bi bi-truck"></i>
-                            <span>Free Shipping</span>
+                            <span>Miễn phí vận chuyển</span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-shield-check"></i>
-                            <span>Secure Payment</span>
+                            <span>Thanh toán an toàn</span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-arrow-repeat"></i>
-                            <span>Easy Returns</span>
+                            <span>Đổi hành dễ dàng</span>
                         </div>
                     </div>
                 </div>

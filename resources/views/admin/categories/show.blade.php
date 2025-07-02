@@ -29,10 +29,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <div class="avatar-xl mx-auto mb-3">
-                            <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="img-fluid rounded">
-                        </div>
-                        <h4 class="mb-1">{{ $category->name }}</h4>
+                        <h4 class="mb-1">{{ $category->category_name }}</h4>
                         <p class="text-muted mb-0">ID: #{{ $category->id }}</p>
                     </div>
 
@@ -46,23 +43,6 @@
                                             {{ ucfirst($category->status) }}
                                         </span>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="ps-0">Featured</th>
-                                    <td class="text-end">
-                                        @if($category->is_featured)
-                                            <span class="badge bg-warning-subtle text-warning">
-                                                <iconify-icon icon="solar:star-broken" class="align-middle"></iconify-icon>
-                                                Featured
-                                            </span>
-                                        @else
-                                            <span class="badge bg-light text-muted">No</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="ps-0">Order</th>
-                                    <td class="text-end">{{ $category->order }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="ps-0">Created</th>
@@ -101,14 +81,9 @@
                     <div class="mb-4">
                         <h5 class="fs-15 mb-3">Parent Category</h5>
                         @if($category->parent)
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="rounded bg-light avatar-sm d-flex align-items-center justify-content-center">
-                                    <img src="{{ asset($category->parent->image) }}" alt="" class="avatar-sm">
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">{{ $category->parent->name }}</h6>
-                                    <p class="text-muted mb-0">ID: #{{ $category->parent->id }}</p>
-                                </div>
+                            <div>
+                                <h6 class="mb-0">{{ $category->parent->name }}</h6>
+                                <p class="text-muted mb-0">ID: #{{ $category->parent->id }}</p>
                             </div>
                         @else
                             <p class="text-muted mb-0">This is a parent category.</p>
@@ -124,7 +99,6 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Status</th>
-                                            <th>Featured</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -132,30 +106,15 @@
                                         @foreach($category->children as $child)
                                         <tr>
                                             <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="rounded bg-light avatar-sm d-flex align-items-center justify-content-center">
-                                                        <img src="{{ asset($child->image) }}" alt="" class="avatar-sm">
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">{{ $child->name }}</h6>
-                                                        <p class="text-muted mb-0">ID: #{{ $child->id }}</p>
-                                                    </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ $child->name }}</h6>
+                                                    <p class="text-muted mb-0">ID: #{{ $child->id }}</p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <span class="badge bg-{{ $child->status === 'active' ? 'success' : 'danger' }}-subtle text-{{ $child->status === 'active' ? 'success' : 'danger' }}">
                                                     {{ ucfirst($child->status) }}
                                                 </span>
-                                            </td>
-                                            <td>
-                                                @if($child->is_featured)
-                                                    <span class="badge bg-warning-subtle text-warning">
-                                                        <iconify-icon icon="solar:star-broken" class="align-middle"></iconify-icon>
-                                                        Featured
-                                                    </span>
-                                                @else
-                                                    <span class="badge bg-light text-muted">No</span>
-                                                @endif
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
@@ -177,28 +136,7 @@
                         @endif
                     </div>
 
-                    <div class="mb-4">
-                        <h5 class="fs-15 mb-3">URL Information</h5>
-                        <div class="table-responsive">
-                            <table class="table table-borderless mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" class="ps-0">Slug</th>
-                                        <td class="text-end">{{ $category->slug }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" class="ps-0">Full URL</th>
-                                        <td class="text-end">
-                                            <a href="{{ url('categories/' . $category->slug) }}" target="_blank" class="text-primary">
-                                                {{ url('categories/' . $category->slug) }}
-                                                <iconify-icon icon="solar:external-link-broken" class="align-middle ms-1"></iconify-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                  
                 </div>
             </div>
         </div>

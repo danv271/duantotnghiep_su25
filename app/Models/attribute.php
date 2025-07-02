@@ -10,8 +10,11 @@ class Attribute extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
-
-    public function values()
+    // tên bảng
+    protected $table = 'attributes';
+    // khóa chính
+    protected $primarykey = 'id';
+    public function attributesValues()
     {
         return $this->hasMany(AttributeValue::class);
     }

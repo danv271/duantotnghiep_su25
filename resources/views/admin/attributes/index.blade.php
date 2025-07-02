@@ -76,11 +76,11 @@
                                     <td>{{ ($attributes->currentPage() - 1) * $attributes->perPage() + $key + 1 }}</td>
                                     <td>{{ $attribute->name }}</td>
                                     <td>
-                                        @foreach($attribute->values as $value)
+                                        @foreach($attribute->attributesValues as $value)
                                             <span class="badge bg-primary me-1">{{ $value->value }}</span>
                                         @endforeach
                                     </td>
-                                    <td>{{ $attribute->created_at->format('d/m/Y') }}</td>
+                                    <td>{{ $attribute->created_at ? $attribute->created_at->format('d/m/Y') : "" }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('admin.attributes.edit', $attribute->id) }}" class="btn btn-soft-primary btn-sm">
