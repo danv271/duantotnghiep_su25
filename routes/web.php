@@ -26,7 +26,7 @@ Route::get('/test-cart', function() {
         '1' => [
             'id' => '1',
             'name' => 'Test Product',
-            'price' => 100000,
+            'base_price' => 100000,
             'quantity' => 2,
             'image' => 'images/default-product.jpg',
             'color' => 'Red',
@@ -39,7 +39,7 @@ Route::get('/test-cart', function() {
 });
 
 // ===================== Giao diện người dùng =====================
-Route::view('/', 'index');
+Route::view('/', 'index',[HomeController::class,'index']);
 Route::view('/account', 'account')->name('account');
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');

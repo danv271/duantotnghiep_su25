@@ -19,8 +19,11 @@
                     <div class="product-card">
                         <div class="product-image">
                             <span class="badge">New</span>
-                            <img src="{{ asset('assets/img/product/default.webp') }}" alt="{{ $product->name }}" class="img-fluid main-img">
-                            <img src="{{ asset('assets/img/product/default-variant.webp') }}" alt="{{ $product->name }}" class="img-fluid hover-img">
+                            @foreach($product->images as $image)
+                                @if ($image->is_featured == 1)
+                                    <img src="{{ asset('storage/'.$image->path) }}" alt="{{ $product->name }}" class="img-fluid main-img">
+                                @endif
+                            @endforeach
                             <div class="product-overlay">
                                 <a href="{{ url('cart') }}" class="btn-cart"><i class="bi bi-cart-plus"></i> Add to Cart</a>
                                 <div class="product-actions">
