@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Chia sẻ các danh mục với sidebar
         View::composer('admin.partials.sidebar', function ($view) {
-            $view->with('categories', Category::orderBy('name')->get());
+            $view->with('categories', Category::orderBy('category_name')->get());
         });
     }
 }

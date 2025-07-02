@@ -16,4 +16,13 @@ class Variant extends Model
         'price',
         'status',
     ];
+    // tên khóa chính
+    protected $primaryKey = 'id';
+    // định nghĩa quan hệ với bảng products
+    public function product(){
+        return $this->belongsTo(product::class);
+    }
+    public function attributesValue(){
+        return $this->belongsToMany(AttributeValue::class,'variant_attributes','variant_id','attribute_value_id');
+    }
 }

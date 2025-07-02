@@ -29,7 +29,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Giá trị thuộc tính</label>
                                         <input type="text" name="values" class="form-control"
-                                            value="{{ old('values', $attribute->values->pluck('value')->implode(', ')) }}" >
+                                            value="{{ old('values', $attribute->attributesValues->pluck('value')->implode(', ')) }}" >
                                         <small class="text-muted">Nhập các giá trị, phân cách bằng dấu phẩy</small>
                                     </div>
                                 </div>
