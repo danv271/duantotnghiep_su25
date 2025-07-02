@@ -45,7 +45,7 @@ class VariantController extends Controller
 
             // Chuẩn bị dữ liệu để đồng bộ hóa thuộc tính
             $attributesData = [];
-            foreach ($variant['attribute_value_id'] as $attributeValueId) {
+            foreach ($variantData['attribute_value_id' ] as $attributeValueId) {
                 // Kiểm tra xem attribute_value_id có phải là số (ID) hay chuỗi (giá trị mới)
                 // Thêm vào mảng để đồng bộ
                 if ($attributeValueId) {

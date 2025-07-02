@@ -40,7 +40,7 @@
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="#">List</a>
+                            <a class="sub-nav-link" href="{{route('admin.products-list')}}">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
