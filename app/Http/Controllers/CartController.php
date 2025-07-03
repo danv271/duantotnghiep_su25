@@ -11,9 +11,10 @@ use App\Models\Variant;
 
 class CartController extends Controller
 {
-    public function index()
-    {
-        $userId = Auth::check() ? Auth::id() : 1;
+ public function index()
+{
+    if (Auth::check()) {
+        $userId = Auth::id();
 
         $cartItems = Cart::join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
             ->join('variants', 'cart_items.variant_id', '=', 'variants.id')
@@ -23,19 +24,25 @@ class CartController extends Controller
                      ->whereRaw('products_images.id = (SELECT MIN(id) FROM products_images WHERE product_id = products.id)');
             })
             ->select(
-                'carts.*',
                 'cart_items.id as cart_item_id',
                 'cart_items.quantity',
                 'products.name as product_name',
                 'variants.price as variant_price',
-                'variants.stock_quantity as max_quantity', 
+                'variants.stock_quantity as max_quantity',
                 'products_images.path as image_path'
             )
             ->where('carts.user_id', $userId)
             ->get();
 
         return view('cart', compact('cartItems'));
+
+    } else {
+        // Lấy từ session nếu chưa đăng nhập
+        $cartItems = session('cart', []);
+        return view('cart', compact('cartItems'));
     }
+}
+
 
     public function update(Request $request)
     {
@@ -86,43 +93,69 @@ class CartController extends Controller
 }
 public function add(Request $request)
 {
-    $userId = Auth::check() ? Auth::id() : 1;
     $variantId = $request->input('variant_id');
     $quantity = (int) $request->input('quantity', 1);
 
     $variant = \App\Models\Variants::with('product')->findOrFail($variantId);
 
-    
-    $cart = Cart::firstOrCreate(['user_id' => $userId]);
+    // Người dùng đã đăng nhập
+    if (Auth::check()) {
+        $userId = Auth::id();
 
-   
-    $cartItem = CartItem::where('cart_id', $cart->id)
-        ->where('variant_id', $variantId)
-        ->first();
+        $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
-    $currentCartQuantity = $cartItem ? $cartItem->quantity : 0;
-    $totalAfterAdd = $currentCartQuantity + $quantity;
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('variant_id', $variantId)
+            ->first();
 
-    if ($totalAfterAdd > $variant->stock_quantity) {
-        return back()->with('error', "Số lượng đặt vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, hiện đã có trong giỏ: {$currentCartQuantity}");
+        $currentCartQuantity = $cartItem ? $cartItem->quantity : 0;
+        $totalAfterAdd = $currentCartQuantity + $quantity;
+
+        if ($totalAfterAdd > $variant->stock_quantity) {
+            return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã có trong giỏ: {$currentCartQuantity}");
+        }
+
+        if ($cartItem) {
+            $cartItem->update(['quantity' => $totalAfterAdd]);
+        } else {
+            CartItem::create([
+                'cart_id' => $cart->id,
+                'variant_id' => $variantId,
+                'quantity' => $quantity,
+            ]);
+        }
     }
+    // Người dùng chưa đăng nhập — dùng session
+    else {
+        $cart = session()->get('cart', []);
 
-    if ($cartItem) {
-        $cartItem->update([
-            'quantity' => $totalAfterAdd,
-        ]);
-    } else {
-        CartItem::create([
-            'cart_id' => $cart->id,
-            'variant_id' => $variantId,
-            'quantity' => $quantity,
-        ]);
+        // Nếu sản phẩm đã có trong giỏ
+        if (isset($cart[$variantId])) {
+            $newQuantity = $cart[$variantId]['quantity'] + $quantity;
+
+            if ($newQuantity > $variant->stock_quantity) {
+                return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã có trong giỏ: {$cart[$variantId]['quantity']}");
+            }
+
+            $cart[$variantId]['quantity'] = $newQuantity;
+        } else {
+            if ($quantity > $variant->stock_quantity) {
+                return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}");
+            }
+
+            $cart[$variantId] = [
+                'product_name' => $variant->product->name,
+                'price' => $variant->price,
+                'quantity' => $quantity,
+                'variant_id' => $variant->id,
+            ];
+        }
+
+        session()->put('cart', $cart);
     }
 
     return redirect()->route('cart.index')->with('success', 'Đã thêm vào giỏ hàng!');
 }
-
-
 
 
 }

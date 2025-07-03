@@ -31,7 +31,7 @@
                                 </div>
                             </div>
 
-                            @php $subtotal = 0; @endphp
+                            {{-- @php $subtotal = 0; @endphp
 
                         @foreach ($cartItems as $item)
                                         @php
@@ -85,7 +85,108 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    @endforeach --}}
+                                    @php $subtotal = 0; @endphp
+
+                                    @if(Auth::check())
+                                        @foreach ($cartItems as $item)
+                                        @php
+                                            $total = $item->variant_price * $item->quantity;
+                                            $subtotal += $total;
+                                        @endphp
+
+                                        <div class="cart-item mb-3 border p-3">
+                                            <div class="row align-items-center gy-4">
+                                                <div class="col-lg-1 col-2 text-center">
+                                                    <input type="checkbox"
+                                                        name="selected_items[]"
+                                                        value="{{ $item->cart_item_id }}"
+                                                        class="form-check-input">
+                                                </div>
+
+                                                <div class="col-lg-5 col-10 d-flex align-items-center">
+                                                    <img src="{{ $item->image_path }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                                    <div class="ms-3">
+                                                        <h6 class="mb-0">{{ $item->product_name }}</h6>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($item->variant_price, 2) }}</span>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <input type="number" 
+                                                        name="cart_items[{{ $item->cart_item_id }}]" 
+                                                        value="{{ $item->quantity }}" 
+                                                        min="1" 
+                                                        max="{{ $item->max_quantity }}" 
+                                                        class="form-control text-center quantity-input"
+                                                        data-stock="{{ $item->max_quantity }}">
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($total, 2) }}</span>
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="row mt-2">
+                                                <div class="col-12 text-end">
+                                                    <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
+                                    @else
+                                        @foreach ($cartItems as $variantId => $item)
+                                            @php
+                                                $total = $item['price'] * $item['quantity'];
+                                                $subtotal += $total;
+                                            @endphp
+
+                                            <div class="cart-item mb-3 border p-3">
+                                                <div class="row align-items-center gy-4">
+                                                    <div class="col-lg-1 col-2 text-center">
+                                                        <input type="checkbox"
+                                                            name="selected_items[]"
+                                                            value="{{ $variantId }}"
+                                                            class="form-check-input">
+                                                    </div>
+
+                                                    <div class="col-lg-5 col-10 d-flex align-items-center">
+                                                        {{-- Không có ảnh trong session thì gán mặc định --}}
+                                                        <img src="{{ asset('assets/img/product/default.webp') }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                                        <div class="ms-3">
+                                                            <h6 class="mb-0">{{ $item['product_name'] }}</h6>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <span>${{ number_format($item['price'], 2) }}</span>
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <input type="number" 
+                                                            name="cart_items[{{ $variantId }}]" 
+                                                            value="{{ $item['quantity'] }}" 
+                                                            min="1" 
+                                                            max="{{ $item['stock_quantity'] ?? 100 }}" 
+                                                            class="form-control text-center quantity-input"
+                                                            data-stock="{{ $item['stock_quantity'] ?? 100 }}">
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <span>${{ number_format($total, 2) }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
 
 
                             <div class="cart-actions mt-4 d-flex justify-content-between">
