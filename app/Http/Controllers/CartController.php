@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
+use App\Models\Variant;
 
 class CartController extends Controller
 {
     public function index()
     {
-        $userId = Auth::check() ? Auth::id() : 8;
+        $userId = Auth::check() ? Auth::id() : 1;
 
         $cartItems = Cart::join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
             ->join('variants', 'cart_items.variant_id', '=', 'variants.id')
@@ -57,7 +58,7 @@ class CartController extends Controller
     public function clear()
     {
         try {
-            $userId = Auth::check() ? Auth::id() : 8;
+            $userId = Auth::check() ? Auth::id() : 1;
 
             $cart = Cart::where('user_id', $userId)->first();
             
@@ -83,6 +84,45 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('error', 'Error removing item: ' . $e->getMessage());
     }
 }
+public function add(Request $request)
+{
+    $userId = Auth::check() ? Auth::id() : 1;
+    $variantId = $request->input('variant_id');
+    $quantity = (int) $request->input('quantity', 1);
+
+    $variant = \App\Models\Variants::with('product')->findOrFail($variantId);
+
+    
+    $cart = Cart::firstOrCreate(['user_id' => $userId]);
+
+   
+    $cartItem = CartItem::where('cart_id', $cart->id)
+        ->where('variant_id', $variantId)
+        ->first();
+
+    $currentCartQuantity = $cartItem ? $cartItem->quantity : 0;
+    $totalAfterAdd = $currentCartQuantity + $quantity;
+
+    if ($totalAfterAdd > $variant->stock_quantity) {
+        return back()->with('error', "Số lượng đặt vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, hiện đã có trong giỏ: {$currentCartQuantity}");
+    }
+
+    if ($cartItem) {
+        $cartItem->update([
+            'quantity' => $totalAfterAdd,
+        ]);
+    } else {
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'variant_id' => $variantId,
+            'quantity' => $quantity,
+        ]);
+    }
+
+    return redirect()->route('cart.index')->with('success', 'Đã thêm vào giỏ hàng!');
+}
+
+
 
 
 }

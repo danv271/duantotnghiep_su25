@@ -74,7 +74,7 @@
                                                 </div>
                                             </div>
 
-                                            {{-- Form xóa được đưa ra khỏi hàng chính để tránh lồng form --}}
+                                            
                                             <div class="row mt-2">
                                                 <div class="col-12 text-end">
                                                     <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
