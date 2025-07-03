@@ -17,9 +17,10 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'parent_category_id' => fake()->optional()->numberBetween(1, 10),
-            'description' => fake()->sentence,
-            'status' => fake()->randomElement(['active', 'inactive']),
+            'category_name' => $this->faker->words(2, true),
+            'parent_category_id' => null,
+            'description' => $this->faker->sentence(),
+            'status' => 'active',
         ];
     }
 }
