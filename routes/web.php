@@ -134,7 +134,7 @@ Route::prefix('admin')->name('admin.')->group (function () {
         Route::get('/{id}', fn ($id) => view('admin.roles.show', compact('id')))->name('show');
         Route::get('/{id}/edit', fn ($id) => view('admin.roles.edit', compact('id')))->name('edit');
     });
-
+});
 
 
 
