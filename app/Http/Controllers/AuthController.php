@@ -173,9 +173,9 @@ class AuthController extends Controller
 
         $user = User::where('email', $validatedData['email'])->first();
         if ($user) {
-        // dd($validatedData);
-        $validatedData['password'] = Hash::make($validatedData['password']);
-            $user->update(['password'=> $validatedData['password']]);
+            // dd($validatedData);
+            $validatedData['password'] = Hash::make($validatedData['password']);
+            $user->update(['password' => $validatedData['password']]);
             // Xóa mã OTP sau khi đặt lại mật khẩu thành công
             $otpCode->delete();
             return redirect()->route('login')->with('success', 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập.');
@@ -187,5 +187,20 @@ class AuthController extends Controller
     public function resetPassword()
     {
         return view('auth.resetPassword');
-    }   
+    }
+    public function updatePass(request $request , $id)
+    {
+        dd($request);
+        $user = User::findOrFail($id);
+        dd($user);
+        $dataValidate = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required'],
+        ]);
+        dd($dataValidate);
+        if($dataValidate){
+            $check = Hash::check($dataValidate['current_password'],$user->password);
+        }
+    }
 }

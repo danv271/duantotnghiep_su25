@@ -42,10 +42,10 @@ Route::get('/test-cart', function() {
 // ===================== Giao diện người dùng =====================
 Route::view('/', 'index');
 Route::get('/account', [AccountController::class ,"index"])->name('account');
+Route::post('/update_pass/{id}',[AuthController::class , 'updatePass'])->name('update_pass');
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
-Route::view('/login', 'auth.login-register')->name('login');
-Route::view('/register', 'auth.login-register')->name('register');
+
 
 // ===================== Cart Routes =====================
 Route::prefix('cart')->name('cart.')->group(function () {

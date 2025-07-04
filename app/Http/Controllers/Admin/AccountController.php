@@ -13,6 +13,7 @@ class AccountController extends Controller
     {
         // dd(session());
         $data = User::findOrFail(session('user')->id);
+        // dd($data->order);
         $nameparts = explode(' ', $data->name);
         if (count($nameparts) > 2) {
             $data->first_name = $nameparts[0] . ' ' . $nameparts[1];
