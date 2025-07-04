@@ -958,22 +958,22 @@
                                                     <div class="col-md-6">
                                                         <label for="firstName" class="form-label">First Name</label>
                                                         <input type="text" class="form-control" id="firstName"
-                                                            value="Sarah" required="">
+                                                            value="{{$data->first_name}}" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="lastName" class="form-label">Last Name</label>
                                                         <input type="text" class="form-control" id="lastName"
-                                                            value="Anderson" required="">
+                                                            value="{{$data->last_name}}" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="email" class="form-label">Email</label>
                                                         <input type="email" class="form-control" id="email"
-                                                            value="sarah@example.com" required="">
+                                                            value="{{$data->email}}" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="phone" class="form-label">Phone</label>
                                                         <input type="tel" class="form-control" id="phone"
-                                                            value="+1 (555) 123-4567">
+                                                            value="{{$data->phone}}">
                                                     </div>
                                                 </div>
 

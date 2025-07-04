@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
@@ -40,7 +41,7 @@ Route::get('/test-cart', function() {
 
 // ===================== Giao diện người dùng =====================
 Route::view('/', 'index');
-Route::view('/account', 'account')->name('account');
+Route::get('/account', [AccountController::class ,"index"])->name('account');
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
 Route::view('/login', 'auth.login-register')->name('login');
@@ -141,9 +142,6 @@ Route::prefix('admin')->name('admin.')->group (function () {
 // Frontend routes
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/account', function () {
-    return view('account');
-})->name('account');
 
 Route::get('/checkout', function () {
     return view('checkout');
