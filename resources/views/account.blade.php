@@ -666,15 +666,13 @@
                                         <div class="address-card default aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="100">
                                             <div class="card-header">
-                                                <h4>Home</h4>
                                                 <span class="default-badge">Default</span>
                                             </div>
                                             <div class="card-body">
-                                                <p class="address-text">123 Main Street<br>Apt 4B<br>New York, NY
-                                                    10001<br>United States</p>
+                                                <p class="address-text">{{$data->address}}</p>
                                                 <div class="contact-info">
-                                                    <div><i class="bi bi-person"></i> Sarah Anderson</div>
-                                                    <div><i class="bi bi-telephone"></i> +1 (555) 123-4567</div>
+                                                    <div><i class="bi bi-person"></i> {{$data->name}}</div>
+                                                    <div><i class="bi bi-telephone"></i> {{$data->phone}}</div>
                                                 </div>
                                             </div>
                                             <div class="card-actions">
@@ -808,9 +806,10 @@
                                             <form class="php-email-form settings-form" method="post"
                                                 action="{{ route('update_pass', Auth::user()->id) }}">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="row g-3">
                                                     <div class="col-md-12">
-                                                        <label for="currentPassword" class="form-label">Current
+                                                        <label for="curerent_password" class="form-label">Current
                                                             Password</label>
                                                         <input type="password" name="curerent_password"
                                                             class="form-control" id="currentPassword">

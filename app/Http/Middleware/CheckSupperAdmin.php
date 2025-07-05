@@ -15,7 +15,7 @@ class CheckSupperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-       if ( auth()->user()->role_id === 6 ) {
+       if ( auth()->user()->role->role_name === "Supper admin" ) {
             return $next($request); // Cho phép đi tiếp
         }
 
