@@ -15,7 +15,7 @@ class CheckUserRole
      */
    public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role_id === 2 || auth()->user()->role_id === 6 ) {
+        if (auth()->check() && auth()->user()->role()->role_name === 'admin' || auth()->user()->role()->role_name === 'Supper admin' ) {
             return $next($request); // Cho phép đi tiếp
         }
 
