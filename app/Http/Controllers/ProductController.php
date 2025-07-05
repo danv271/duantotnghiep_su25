@@ -242,9 +242,11 @@ class ProductController extends Controller
     }
 
 
-    public function showClient($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('product-detail', compact('product'));
-    }
+   public function showClient($id)
+{
+    $product = Product::with(['variants.attributesValue.attribute', 'images'])->findOrFail($id);
+    return view('product-detail', compact('product'));
 }
+
+}
+    

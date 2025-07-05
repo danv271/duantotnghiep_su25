@@ -27,7 +27,7 @@ Route::get('/test-cart', function() {
         '1' => [
             'id' => '1',
             'name' => 'Test Product',
-            'price' => 100000,
+            'base_price' => 100000,
             'quantity' => 2,
             'image' => 'images/default-product.jpg',
             'color' => 'Red',
@@ -40,9 +40,14 @@ Route::get('/test-cart', function() {
 });
 
 // ===================== Giao diện người dùng =====================
+
 Route::view('/', 'index');
 Route::get('/account', [AccountController::class ,"index"])->name('account');
 Route::put('/update_pass',[AuthController::class , 'updatePass'])->name('update_pass');
+
+Route::view('/', 'index',[HomeController::class,'index']);
+Route::view('/account', 'account')->name('account');
+
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
 
@@ -53,13 +58,15 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/update', [CartController::class, 'update'])->name('update');  // Cập nhật số lượng
     Route::delete('/clear', [CartController::class, 'clear'])->name('clear');   // Xóa toàn bộ giỏ hàng
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove'); // Xóa 1 item
-
+    Route::post('/add', [CartController::class, 'add'])->name('add'); 
 });
 
+
 Route::view('/search', 'search')->name('search');
-Route::view('/product-detail', 'product-detail')->name('product-detail');
+// Route::view('/product-detail', 'product-detail')->name('product-detail');
 Route::view('/product-details', 'product-details')->name('product-details');
 Route::view('/category', 'category')->name('category');
+
 
 // ===================== Trang quản trị (admin) =====================
 Route::prefix('admin')->name('admin.')->group (function () {
@@ -164,17 +171,16 @@ Route::post('register-process',AuthController::class . '@handleregister')->name(
 Route::get('forgot-password', AuthController::class . '@forgotPassword')->name('forgot-password');
 route::post('/forgot-password/process', AuthController::class . '@handleForgotPassword')->name('forgot-password.process');
 route::get('/reset-password', AuthController::class . '@resetPassword')->name('reset.password');
-route::put('/rest-password-process', AuthController::class . '@handleResetPassword')->name('reset.password.process');
+route::put('/reset-password/process', AuthController::class . '@handleResetPassword')->name('reset.password.process');
 
-Route::view('/cart', 'cart');
 
 Route::get('/search', function () {
     return view('search');
 })->name('search');
 
-Route::get('/product-details', function () {
-    return view('product-detail');
-})->name('product-detail');
+// Route::get('/product-details', function () {
+//     return view('product-detail');
+// })->name('product-detail');
 
 Route::get('/category', function () {
     return view('category');
@@ -235,8 +241,12 @@ Route::get('/admin/attributes/edit', function () {
     return view('admin.attributes.edit');
 })->name('admin.attributes.edit');
 
+Route::get('/products', [ProductController::class, 'indexClient']);
+
+
 // Trang chủ sản phẩm
 Route::get('/products', [ProductController::class, 'index']);
+
 Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
 
 

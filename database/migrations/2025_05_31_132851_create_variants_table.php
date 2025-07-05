@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('stock_quantity');
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('product_id')
                   ->references('id')

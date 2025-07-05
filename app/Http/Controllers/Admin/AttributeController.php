@@ -13,7 +13,7 @@ class AttributeController extends Controller
     public function index(Request $request)
     {
         $per_page = $request->per_page ?? 10;
-        $attributes = Attribute::with('values')
+        $attributes = Attribute::with('attributesValues')
             ->orderBy('created_at', 'desc')
             ->paginate($per_page);
         return view('admin.attributes.index', compact('attributes'));
@@ -68,7 +68,7 @@ class AttributeController extends Controller
 
     public function edit($id)
     {
-        $attribute = Attribute::with('values')->findOrFail($id);
+        $attribute = Attribute::with('attributesValues')->findOrFail($id);
         return view('admin.attributes.edit', compact('attribute'));
     }
 
