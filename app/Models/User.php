@@ -51,4 +51,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Roles::class, 'role_id', 'id'); // Quan hệ với mô hình Roles
     }
+    public function order(){
+        return $this->hasMany(Order::class,'user_id','id');
+    }
 }
