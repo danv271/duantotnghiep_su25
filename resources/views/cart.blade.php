@@ -216,7 +216,7 @@
                             <span class="summary-value">${{ number_format($subtotal, 2) }}</span>
                         </div>
 
-                        <form id="checkout-form" action="{{ route('checkout') }}" method="POST">
+                        <form id="checkout-form" action="{{ route('checkout') }}">
                             @csrf
                             <input type="hidden" name="selected_items" id="selected_items_checkout">
                             <div class="summary-item d-flex justify-content-between mt-2">

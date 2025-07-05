@@ -13,6 +13,7 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,13 +69,9 @@ Route::get('/account', function () {
     return view('account');
 })->name('account');
 
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
-
-Route::post('/checkout', function () {
-    return view('checkout');
-})->name('checkout.process');
+Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
+Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('/checkout/store',[CheckoutController::class, 'store'])->name('checkout.process');
 
 Route::get('/login', function () {
     return view('auth.login-register');
