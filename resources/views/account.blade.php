@@ -59,7 +59,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>My Orders</span>
-                                            <span class="badge">{{count($data->order)}}</span>
+                                            <span class="badge">{{ count($data->order) }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -150,23 +150,24 @@
                                                 data-aos-delay="100">
                                                 <div class="order-header">
                                                     <div class="order-id">
-                                                        <span class="label">Order ID:{{$item->id}}</span>
+                                                        <span class="label">Order ID:{{ $item->id }}</span>
                                                     </div>
-                                                    <div class="order-date">{{$item->created_at}}</div>
+                                                    <div class="order-date">{{ $item->created_at }}</div>
                                                 </div>
                                                 <div class="order-content">
                                                     <div class="order-info">
                                                         <div class="info-row">
                                                             <span>Status</span>
-                                                            <span class="status processing">{{$item->status_order}}</span>
+                                                            <span
+                                                                class="status processing">{{ $item->status_order }}</span>
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Items</span>
-                                                            <span>{{count($item->OrderDetail)}} items</span>
+                                                            <span>{{ count($item->OrderDetail) }} items</span>
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Total</span>
-                                                            <span class="price">${{$item->toltal_price}}</span>
+                                                            <span class="price">${{ $item->toltal_price }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -669,10 +670,10 @@
                                                 <span class="default-badge">Default</span>
                                             </div>
                                             <div class="card-body">
-                                                <p class="address-text">{{$data->address}}</p>
+                                                <p class="address-text">{{ $data->address }}</p>
                                                 <div class="contact-info">
-                                                    <div><i class="bi bi-person"></i> {{$data->name}}</div>
-                                                    <div><i class="bi bi-telephone"></i> {{$data->phone}}</div>
+                                                    <div><i class="bi bi-person"></i> {{ $data->name }}</div>
+                                                    <div><i class="bi bi-telephone"></i> {{ $data->phone }}</div>
                                                 </div>
                                             </div>
                                             <div class="card-actions">
@@ -803,38 +804,48 @@
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="200">
                                             <h3>Security</h3>
-                                            <form class="php-email-form settings-form" method="post"
-                                                action="{{ route('update_pass', Auth::user()->id) }}">
+                                            <form class=" settings-form" method="post"
+                                                action="{{ route('update_pass') }}">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-3">
                                                     <div class="col-md-12">
-                                                        <label for="curerent_password" class="form-label">Current
+                                                        <label for="current_password" class="form-label">Current
                                                             Password</label>
-                                                        <input type="password" name="curerent_password"
+                                                        <input type="password" name="current_password"
                                                             class="form-control" id="currentPassword">
+                                                        @error('current_password')
+                                                            <div class="error-message">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="newPassword" class="form-label">New Password</label>
                                                         <input type="password" name="password" class="form-control"
                                                             id="newPassword">
+                                                        @error('password')
+                                                            <div class="error-message">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="confirmPassword" class="form-label">Confirm
                                                             Password</label>
                                                         <input type="password" class="form-control"
                                                             name="password_confirmation" id="confirmPassword">
+                                                        @error('password_confirmation')
+                                                            <div class="error-message">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
 
                                                 <div class="form-buttons">
                                                     <button type="submit" class="btn-save">Update Password</button>
                                                 </div>
-
-                                                <div class="loading">Loading</div>
                                                 <div class="error-message"></div>
-                                                <div class="sent-message">Your password has been updated successfully!
-                                                </div>
+                                                @if (session('success'))
+                                                    <div class="sent-message">
+                                                        {{ session('success') }} 
+                                                    </div>
+                                                @endif
                                             </form>
                                         </div>
 

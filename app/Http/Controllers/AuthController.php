@@ -188,19 +188,22 @@ class AuthController extends Controller
     {
         return view('auth.resetPassword');
     }
-    public function updatePass(request $request , $id)
+    public function updatePass(request $request)
     {
-        dd($request);
-        $user = User::findOrFail($id);
-        dd($user);
+        // dd(Auth::user());
+        $user = Auth::user();
+        // dd($user->password);
         $dataValidate = $request->validate([
-            'current_password' => ['required', 'current_password'],
+            'current_password' => ['required', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required'],
         ]);
-        dd($dataValidate);
-        if($dataValidate){
-            $check = Hash::check($dataValidate['current_password'],$user->password);
+        // dd($dataValidate);
+        if ($dataValidate) {
+            $check = Hash::check($dataValidate['current_password'], $user->password);
+            $user->password = Hash::make($dataValidate['password']);
+            $user->save();
+            return redirect('account')->with('success', 'Your password has been updated successfully!');
         }
     }
 }

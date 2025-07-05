@@ -42,7 +42,7 @@ Route::get('/test-cart', function() {
 // ===================== Giao diện người dùng =====================
 Route::view('/', 'index');
 Route::get('/account', [AccountController::class ,"index"])->name('account');
-Route::put('/update_pass/{id}',[AuthController::class , 'updatePass'])->name('update_pass');
+Route::put('/update_pass',[AuthController::class , 'updatePass'])->name('update_pass');
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
 
