@@ -25,4 +25,12 @@ class Variant extends Model
     public function attributesValue(){
         return $this->belongsToMany(AttributeValue::class,'variant_attributes','variant_id','attribute_value_id');
     }
+    /**
+     * Mối quan hệ với model Variant
+     * CartItem thuộc về một Variant
+     */
+    public function cartItem()
+    {
+        return $this->hasOne(Variant::class);
+    }
 }

@@ -25,40 +25,31 @@
                 <div class="col-lg-7">
                     <!-- Checkout Form -->
                     <div class="checkout-container" data-aos="fade-up">
-                        <form class="checkout-form" method="POST" action="{{ route('checkout.process') }}">
+                        <form method="POST" action="{{ route('checkout.process') }}">
                             @csrf
                             <!-- Customer Information -->
                             <div class="checkout-section" id="customer-info">
                                 <div class="section-header">
                                     <div class="section-number">1</div>
-                                    <h3>Customer Information</h3>
+                                    <h3>Thông tin khách hàng</h3>
                                 </div>
                                 <div class="section-content">
-                                    <div class="row">
-                                        <div class="col-md-6 form-group">
-                                            <label for="first-name">First Name</label>
-                                            <input type="text" name="first_name" class="form-control" id="first-name" placeholder="Your First Name" value="{{ old('first_name') }}" required>
+                                        <div class="form-group">
+                                            <label for="first-name">Tên người nhận</label>
+                                            <input type="text" name="name" class="form-control" id="first-name" placeholder="Your First Name" value="{{ old('first_name') }}" required>
                                             @error('first_name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="col-md-6 form-group">
-                                            <label for="last-name">Last Name</label>
-                                            <input type="text" name="last_name" class="form-control" id="last-name" placeholder="Your Last Name" value="{{ old('last_name') }}" required>
-                                            @error('last_name')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
                                     <div class="form-group">
-                                        <label for="email">Email Address</label>
+                                        <label for="email">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" value="{{ old('email') }}" required>
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="phone">Phone Number</label>
+                                        <label for="phone">Số điện thoại</label>
                                         <input type="tel" class="form-control" name="phone" id="phone" placeholder="Your Phone Number" value="{{ old('phone') }}" required>
                                         @error('phone')
                                             <span class="text-danger">{{ $message }}</span>
@@ -75,66 +66,17 @@
                                 </div>
                                 <div class="section-content">
                                     <div class="form-group">
-                                        <label for="address">Street Address</label>
+                                        <label for="address">Địa chỉ</label>
                                         <input type="text" class="form-control" name="address" id="address" placeholder="Street Address" value="{{ old('address') }}" required>
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="apartment">Apartment, Suite, etc. (optional)</label>
-                                        <input type="text" class="form-control" name="apartment" id="apartment" placeholder="Apartment, Suite, Unit, etc." value="{{ old('apartment') }}">
+                                        <label for="apartment">Ghi chú</label>
+                                        <input type="text" class="form-control" name="note" id="apartment" placeholder="Apartment, Suite, Unit, etc." value="{{ old('apartment') }}">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4 form-group">
-                                            <label for="city">City</label>
-                                            <input type="text" name="city" class="form-control" id="city" placeholder="City" value="{{ old('city') }}" required>
-                                            @error('city')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="state">State</label>
-                                            <input type="text" name="state" class="form-control" id="state" placeholder="State" value="{{ old('state') }}" required>
-                                            @error('state')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="zip">ZIP Code</label>
-                                            <input type="text" name="zip" class="form-control" id="zip" placeholder="ZIP Code" value="{{ old('zip') }}" required>
-                                            @error('zip')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="country">Country</label>
-                                        <select class="form-select" id="country" name="country" required>
-                                            <option value="">Select Country</option>
-                                            <option value="US" {{ old('country') == 'US' ? 'selected' : '' }}>United States</option>
-                                            <option value="CA" {{ old('country') == 'CA' ? 'selected' : '' }}>Canada</option>
-                                            <option value="UK" {{ old('country') == 'UK' ? 'selected' : '' }}>United Kingdom</option>
-                                            <option value="AU" {{ old('country') == 'AU' ? 'selected' : '' }}>Australia</option>
-                                            <option value="DE" {{ old('country') == 'DE' ? 'selected' : '' }}>Germany</option>
-                                            <option value="FR" {{ old('country') == 'FR' ? 'selected' : '' }}>France</option>
-                                        </select>
-                                        @error('country')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="save-address" name="save_address" {{ old('save_address') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="save-address">
-                                            Save this address for future orders
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="billing-same" name="billing_same" {{ old('billing_same', true) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="billing-same">
-                                            Billing address same as shipping
-                                        </label>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -142,34 +84,27 @@
                             <div class="checkout-section" id="payment-method">
                                 <div class="section-header">
                                     <div class="section-number">3</div>
-                                    <h3>Payment Method</h3>
+                                    <h3>Phương thức thanh toán</h3>
                                 </div>
                                 <div class="section-content">
                                     <div class="payment-options">
                                         <div class="payment-option active">
-                                            <input type="radio" name="payment_method" id="credit-card" value="credit_card" {{ old('payment_method', 'credit_card') == 'credit_card' ? 'checked' : '' }} required>
+                                            <input type="radio" name="payment_method" id="credit-card" value="cash" {{ old('payment_method', 'cash') == 'cash' ? 'checked' : '' }} required>
                                             <label for="credit-card">
-                                                <span class="payment-icon"><i class="bi bi-credit-card-2-front"></i></span>
-                                                <span class="payment-label">Credit / Debit Card</span>
+                                                <span class="payment-icon"><i class="bi bi-truck"></i></span>
+                                                <span class="payment-label">Thanh toán khi nhận hàng</span>
                                             </label>
                                         </div>
                                         <div class="payment-option">
-                                            <input type="radio" name="payment_method" id="paypal" value="paypal" {{ old('payment_method') == 'paypal' ? 'checked' : '' }}>
+                                            <input type="radio" name="payment_method" id="paypal" value="transfer" {{ old('payment_method') == 'transfe' ? 'checked' : '' }}>
                                             <label for="paypal">
-                                                <span class="payment-icon"><i class="bi bi-paypal"></i></span>
-                                                <span class="payment-label">PayPal</span>
-                                            </label>
-                                        </div>
-                                        <div class="payment-option">
-                                            <input type="radio" name="payment_method" id="apple-pay" value="apple_pay" {{ old('payment_method') == 'apple_pay' ? 'checked' : '' }}>
-                                            <label for="apple-pay">
-                                                <span class="payment-icon"><i class="bi bi-apple"></i></span>
-                                                <span class="payment-label">Apple Pay</span>
+                                                <span class="payment-icon"><i class="bi bi-credit-card-2-front"></i></span>
+                                                <span class="payment-label">Thanh toán Online</span>
                                             </label>
                                         </div>
                                     </div>
 
-                                    <div class="payment-details" id="credit-card-details" style="{{ old('payment_method', 'credit_card') == 'credit_card' ? '' : 'display: none;' }}">
+                                    {{-- <div class="payment-details" id="credit-card-details" style="{{ old('payment_method', 'credit_card') == 'credit_card' ? '' : 'display: none;' }}">
                                         <div class="form-group">
                                             <label for="card-number">Card Number</label>
                                             <div class="card-number-wrapper">
@@ -219,21 +154,21 @@
 
                                     <div class="payment-details" id="apple-pay-details" style="{{ old('payment_method') == 'apple_pay' ? '' : 'display: none;' }}">
                                         <p class="payment-info">You will be prompted to authorize payment with Apple Pay.</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
-
+                            
                             <!-- Order Review -->
                             <div class="checkout-section" id="order-review">
                                 <div class="section-header">
                                     <div class="section-number">4</div>
-                                    <h3>Review & Place Order</h3>
+                                    <h3>Xác nhận thanh toán</h3>
                                 </div>
                                 <div class="section-content">
                                     <div class="form-check terms-check">
                                         <input class="form-check-input" type="checkbox" id="terms" name="terms" {{ old('terms') ? 'checked' : '' }} required>
                                         <label class="form-check-label" for="terms">
-                                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                                            Tôi đồng ý <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">các điều khoản</a> và <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">chính sách</a>
                                         </label>
                                         @error('terms')
                                             <span class="text-danger">{{ $message }}</span>
@@ -241,9 +176,10 @@
                                     </div>
                                     <div class="success-message d-none">Your order has been placed successfully! Thank you for your purchase.</div>
                                     <div class="place-order-container">
+                                        <input type="hidden" name="total" value="{{$total}}">
                                         <button type="submit" class="btn btn-primary place-order-btn">
                                             <span class="btn-text">Place Order</span>
-                                            <span class="btn-price">$240.96</span>
+                                            <span class="btn-price">{{$total}} vnđ</span>
                                         </button>
                                     </div>
                                 </div>
@@ -259,24 +195,24 @@
                             <h3>Order Summary</h3>
                             <span class="item-count">2 Items</span>
                         </div>
-
                         <div class="order-summary-content">
                             <div class="order-items">
+                            @forEach($cartItems as $item)
                                 <div class="order-item">
                                     <div class="order-item-image">
-                                        <img src="{{ asset('estore/img/product/product-1.webp') }}" alt="Product" class="img-fluid">
+                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Product" class="img-fluid">
                                     </div>
                                     <div class="order-item-details">
-                                        <h4>Lorem Ipsum Dolor</h4>
+                                        <h4>{{$item->product_name}}</h4>
                                         <p class="order-item-variant">Color: Black | Size: M</p>
                                         <div class="order-item-price">
-                                            <span class="quantity">1 ×</span>
-                                            <span class="price">$89.99</span>
+                                            <span class="quantity">{{$item->quantity}} ×</span>
+                                            <span class="price">{{$item->variant_price}}</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="order-item">
+                            @endforeach
+                                {{-- <div class="order-item">
                                     <div class="order-item-image">
                                         <img src="{{ asset('estore/img/product/product-2.webp') }}" alt="Product" class="img-fluid">
                                     </div>
@@ -288,7 +224,7 @@
                                             <span class="price">$59.99</span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="promo-code">
@@ -304,19 +240,15 @@
                             <div class="order-totals">
                                 <div class="order-subtotal d-flex justify-content-between">
                                     <span>Subtotal</span>
-                                    <span>$209.97</span>
+                                    <span>{{$subtotal}} vnđ</span>
                                 </div>
                                 <div class="order-shipping d-flex justify-content-between">
                                     <span>Shipping</span>
-                                    <span>$9.99</span>
-                                </div>
-                                <div class="order-tax d-flex justify-content-between">
-                                    <span>Tax</span>
-                                    <span>$21.00</span>
+                                    <span>{{$shipping}} vnđ</span>
                                 </div>
                                 <div class="order-total d-flex justify-content-between">
                                     <span>Total</span>
-                                    <span>$240.96</span>
+                                    <span>{{$total}} vnđ</span>
                                 </div>
                             </div>
 
