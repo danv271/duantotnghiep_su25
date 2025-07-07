@@ -1,5 +1,9 @@
 <section id="category-cards" class="category-cards section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-title" data-aos="fade-up">
+        <h2>Danh mục sản phẩm</h2>
+        <p>Tập hợp tất cả phụ kiện thông minh và đa năng dànnh cho smartphone của bạn từ cáp sạc, củ sạc, pin dự phòng đến tai nghe, loa bluetooth,…..</p>
+    </div>
         <div class="category-slider swiper init-swiper">
             <script type="application/json" class="swiper-config">
                 {
@@ -41,23 +45,10 @@
                 }
             </script>
             <div class="swiper-wrapper">
-                @foreach([
-                    ['image' => 'product-1.webp', 'title' => 'Vestibulum ante', 'count' => '4 Products'],
-                    ['image' => 'product-6.webp', 'title' => 'Maecenas nec', 'count' => '8 Products'],
-                    ['image' => 'product-9.webp', 'title' => 'Aenean tellus', 'count' => '4 Products'],
-                    ['image' => 'product-f-1.webp', 'title' => 'Donec quam', 'count' => '12 Products'],
-                    ['image' => 'product-10.webp', 'title' => 'Phasellus leo', 'count' => '4 Products'],
-                    ['image' => 'product-m-1.webp', 'title' => 'Quisque rutrum', 'count' => '2 Products'],
-                    ['image' => 'product-10.webp', 'title' => 'Etiam ultricies', 'count' => '4 Products'],
-                    ['image' => 'product-2.webp', 'title' => 'Fusce fermentum', 'count' => '4 Products']
-                ] as $index => $category)
+                @foreach( $categories as $index => $category)
                     <div class="swiper-slide">
                         <div class="category-card" data-aos="fade-up" data-aos-delay="{{ 100 + ($index * 100) }}">
-                            <div class="category-image">
-                                <img src="{{ asset('assets/img/product/' . $category['image']) }}" alt="Category" class="img-fluid">
-                            </div>
-                            <h3 class="category-title">{{ $category['title'] }}</h3>
-                            <p class="category-count">{{ $category['count'] }}</p>
+                            <h3 class="category-title">{{ $category['category_name'] }}</h3>
                             <a href="{{ url('category') }}" class="stretched-link"></a>
                         </div>
                     </div>

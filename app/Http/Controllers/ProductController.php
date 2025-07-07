@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\productsImage;
 use App\Models\Variants;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -116,7 +117,20 @@ class ProductController extends Controller
             "min" => $product->variants->pluck('price')->min(),
             "max" => $product->variants->pluck('price')->max()
         ];
-        return view('admin.products.detail',compact('product','priceRange'));
+        // lấy danh sách danh mục,thuộc tính và giá trị thuộc tính để hiển thị trong form tạo sản phẩm
+        $categories = Category::all();
+        $attributes = Attribute::with('attributesValues')->get();
+        // mảng giá trị chứa các giá trị thuộc tính, mỗi giá trị có id và value
+        $attributeValues = [];
+        foreach($attributes as $attribute){
+            foreach($attribute->attributesValues as $value){
+                $attributeValues[] = (object) [
+                    'attribute_value_id' => $value->id,
+                    'value' => $value->value
+                ];
+            }
+        }
+        return view('admin.products.detail',compact('product','priceRange','categories','attributes','attributeValues'));
     }
 
     /**
@@ -153,127 +167,64 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(storePostProduct $request, string $id)
+    public function update(Request $request, string $id)
     {
-        $product = Product::findOrFail($id);
-        $validatedData = $request->validated();
-
-        // Cập nhật thông tin cơ bản
+        $product = Product::find($id);
+        // Update basic product information
         $product->update([
-            'name' => $validatedData['name'],
-            'description' => $validatedData['description'],
-            'base_price' => $validatedData['base_price'],
-            'category_id' => $validatedData['category_id']
+            'name' => $request['name'],
+            'base_price' => $request['base_price'],
+            'category_id' => $request['category_id'],
+            'description' => $request['description'],
         ]);
 
-        // // Xử lý ảnh nổi bật
-        // $existingFeaturedImages = $request->input('existing_featured_image', []);
-        // $newFeaturedImages = $request->file('new_featured_image');
-        // $deletedImageIds = $request->input('deleted_images', []);
-
-        // if ($newFeaturedImages) {
-        //     foreach ($newFeaturedImages as $image) {
-        //         $imageUrl = $image->store('products', 'public');
-        //         Image::create([
-        //             'product_id' => $product->id,
-        //             'image_url' => $imageUrl,
-        //             'is_primary' => 1, // Lưu ý: Có thể cần logic để chọn ảnh chính
-        //         ]);
-        //     }
-        // }
-
-        // foreach ($deletedImageIds as $imageId) {
-        //     $image = Image::find($imageId);
-        //     if ($image) {
-        //         Storage::disk('public')->delete($image->image_url);
-        //         $image->delete();
-        //     }
-        // }
-
-        // // Xử lý ảnh sản phẩm bổ sung
-        // $existingProductImages = $request->input('existing_product_images', []);
-        // $newProductImages = $request->file('new_product_images') ? $request->file('new_product_images')->map(function ($file) {
-        //     return $file->store('products', 'public');
-        // })->toArray() : [];
-
-        // foreach ($newProductImages as $imageUrl) {
-        //     Image::create([
-        //         'product_id' => $product->id,
-        //         'image_url' => $imageUrl,
-        //         'is_primary' => 0,
-        //     ]);
-        // }
-
-        // Xử lý biến thể
-        // lấy giá trị của 1 khóa cụ thể từ dữ liệu được gửi lên qua Request HTTP
-        $variantsData = $request->input('variants', []); //
-        // lấy danh sách ID của tất cả biến thể thuộc sản phẩm và chuyển thành mảng
-        $existingVariantIds = $product->variants->pluck('id')->toArray();
-        // lặp qua dữ liệu được lấy từ khóa được gửi lên qua Request HTTP
-        foreach ($variantsData as $index => $variantData) {
-            // kiểm tra id có tồn tại hay không
-            // nếu tồn tại thì gán giá trị cho variantId
-            // nếu không thì gán null cho variantId
-            $variantId = isset($variantData['id']) ? $variantData['id'] : null;
-            
-            // kiểm tra varriantId có null không và có tồn tại trong danh sách biến thể không
-            if ($variantId && in_array($variantId, $existingVariantIds)) {
-                // nếu đúng
-                // Cập nhật biến thể hiện có
-                $variant = Variants::find($variantId);
-                $variant->update([
-                    'price' => $variantData['price'],
-                    'stock_quantity' => $variantData['quantity'],
-                    'status' => $variantData['status'],
-                ]);
-            } else {
-                // nếu không
-                // Tạo biến thể mới nếu chưa tồn tại
-                $variant = Variants::create([
-                    'product_id' => $product->id,
-                    'price' => $variantData['price'],
-                    'stock_quantity' => $variantData['quantity'],
-                    'status' => $variantData['status'],
-                ]);
+        // Handle featured image
+        if ($request->hasFile('featured_image')) {
+            // Delete old featured image if exists
+            $currentFeatured = $product->images()->where('is_featured', 1)->first();
+            if ($currentFeatured) {
+                Storage::delete($currentFeatured->path);
+                $currentFeatured->delete();
             }
 
-            // Xử lý thuộc tính của biến thể
-            // lấy dữ liệu từ 1 khóa cụ thể từ Request HTTP
-            // Lấy danh sách dữ liệu thuộc tính, mặc định là mảng rỗng
-            $attributesData = $variantData['attributes'] ?? [];
-
-            // Mảng để lưu các ID attribute_value_id cần đồng bộ
-            $attributeValueIds = [];
-
-            // Duyệt qua dữ liệu thuộc tính
-            foreach ($attributesData as $attributeData) {
-                $attributeData = array_filter($attributeData);
-                $attributeValueId = $attributeData['attribute_value_id'] ?? null;
-                $attributeId = $attributeData['attribute_id'] ?? null;
-
-                // Kiểm tra dữ liệu đầu vào
-                if ($attributeValueId && $attributeId) {
-                    // Kiểm tra sự tồn tại của AttributeValue và Attribute (tùy chọn)
-                    if (AttributeValue::where('id', $attributeValueId)->where('attribute_id', $attributeId)->exists()) {
-                        $attributeValueIds[] = $attributeValueId;
-                    }
-                }
-            }
-
-            // Đồng bộ các attribute_value_id với bảng trung gian
-            $variant->attributesValue()->sync($attributeValueIds);
-
-// Xóa các attribute_value_id không còn trong danh sách
-// (sync sẽ tự động xóa các bản ghi không có trong $attributeValueIds)
-
-            // Xóa thuộc tính không còn trong request
-            // $variant->attributesValue()->whereNotIn('id', Arr::pluck($attributesData, 'id'))->delete();
+            // Upload new featured image
+            $path = $request->file('featured_image')->store('uploads', 'public');
+            $product->images()->create([
+                'path' => $path,
+                'is_featured' => 1,
+            ]);
         }
 
-        // Xóa biến thể không còn trong request
-        // $product->variants()->whereNotIn('id', Arr::pluck($variantsData, 'id'))->delete();
+        // Handle product images
+        if ($request->hasFile('images')) {
+            // Upload new images
+            $newImages = [];
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('images', 'public');
+                $newImages[] = [
+                    'path' => $path,
+                    'is_featured' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
 
-        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm đã được cập nhật thành công.');
+            // Use syncWithoutDetaching to add new images without removing existing ones
+            $product->images()->createMany($newImages);
+        }
+
+        // Handle deleted images
+        if ($request->filled('deleted_images')) {
+            $deletedImageIds = explode(',', $request->input('deleted_images'));
+            $imagesToDelete = $product->images()->whereIn('id', $deletedImageIds)->where('is_featured', 0)->get();
+            
+            foreach ($imagesToDelete as $image) {
+                Storage::delete($image->path);
+                $image->delete();
+            }
+        }
+
+        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
     /**
@@ -291,9 +242,11 @@ class ProductController extends Controller
     }
 
 
-    public function showClient($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('product-detail', compact('product'));
-    }
+   public function showClient($id)
+{
+    $product = Product::with(['variants.attributesValue.attribute', 'images'])->findOrFail($id);
+    return view('product-detail', compact('product'));
 }
+
+}
+    

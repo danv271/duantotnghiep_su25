@@ -62,8 +62,17 @@
                             <h5 class="mb-3">Hình Ảnh Nổi Bật</h5>
                             <div class="row">
                                 <div class="col-12 mb-3">
-                                    <label for="featured_image" class="form-label">Tải Lên Hình Ảnh Nổi Bật</label>
-                                    <input type="file" id="featured_image" name="featured_image" class="form-control" accept="image/jpeg,image/png,image/gif">
+                                    <label class="form-label">Tải Lên Hình Ảnh Nổi Bật</label>
+                                    <div class="dropzone featured-dropzone" id="featured-dropzone" data-plugin="dropzone">
+                                        <div class="dz-preview">
+                                            <div class="dz-image">
+                                                <img src="" alt="Featured Image" style="width:300px; display:none;" id="featured-image-preview">
+                                            </div>
+                                            <a class="dz-remove" href="javascript:void(0);" onclick="document.getElementById('featured-image-upload').click();" id="featured-image-change" style="display:none;">Thay đổi</a>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('featured-image-upload').click();" id="featured-image-add">Thêm Ảnh</button>
+                                    <input type="file" id="featured-image-upload" name="featured_image" accept="image/jpeg,image/png,image/gif" style="display: none;">
                                     @error('featured_image')
                                         <span class="text-danger">{{ $message }}</span>
                                     @endif
@@ -76,7 +85,13 @@
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <label for="images" class="form-label">Tải Lên Hình Ảnh Bổ Sung</label>
-                                    <input type="file" id="images" name="images[]" class="form-control" multiple accept="image/jpeg,image/png,image/gif">
+                                    <div class="dropzone" id="images-dropzone" data-plugin="dropzone">
+                                        <div class="d-flex row" id="existing-images">
+                                            <!-- Ảnh được thêm sẽ hiển thị ở đây -->
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('images-upload').click();" id="add-image-button">Thêm Ảnh</button>
+                                    <input type="file" id="images-upload" name="images[]" multiple accept="image/jpeg,image/png,image/gif" style="display: none;">
                                     @error('images')
                                         <span class="text-danger">{{ $message }}</span>
                                     @endif
@@ -274,10 +289,36 @@
             </div>
         </div>
     </div>
+    <style>
+        .dropzone {
+            border: 2px dashed #dee2e6;
+            padding: 20px;
+            min-height: 150px;
+        }
+        .dropzone .dz-preview {
+            display: inline-block;
+            margin: 10px;
+            text-align: center; /* Căn giữa nội dung trong dz-preview */
+        }
+        .dropzone .dz-preview .dz-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        .dropzone .dz-remove {
+            display: block;
+            text-align: center;
+            color: #dc3545;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 5px; /* Khoảng cách từ ảnh đến nút Xóa */
+        }
+        .dropzone .dz-remove:hover {
+            color: #c82333;
+        }
+    </style>
 @endsection
 
 @section('scripts')
-
     <script>
         let variantIndex = @if(old('variants')) {{ count(old('variants')) }} @else 1 @endif;
 
@@ -299,6 +340,44 @@
             });
             valueSelect.value = ''; // Reset selection
         }
+
+        // Xử lý thay đổi ảnh nổi bật
+        document.getElementById('featured-image-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('featured-image-preview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('featured-image-add').style.display = 'none';
+                    document.getElementById('featured-image-change').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Xử lý thêm ảnh sản phẩm
+        document.getElementById('images-upload').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const previewContainer = document.getElementById('existing-images');
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'dz-preview col-3 m-0';
+                    div.innerHTML = `
+                        <div class="dz-image" style="width:100%;">
+                            <img src="${e.target.result}" alt="Product Image" width="100%">
+                        </div>
+                        <a class="dz-remove" href="javascript:void(0);" onclick="this.parentElement.remove();">Xóa</a>
+                    `;
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
 
         // Thêm hàng biến thể mới
         document.getElementById('add-variant-btn').addEventListener('click', function() {

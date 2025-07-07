@@ -1,283 +1,350 @@
-@extends('layouts.app') {{-- Sử dụng layout chung --}}
+@extends('layouts.app')
 @section('title', 'eStore - Cart')
 
-
 @section('content')
- <main class="main">
-
-    <!-- Page Title -->
+<main class="main">
     <div class="page-title light-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Cart</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Cart</li>
-          </ol>
-        </nav>
-      </div>
-    </div><!-- End Page Title -->
-
-    <!-- Cart Section -->
-    <section id="cart" class="cart section">
-
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row g-4">
-          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-            <div class="cart-items">
-              <div class="cart-header d-none d-lg-block">
-                <div class="row align-items-center gy-4">
-                  <div class="col-lg-6">
-                    <h5>Product</h5>
-                  </div>
-                  <div class="col-lg-2 text-center">
-                    <h5>Price</h5>
-                  </div>
-                  <div class="col-lg-2 text-center">
-                    <h5>Quantity</h5>
-                  </div>
-                  <div class="col-lg-2 text-center">
-                    <h5>Total</h5>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Cart Item 1 -->
-              <div class="cart-item" data-aos="fade-up" data-aos-delay="100">
-                <div class="row align-items-center gy-4">
-                  <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                    <div class="product-info d-flex align-items-center">
-                      <div class="product-image">
-                        <img src="assets/img/product/product-2.webp" alt="Product" class="img-fluid" loading="lazy">
-                      </div>
-                      <div class="product-details">
-                        <h6 class="product-title">Lorem ipsum dolor sit amet</h6>
-                        <div class="product-meta">
-                          <span class="product-color">Color: Black</span>
-                          <span class="product-size">Size: M</span>
-                        </div>
-                        <button class="remove-item" type="button">
-                          <i class="bi bi-trash"></i> Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="price-tag">
-                      <span class="current-price">$89.99</span>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="quantity-selector">
-                      <button class="quantity-btn decrease">
-                        <i class="bi bi-dash"></i>
-                      </button>
-                      <input type="number" class="quantity-input" value="1" min="1" max="10">
-                      <button class="quantity-btn increase">
-                        <i class="bi bi-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center mt-3 mt-lg-0">
-                    <div class="item-total">
-                      <span>$89.99</span>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Cart Item -->
-
-              <!-- Cart Item 2 -->
-              <div class="cart-item" data-aos="fade-up" data-aos-delay="200">
-                <div class="row align-items-center gy-4">
-                  <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                    <div class="product-info d-flex align-items-center">
-                      <div class="product-image">
-                        <img src="assets/img/product/product-7.webp" alt="Product" class="img-fluid" loading="lazy">
-                      </div>
-                      <div class="product-details">
-                        <h6 class="product-title">Consectetur adipiscing elit</h6>
-                        <div class="product-meta">
-                          <span class="product-color">Color: White</span>
-                          <span class="product-size">Size: L</span>
-                        </div>
-                        <button class="remove-item" type="button">
-                          <i class="bi bi-trash"></i> Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="price-tag">
-                      <span class="current-price">$64.99</span>
-                      <span class="original-price">$79.99</span>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="quantity-selector">
-                      <button class="quantity-btn decrease">
-                        <i class="bi bi-dash"></i>
-                      </button>
-                      <input type="number" class="quantity-input" value="2" min="1" max="10">
-                      <button class="quantity-btn increase">
-                        <i class="bi bi-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center mt-3 mt-lg-0">
-                    <div class="item-total">
-                      <span>$129.98</span>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Cart Item -->
-
-              <!-- Cart Item 3 -->
-              <div class="cart-item" data-aos="fade-up" data-aos-delay="300">
-                <div class="row align-items-center gy-4">
-                  <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                    <div class="product-info d-flex align-items-center">
-                      <div class="product-image">
-                        <img src="assets/img/product/product-10.webp" alt="Product" class="img-fluid" loading="lazy">
-                      </div>
-                      <div class="product-details">
-                        <h6 class="product-title">Sed do eiusmod tempor</h6>
-                        <div class="product-meta">
-                          <span class="product-color">Color: Blue</span>
-                          <span class="product-size">Size: S</span>
-                        </div>
-                        <button class="remove-item" type="button">
-                          <i class="bi bi-trash"></i> Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="price-tag">
-                      <span class="current-price">$49.99</span>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center">
-                    <div class="quantity-selector">
-                      <button class="quantity-btn decrease">
-                        <i class="bi bi-dash"></i>
-                      </button>
-                      <input type="number" class="quantity-input" value="1" min="1" max="10">
-                      <button class="quantity-btn increase">
-                        <i class="bi bi-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col-12 col-lg-2 text-center mt-3 mt-lg-0">
-                    <div class="item-total">
-                      <span>$49.99</span>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- End Cart Item -->
-
-              <div class="cart-actions">
-                <div class="row g-3">
-                  <div class="col-lg-6 col-md-6">
-                    <div class="coupon-form">
-                      <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Coupon code">
-                        <button class="btn btn-accent" type="button">Apply</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 col-md-6 text-md-end">
-                    <button class="btn btn-outline-accent me-2">
-                      <i class="bi bi-arrow-clockwise"></i> Update
-                    </button>
-                    <button class="btn btn-outline-danger">
-                      <i class="bi bi-trash"></i> Clear
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="cart-summary">
-              <h4 class="summary-title">Order Summary</h4>
-
-              <div class="summary-item">
-                <span class="summary-label">Subtotal</span>
-                <span class="summary-value">$269.96</span>
-              </div>
-
-              <div class="summary-item shipping-item">
-                <span class="summary-label">Shipping</span>
-                <div class="shipping-options">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping" id="standard" checked="">
-                    <label class="form-check-label" for="standard">
-                      Standard Delivery - $4.99
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping" id="express">
-                    <label class="form-check-label" for="express">
-                      Express Delivery - $12.99
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping" id="free">
-                    <label class="form-check-label" for="free">
-                      Free Shipping (Orders over $300)
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="summary-item">
-                <span class="summary-label">Tax</span>
-                <span class="summary-value">$27.00</span>
-              </div>
-
-              <div class="summary-item discount">
-                <span class="summary-label">Discount</span>
-                <span class="summary-value">-$0.00</span>
-              </div>
-
-              <div class="summary-total">
-                <span class="summary-label">Total</span>
-                <span class="summary-value">$301.95</span>
-              </div>
-
-              <div class="checkout-button">
-                <a href="#" class="btn btn-accent w-100">
-                  Proceed to Checkout <i class="bi bi-arrow-right"></i>
-                </a>
-              </div>
-
-              <div class="continue-shopping">
-                <a href="#" class="btn btn-link w-100">
-                  <i class="bi bi-arrow-left"></i> Continue Shopping
-                </a>
-              </div>
-
-              <div class="payment-methods">
-                <p class="payment-title">We Accept</p>
-                <div class="payment-icons">
-                  <i class="bi bi-credit-card-2-front"></i>
-                  <i class="bi bi-paypal"></i>
-                  <i class="bi bi-wallet2"></i>
-                  <i class="bi bi-apple"></i>
-                  <i class="bi bi-google"></i>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="container d-lg-flex justify-content-between align-items-center">
+            <h1 class="mb-2 mb-lg-0">Cart</h1>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li class="current">Cart</li>
+                </ol>
+            </nav>
         </div>
+    </div>
 
-      </div>
+    <section id="cart" class="cart section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                   
+                       
+                        <div class="cart-items">
+                            <div class="cart-header d-none d-lg-block">
+                                <div class="row align-items-center gy-4">
+                                    <div class="col-lg-1 text-center"><h5></h5></div>
+                                    <div class="col-lg-5"><h5>Product</h5></div>
+                                    <div class="col-lg-2 text-center"><h5>Price</h5></div>
+                                    <div class="col-lg-2 text-center"><h5>Quantity</h5></div>
+                                    <div class="col-lg-2 text-center"><h5>Total</h5></div>
+                                </div>
+                            </div>
 
-    </section><!-- /Cart Section -->
+                            {{-- @php $subtotal = 0; @endphp
 
-  </main>
-  
-  
-  @endsection
+                        @foreach ($cartItems as $item)
+                                        @php
+                                            $total = $item->variant_price * $item->quantity;
+                                            $subtotal += $total;
+                                        @endphp
+
+                                        <div class="cart-item mb-3 border p-3">
+                                            <div class="row align-items-center gy-4">
+                                                <div class="col-lg-1 col-2 text-center">
+                                                    <input type="checkbox"
+                                                        name="selected_items[]"
+                                                        value="{{ $item->cart_item_id }}"
+                                                        class="form-check-input">
+                                                </div>
+
+                                                <div class="col-lg-5 col-10 d-flex align-items-center">
+                                                    <img src="{{ $item->image_path }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                                    <div class="ms-3">
+                                                        <h6 class="mb-0">{{ $item->product_name }}</h6>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($item->variant_price, 2) }}</span>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <input type="number" 
+                                                        name="cart_items[{{ $item->cart_item_id }}]" 
+                                                        value="{{ $item->quantity }}" 
+                                                        min="1" 
+                                                        max="{{ $item->max_quantity }}" 
+                                                        class="form-control text-center quantity-input"
+                                                        data-stock="{{ $item->max_quantity }}">
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($total, 2) }}</span>
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="row mt-2">
+                                                <div class="col-12 text-end">
+                                                    <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach --}}
+                                    @php $subtotal = 0; @endphp
+
+                                    @if(Auth::check())
+                                        @foreach ($cartItems as $item)
+                                        @php
+                                            $total = $item->variant_price * $item->quantity;
+                                            $subtotal += $total;
+                                        @endphp
+
+                                        <div class="cart-item mb-3 border p-3">
+                                            <div class="row align-items-center gy-4">
+                                                <div class="col-lg-1 col-2 text-center">
+                                                    <input type="checkbox"
+                                                        name="selected_items[]"
+                                                        value="{{ $item->cart_item_id }}"
+                                                        class="form-check-input">
+                                                </div>
+
+                                                <div class="col-lg-5 col-10 d-flex align-items-center">
+                                                    <img src="{{ $item->image_path }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                                    <div class="ms-3">
+                                                        <h6 class="mb-0">{{ $item->product_name }}</h6>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($item->variant_price, 2) }}</span>
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <input type="number" 
+                                                        name="cart_items[{{ $item->cart_item_id }}]" 
+                                                        value="{{ $item->quantity }}" 
+                                                        min="1" 
+                                                        max="{{ $item->max_quantity }}" 
+                                                        class="form-control text-center quantity-input"
+                                                        data-stock="{{ $item->max_quantity }}">
+                                                </div>
+
+                                                <div class="col-lg-2 text-center">
+                                                    <span>${{ number_format($total, 2) }}</span>
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="row mt-2">
+                                                <div class="col-12 text-end">
+                                                    <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    @else
+                                        @foreach ($cartItems as $variantId => $item)
+                                            @php
+                                                $total = $item['price'] * $item['quantity'];
+                                                $subtotal += $total;
+                                            @endphp
+
+                                            <div class="cart-item mb-3 border p-3">
+                                                <div class="row align-items-center gy-4">
+                                                    <div class="col-lg-1 col-2 text-center">
+                                                        <input type="checkbox"
+                                                            name="selected_items[]"
+                                                            value="{{ $variantId }}"
+                                                            class="form-check-input">
+                                                    </div>
+
+                                                    <div class="col-lg-5 col-10 d-flex align-items-center">
+                                                        {{-- Không có ảnh trong session thì gán mặc định --}}
+                                                        <img src="{{ asset('assets/img/product/default.webp') }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                                        <div class="ms-3">
+                                                            <h6 class="mb-0">{{ $item['product_name'] }}</h6>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <span>${{ number_format($item['price'], 2) }}</span>
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <input type="number" 
+                                                            name="cart_items[{{ $variantId }}]" 
+                                                            value="{{ $item['quantity'] }}" 
+                                                            min="1" 
+                                                            max="{{ $item['stock_quantity'] ?? 100 }}" 
+                                                            class="form-control text-center quantity-input"
+                                                            data-stock="{{ $item['stock_quantity'] ?? 100 }}">
+                                                    </div>
+
+                                                    <div class="col-lg-2 text-center">
+                                                        <span>${{ number_format($total, 2) }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+
+
+                            <div class="cart-actions mt-4 d-flex justify-content-between">
+                                <form action="{{ route('cart.clear') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Xóa toàn bộ giỏ hàng?');">
+                                        <i class="bi bi-trash"></i> Xóa toàn bộ giỏ hàng
+                                    </button>
+                                    
+                                </form>
+                                    <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="select-all">
+                                    <label for="select-all" class="form-check-label">Chọn tất cả</label>
+                                    </div>
+
+                            </div>
+                        </div>
+                    
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="cart-summary border p-3">
+                        <h4 class="summary-title mb-3">Order Summary</h4>
+                        <div class="summary-item d-flex justify-content-between">
+                            <span class="summary-label">Tổng toàn bộ</span>
+                            <span class="summary-value">${{ number_format($subtotal, 2) }}</span>
+                        </div>
+
+                        <form id="checkout-form" action="{{ route('checkout') }}">
+                            @csrf
+                            <input type="hidden" name="selected_items" id="selected_items_checkout">
+                            <div class="summary-item d-flex justify-content-between mt-2">
+                                <span class="summary-label">Tổng tiền đã chọn</span>
+                                <span class="summary-value" id="selected-total">$0.00</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100" id="checkout-button" disabled>Đặt hàng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{{-- SCRIPT --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[name="selected_items[]"]');
+    const checkoutButton = document.getElementById('checkout-button');
+    const selectedItemsInput = document.getElementById('selected_items_checkout');
+    const checkoutForm = document.getElementById('checkout-form');
+    const selectedTotal = document.getElementById('selected-total');
+
+   function calculateSelectedTotal() {
+    let total = 0;
+    let selectedIds = [];
+
+    checkboxes.forEach(chk => {
+        if (chk.checked) {
+            const row = chk.closest('.cart-item');
+            const priceText = row.querySelector('div.col-lg-2.text-center span').innerText;
+            const price = parseFloat(priceText.replace('$', ''));
+
+            const quantityInput = row.querySelector('input[type="number"]');
+            const quantity = parseInt(quantityInput.value);
+
+            total += price * quantity;
+            selectedIds.push(chk.value);
+        }
+    });
+
+    selectedItemsInput.value = selectedIds.join(',');
+    selectedTotal.textContent = `$${total.toFixed(2)}`;
+    checkoutButton.disabled = selectedIds.length === 0;
+}
+
+
+    checkboxes.forEach(chk => {
+        chk.addEventListener('change', calculateSelectedTotal);
+    });
+
+    checkoutForm.addEventListener('submit', function (e) {
+        if (!selectedItemsInput.value) {
+            e.preventDefault();
+            alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
+        }
+    });
+
+   document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('input', function () {
+        const max = parseInt(this.dataset.stock);
+        const val = parseInt(this.value);
+
+        if (val > max) {
+            alert(`Số lượng vượt quá số lượng trong kho (${max}).`);
+            this.value = max;
+        }
+
+        calculateSelectedTotal();
+    });
+});
+
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAllCheckbox = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('input[name="selected_items[]"]');
+    const checkoutButton = document.getElementById('checkout-button');
+    const selectedItemsInput = document.getElementById('selected_items_checkout');
+    const selectedTotal = document.getElementById('selected-total');
+
+    function calculateSelectedTotal() {
+        let total = 0;
+        let selectedIds = [];
+
+        checkboxes.forEach(chk => {
+            if (chk.checked) {
+                const row = chk.closest('.cart-item');
+                const priceText = row.querySelector('div.col-lg-2.text-center span').innerText;
+                const price = parseFloat(priceText.replace('$', ''));
+
+                const quantityInput = row.querySelector('input[type="number"]');
+                const quantity = parseInt(quantityInput.value);
+
+                total += price * quantity;
+                selectedIds.push(chk.value);
+            }
+        });
+
+        selectedItemsInput.value = selectedIds.join(',');
+        selectedTotal.textContent = `$${total.toFixed(2)}`;
+        checkoutButton.disabled = selectedIds.length === 0;
+    }
+
+    checkboxes.forEach(chk => {
+        chk.addEventListener('change', function () {
+            calculateSelectedTotal();
+
+            // Nếu có checkbox nào chưa check thì bỏ chọn tất cả
+            if (!this.checked) {
+                selectAllCheckbox.checked = false;
+            } else {
+                // Nếu tất cả checkbox đều được chọn thì check "select all"
+                const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+                selectAllCheckbox.checked = allChecked;
+            }
+        });
+    });
+
+    selectAllCheckbox.addEventListener('change', function () {
+        checkboxes.forEach(chk => {
+            chk.checked = this.checked;
+        });
+        calculateSelectedTotal();
+    });
+
+    // Các event khác như kiểm tra số lượng vẫn giữ nguyên...
+});
+
+</script>
+@endsection

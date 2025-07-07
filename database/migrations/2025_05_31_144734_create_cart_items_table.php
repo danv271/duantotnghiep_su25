@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->foreign('cart_id')
                   ->references('id')
-                  ->on('cart')
+                  ->on('carts')
                   ->onDelete('cascade');
 
             $table->foreign('variant_id')
