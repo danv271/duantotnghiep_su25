@@ -12,20 +12,14 @@ class Category extends Model
      use HasFactory;
 
     protected $fillable = [
-        'name',
+        'id',
+        'category_name',
         'slug',
         'description',
-        'image',
         'parent_category_id',
         'status',
-        'order',
-        'is_featured'
     ];
 
-    protected $casts = [
-        'is_featured' => 'boolean',
-        'order' => 'integer'
-    ];
 
     /**
      * Get the parent category of this category.
@@ -46,5 +40,9 @@ class Category extends Model
     /**
      * Get all products in this category.
      */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
    
 }
