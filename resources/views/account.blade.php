@@ -6,7 +6,6 @@
 
 @section('content')
     <main class="main">
-
         <!-- Page Title -->
         <div class="page-title light-background">
             <div class="container d-lg-flex justify-content-between align-items-center">
@@ -41,7 +40,7 @@
                             <!-- User Info -->
                             <div class="user-info aos-init aos-animate" data-aos="fade-right">
                                 <div class="user-avatar">
-                                    <img src="{{ asset($data->avatar) }}" alt="Profile" loading="lazy">
+                                    <img src="" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
                                 <h4>Sarah Anderson</h4>
@@ -59,7 +58,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>My Orders</span>
-                                            <span class="badge">{{ count($data->order) }}</span>
+                                            <span class="badge"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -142,42 +141,39 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="orders-grid">
                                         <!-- Order Card 1 -->
-                                        @foreach ($data->order as $item)
+                                        @foreach ($orders as $order)
                                             <div class="order-card aos-init aos-animate" data-aos="fade-up"
                                                 data-aos-delay="100">
                                                 <div class="order-header">
                                                     <div class="order-id">
-                                                        <span class="label">Order ID:{{ $item->id }}</span>
+                                                        <span class="label">Mã đơn hàng:{{ $order->id }}</span>
                                                     </div>
-                                                    <div class="order-date">{{ $item->created_at }}</div>
+                                                    <div class="order-date">{{ $order->created_at }}</div>
                                                 </div>
                                                 <div class="order-content">
                                                     <div class="order-info">
                                                         <div class="info-row">
-                                                            <span>Status</span>
+                                                            <span>Trạng thái</span>
                                                             <span
-                                                                class="status processing">{{ $item->status_order }}</span>
+                                                                class="status processing">{{ $order->status_order }}</span>
                                                         </div>
                                                         <div class="info-row">
-                                                            <span>Items</span>
-                                                            <span>{{ count($item->OrderDetail) }} items</span>
+                                                            <span>Sản phẩm</span>
+                                                            <span>{{ count($order->OrderDetail) }} items</span>
                                                         </div>
                                                         <div class="info-row">
-                                                            <span>Total</span>
-                                                            <span class="price">${{ $item->toltal_price }}</span>
+                                                            <span>Tổng tiền</span>
+                                                            <span class="price">{{ $order->total_price }} vnđ</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="order-footer">
                                                     <button type="button" class="btn-track" data-bs-toggle="collapse"
-                                                        data-bs-target="#tracking1" aria-expanded="false">Track
-                                                        Order</button>
+                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn hàng</button>
                                                     <button type="button" class="btn-details" data-bs-toggle="collapse"
-                                                        data-bs-target="#details1" aria-expanded="false">View
-                                                        Details</button>
+                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn hàng</button>
                                                 </div>
 
                                                 <!-- Order Tracking -->
@@ -245,24 +241,29 @@
                                                             <h5>Order Information</h5>
                                                             <div class="info-grid">
                                                                 <div class="info-item">
-                                                                    <span class="label">Payment Method</span>
-                                                                    <span class="value">Credit Card (**** 4589)</span>
+                                                                    <span class="label">Phương thức thanh toán</span>
+                                                                    <span class="value">{{$order->type_payment}}</span>
                                                                 </div>
                                                                 <div class="info-item">
-                                                                    <span class="label">Shipping Method</span>
-                                                                    <span class="value">Express Delivery (2-3 days)</span>
+                                                                    <span class="label">Giao hàng</span>
+                                                                    <span class="value">2-3 ngày</span>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Items (3)</h5>
+                                                            <h5>Items {{count($order->OrderDetail)}}</h5>
                                                             <div class="order-items">
-                                                                <div class="item">
-                                                                    <img src="assets/img/product/product-1.webp"
-                                                                        alt="Product" loading="lazy">
+                                                                
+                                                                @forEach($order->OrderDetail as $item)
+                                                                    <div class="item">
+                                                                        @forEach($item->variant->product->images as $image)
+                                                                            @if ($image->is_featured == 1)
+                                                                                <img src="{{asset('storage/'.$image->path)}}" alt="Product" loading="lazy">
+                                                                            @endif
+                                                                        @endforeach
                                                                     <div class="item-info">
-                                                                        <h6>Lorem ipsum dolor sit amet</h6>
+                                                                        <h6>{{$item->variant->product->name}}</h6>
                                                                         <div class="item-meta">
                                                                             <span class="sku">SKU: PRD-001</span>
                                                                             <span class="qty">Qty: 1</span>
@@ -270,32 +271,7 @@
                                                                     </div>
                                                                     <div class="item-price">$899.99</div>
                                                                 </div>
-
-                                                                <div class="item">
-                                                                    <img src="assets/img/product/product-2.webp"
-                                                                        alt="Product" loading="lazy">
-                                                                    <div class="item-info">
-                                                                        <h6>Consectetur adipiscing elit</h6>
-                                                                        <div class="item-meta">
-                                                                            <span class="sku">SKU: PRD-002</span>
-                                                                            <span class="qty">Qty: 2</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="item-price">$599.95</div>
-                                                                </div>
-
-                                                                <div class="item">
-                                                                    <img src="assets/img/product/product-3.webp"
-                                                                        alt="Product" loading="lazy">
-                                                                    <div class="item-info">
-                                                                        <h6>Sed do eiusmod tempor</h6>
-                                                                        <div class="item-meta">
-                                                                            <span class="sku">SKU: PRD-003</span>
-                                                                            <span class="qty">Qty: 1</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="item-price">$129.99</div>
-                                                                </div>
+                                                                @endforeach
                                                             </div>
                                                         </div>
 
@@ -670,10 +646,10 @@
                                                 <span class="default-badge">Default</span>
                                             </div>
                                             <div class="card-body">
-                                                <p class="address-text">{{ $data->address }}</p>
+                                                <p class="address-text"></p>
                                                 <div class="contact-info">
-                                                    <div><i class="bi bi-person"></i> {{ $data->name }}</div>
-                                                    <div><i class="bi bi-telephone"></i> {{ $data->phone }}</div>
+                                                    <div><i class="bi bi-person"></i></div>
+                                                    <div><i class="bi bi-telephone"></i></div>
                                                 </div>
                                             </div>
                                             <div class="card-actions">
@@ -732,22 +708,22 @@
                                                     <div class="col-md-6">
                                                         <label for="firstName" class="form-label">First Name</label>
                                                         <input type="text" class="form-control" id="firstName"
-                                                            value="{{ $data->first_name }}" required="">
+                                                            value="" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="lastName" class="form-label">Last Name</label>
                                                         <input type="text" class="form-control" id="lastName"
-                                                            value="{{ $data->last_name }}" required="">
+                                                            value="" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="email" class="form-label">Email</label>
                                                         <input type="email" class="form-control" id="email"
-                                                            value="{{ $data->email }}" required="">
+                                                            value="" required="">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="phone" class="form-label">Phone</label>
                                                         <input type="tel" class="form-control" id="phone"
-                                                            value="{{ $data->phone }}">
+                                                            value="">
                                                     </div>
                                                 </div>
 

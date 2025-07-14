@@ -148,6 +148,7 @@ public function add(Request $request)
                 'price' => $variant->price,
                 'quantity' => $quantity,
                 'variant_id' => $variant->id,
+                'image_path' => $variant->product->images
             ];
         }
 
