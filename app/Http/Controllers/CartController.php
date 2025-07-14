@@ -16,7 +16,7 @@ class CartController extends Controller
     if (Auth::check()) {
         $userId = Auth::id();
 
-        $cartItems = Cart::join('cart_items', 'cart.id', '=', 'cart_items.cart_id')
+        $cartItems = Cart::join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
             ->join('variants', 'cart_items.variant_id', '=', 'variants.id')
             ->join('products', 'variants.product_id', '=', 'products.id')
             ->leftJoin('products_images', function($join) {
@@ -31,7 +31,7 @@ class CartController extends Controller
                 'variants.stock_quantity as max_quantity',
                 'products_images.path as image_path'
             )
-            ->where('cart.user_id', $userId)
+            ->where('carts.user_id', $userId)
             ->get();
 
         return view('cart', compact('cartItems'));
@@ -102,7 +102,7 @@ public function add(Request $request)
     if (Auth::check()) {
         $userId = Auth::id();
 
-        $cart = Cart::firstOrCreate(['user_id' => $userId]);
+        $cart = Cart::firstOrCreate(['user_id' => $userId ]);
 
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('variant_id', $variantId)
