@@ -15,4 +15,8 @@ class Cart extends Model
         'total_quantity',
         'total_price',
     ];
+    public function cartItem()
+    {
+        return $this->hasMany(CartItem::class);
+    }
 }

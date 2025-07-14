@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderDetail;
 
 class Order extends Model
 { 
@@ -24,12 +25,10 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id','id');
     }
-
-    // public function orderItems()
-    // {
-    //     return $this->hasMany(OrderItem::class);
-    // }
+    
     public function OrderDetail(){
-        return $this->hasMany(OrderDetail::class , 'order_id','id');
+        return $this->hasMany(OrderDetail::class ,'order_id','id');
     }
+    
+
 }

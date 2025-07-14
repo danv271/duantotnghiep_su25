@@ -107,9 +107,9 @@
                                     <i class="bi bi-person-circle me-2"></i>
                                     <span>My Profile</span>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('orders.index') }}">
                                     <i class="bi bi-bag-check me-2"></i>
-                                    <span>My Orders</span>
+                                    <span>Đơn hàng</span>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
                                     <i class="bi bi-heart me-2"></i>
@@ -167,7 +167,7 @@
                         <li><a href="{{ url('category') }}">Category</a></li>
                         <li><a href="{{ url('product-details') }}">Product Details</a></li>
                         <li><a href="{{ url('cart') }}">Cart</a></li>
-                        <li><a href="{{ route('checkout') }}">Checkout</a></li>
+                        <li><a href="">Checkout</a></li>
                         <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                                     class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>

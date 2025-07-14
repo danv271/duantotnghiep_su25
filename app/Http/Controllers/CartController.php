@@ -102,7 +102,7 @@ public function add(Request $request)
     if (Auth::check()) {
         $userId = Auth::id();
 
-        $cart = Cart::firstOrCreate(['user_id' => $userId]);
+        $cart = Cart::firstOrCreate(['user_id' => $userId ]);
 
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('variant_id', $variantId)
@@ -148,6 +148,7 @@ public function add(Request $request)
                 'price' => $variant->price,
                 'quantity' => $quantity,
                 'variant_id' => $variant->id,
+                'image_path' => $variant->product->images
             ];
         }
 
