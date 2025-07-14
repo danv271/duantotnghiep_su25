@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-               $table->id();
+            $table->id();
             $table->unsignedBigInteger('user_id'); // FK đến bảng users (nếu có)
             $table->string('user_email')->nullable();
             $table->string('user_phone')->nullable();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -68,5 +70,29 @@ public function update(Request $request, $id)
     {
         DB::table('orders')->where('id', $id)->delete();
         return redirect()->route('admin.orders.index')->with('success', 'Đã xóa đơn hàng.');
+    }
+    public function indexClient(Request $request)
+    {
+         // Lấy ID của khách hàng đang đăng nhập
+        $userId = Auth::id();
+
+        // Query lấy các đơn hàng của người dùng
+        $query = Order::with([
+            'OrderDetail.variant.product.images'
+        ])->where('user_id', $userId);
+
+        // Nếu có từ khóa tìm kiếm thì thêm điều kiện
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('user_email', 'like', '%' . $search . '%')
+                    ->orWhere('user_phone', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Sắp xếp mới nhất và phân trang
+        $orders = $query->orderBy('id', 'desc')->paginate(10);
+
+        return view('account', compact('orders'));
     }
 }
