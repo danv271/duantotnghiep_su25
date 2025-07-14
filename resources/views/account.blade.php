@@ -58,7 +58,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>My Orders</span>
-                                            <span class="badge"></span>
+                                            <span class="badge">{{count($data->order)}}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="orders-grid">
                                         <!-- Order Card 1 -->
-                                        @foreach ($orders as $order)
+                                        @foreach ($data->order as $order)
                                             <div class="order-card aos-init aos-animate" data-aos="fade-up"
                                                 data-aos-delay="100">
                                                 <div class="order-header">

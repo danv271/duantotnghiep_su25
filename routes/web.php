@@ -1,28 +1,27 @@
 <?php
 
-use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
-// use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductController; // Controller cho sản phẩm ở cả client và admin nếu dùng chung
 use App\Http\Controllers\VariantController;
-use Illuminate\Container\Attributes\Auth;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| Đây là nơi định nghĩa tất cả route cho web.
-| Các route người dùng và quản trị được tách riêng gọn gàng.
+| Định nghĩa tất cả route cho web.
+| Các route người dùng (client) và quản trị (admin) được tách riêng gọn gàng.
 */
+
+// --- Routes cho mục đích Test/Debug (Nên xóa khi deploy Production) ---
 Route::get('/test-cart', function() {
     $cart = [
         '1' => [
@@ -35,226 +34,120 @@ Route::get('/test-cart', function() {
             'size' => 'L'
         ]
     ];
-
     session()->put('cart', $cart);
     return redirect()->route('cart.index');
-});
+})->name('test.cart'); // Đặt tên cho route để dễ dàng truy cập
 
-// ===================== Giao diện người dùng =====================
+// --- Routes chung cho giao diện người dùng (Client-side) ---
+// Home page
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::view('/', 'index');
-Route::get('/account', [AccountController::class ,"index"])->name('account');
-Route::put('/update_pass',[AuthController::class , 'updatePass'])->name('update_pass');
+// Product listings and details
+Route::get('/products', [ProductController::class, 'indexClient'])->name('products.index');
+Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
 
-Route::view('/', 'index',[HomeController::class,'index']);
-// Route::view('/account', 'account')->name('account');
-
-Route::view('/checkout', 'checkout')->name('checkout');
-Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
-
-
-// ===================== Cart Routes =====================
-Route::prefix('cart')->name('cart.')->group(function () {
-    Route::get('/', [CartController::class, 'index'])->name('index');           // Hiển thị giỏ hàng
-    Route::post('/update', [CartController::class, 'update'])->name('update');  // Cập nhật số lượng
-    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');   // Xóa toàn bộ giỏ hàng
-    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove'); // Xóa 1 item
-    Route::post('/add', [CartController::class, 'add'])->name('add'); 
-});
-
-
-Route::view('/search', 'search')->name('search');
-// Route::view('/product-detail', 'product-detail')->name('product-detail');
-Route::view('/product-details', 'product-details')->name('product-details');
+// Category page
 Route::view('/category', 'category')->name('category');
 
+// Search page
+Route::view('/search', 'search')->name('search');
 
-// ===================== Trang quản trị (admin) =====================
-Route::prefix('admin')->name('admin.')->group (function () {
+// Product details (redundant with products/{id}, consider removing if showClient handles everything)
+Route::view('/product-details', 'product-details')->name('product-details'); // Nếu dùng product/{id}, nên xóa cái này
 
-     Route::view('/', '/admin/dashboard');
-
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-
-    // --------- Quản lý sản phẩm ---------
-    Route::prefix('products')->name('products.')->group(function () {
-        Route::view('/list', 'admin.products.list')->name('list');
-
-        Route::get('/create', function () {
-            $categories = [
-                (object)['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
-                (object)['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
-                (object)['category_id' => 3, 'description' => 'Footwear', 'parent_category_id' => 1, 'status' => 'active'],
-                (object)['category_id' => 4, 'description' => 'Smartphones', 'parent_category_id' => 2, 'status' => 'active'],
-                (object)['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
-            ];
-
-            $attributes = [
-                (object)['attribute_id' => 1, 'name' => 'Color'],
-                (object)['attribute_id' => 2, 'name' => 'Size'],
-                (object)['attribute_id' => 3, 'name' => 'Material'],
-                (object)['attribute_id' => 4, 'name' => 'Brand'],
-            ];
-
-            $attributeValues = [
-                (object)['attribute_value_id' => 1, 'value' => 'Red'],
-                (object)['attribute_value_id' => 2, 'value' => 'Blue'],
-                (object)['attribute_value_id' => 3, 'value' => 'Green'],
-                (object)['attribute_value_id' => 4, 'value' => 'XS'],
-                (object)['attribute_value_id' => 5, 'value' => 'S'],
-                (object)['attribute_value_id' => 6, 'value' => 'M'],
-                (object)['attribute_value_id' => 7, 'value' => 'L'],
-                (object)['attribute_value_id' => 8, 'value' => 'Cotton'],
-                (object)['attribute_value_id' => 9, 'value' => 'Leather'],
-                (object)['attribute_value_id' => 10, 'value' => 'Polyester'],
-                (object)['attribute_value_id' => 11, 'value' => 'Nike'],
-                (object)['attribute_value_id' => 12, 'value' => 'Adidas'],
-                (object)['attribute_value_id' => 13, 'value' => 'Samsung'],
-            ];
-
-            return view('admin.products.create', compact('categories', 'attributes', 'attributeValues'));
-        })->name('create');
-
-        Route::post('/store', fn () => '')->name('store');
-        Route::view('/id/edit', 'admin.products.edit')->name('edit');
-        Route::put('/{id}', fn () => '')->name('update');
-        Route::view('/id', 'admin.products.detail')->name('detail');
-        Route::post('/upload-file', fn () => '')->name('upload-file');
-    });
-
-    // --------- Quản lý danh mục (category) ---------
-    Route::prefix('category')->name('category.')->group(function () {
-        Route::view('/', 'admin.category.index')->name('index');
-        Route::view('/create', 'admin.category.create')->name('create');
-        Route::view('/edit', 'admin.category.edit')->name('edit');
-    });
-
-    // --------- Quản lý thuộc tính (attributes) ---------
-    Route::prefix('attributes')->name('attributes.')->group(function () {
-        Route::view('/', 'admin.attributes.index')->name('index');
-        Route::view('/create', 'admin.attributes.create')->name('create');
-        Route::view('/edit', 'admin.attributes.edit')->name('edit');
-    });
-
-    // --------- Quản lý vai trò (roles) ---------
-    Route::prefix('roles')->name('roles.')->group(function () {
-        Route::view('/', 'admin.roles.index')->name('index');
-        Route::view('/create', 'admin.roles.create')->name('create');
-        Route::get('/{id}', fn ($id) => view('admin.roles.show', compact('id')))->name('show');
-        Route::get('/{id}/edit', fn ($id) => view('admin.roles.edit', compact('id')))->name('edit');
-    });
-});
-
-
-
-// Frontend routes
-Route::get('/', [HomeController::class, 'index']);
-
-
-Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
-Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
-Route::post('/checkout/store',[CheckoutController::class, 'store'])->name('checkout.process');
-Route::get('/checkout/success/{id}',[CheckoutController::class,'success'])->name('checkout.success');
-
+// --- Authentication Routes ---
+// Login / Register Form
 Route::get('/login', function () {
     return view('auth.login-register');
 })->name('login');
-
 Route::get('/register', function () {
     return view('auth.login-register');
 })->name('register');
-Route::post('/logout',[AuthController::class ,'destroy'])->name('auth.destroy');
-Route::post('login-process',AuthController::class . '@handleLogin')->name('login.process');
-Route::post('register-process',AuthController::class . '@handleregister')->name('register.process');
-Route::get('forgot-password', AuthController::class . '@forgotPassword')->name('forgot-password');
-route::post('/forgot-password/process', AuthController::class . '@handleForgotPassword')->name('forgot-password.process');
-route::get('/reset-password', AuthController::class . '@resetPassword')->name('reset.password');
-route::put('/reset-password/process', AuthController::class . '@handleResetPassword')->name('reset.password.process');
 
+// Auth Processes
+Route::post('login-process', [AuthController::class, 'handleLogin'])->name('login.process');
+Route::post('register-process', [AuthController::class, 'handleregister'])->name('register.process');
+Route::post('/logout', [AuthController::class, 'destroy'])->name('auth.destroy');
 
-Route::get('/search', function () {
-    return view('search');
-})->name('search');
+// Forgot Password
+Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
+Route::post('/forgot-password/process', [AuthController::class, 'handleForgotPassword'])->name('forgot-password.process');
 
-// Route::get('/product-details', function () {
-//     return view('product-detail');
-// })->name('product-detail');
+// Reset Password
+Route::get('/reset-password', [AuthController::class, 'resetPassword'])->name('reset.password');
+Route::put('/reset-password/process', [AuthController::class, 'handleResetPassword'])->name('reset.password.process');
 
-Route::get('/category', function () {
-    return view('category');
-})->name('category');
+// --- User Account & Profile (Yêu cầu đăng nhập) ---
+Route::middleware('auth')->group(function () {
+    Route::get('/account', [AdminAccountController::class, "index"])->name('account'); // Có vẻ là AccountController của Admin, cần đổi tên nếu có AccountController riêng cho user
+    Route::put('/update_pass', [AuthController::class, 'updatePass'])->name('update_pass');
 
-
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-
-
-Route::prefix('admin/products')->group(function () {
-    // Danh sách sản phẩm
-    Route::get('/list',[ProductController::class,'index'])->name('admin.products-list');
-    // Tạo sản phẩm
-    Route::get('/create',[ProductController::class,'create'])->name('admin.products-create');
-    Route::post('/store',[ProductController::class,'store'])->name('admin.products-store');
-
-    // Chỉnh sửa sản phẩm
-    Route::get('/edit/{id}',[ProductController::class,'edit'])->name('admin.products-edit');
-    Route::put('/update/{id}',[ProductController::class,'update'])->name('admin.products-update'); // Thêm route PUT để cập nhật
-
-    // Chi tiết sản phẩm
-    Route::get('/detail/{id}',[ProductController::class,'show'])->name('admin.products-detail');
-
-    Route::put('/variant/update/{id}',[VariantController::class,'update'])->name('admin.products.variant-update');
-    Route::delete('/variant/delete/{id}',[VariantController::class,'destroy'])->name('admin.products.variant-delete');
-    Route::post('/variant/add',[VariantController::class,'store'])->name('admin.products.variant-add');
-});
-Route::get('/admin/category', function () {
-    return view('admin.category.index');
-})->name('admin.category.index');
-
-Route::get('/admin/category/create', function () {
-    return view('admin.category.create');
-})->name('admin.category.create');
-
-Route::get('/admin/category/edit', function () {
-    return view('admin.category.edit');
-})->name('admin.category.edit');
-Route::prefix('admin/oders')->group(function () {
-    // Danh sách đơn hàng
-    Route::get('/list', function(){
-        return view('admin.orders.index');
-    })->name('admin.orders.index');
-    Route::get('/detail/{id?}',function (){
-        return view('admin.orders.show');
-    })->name('admin.orders.show'); // Chi tiết đơn hàng
+    // User's Orders
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
+    });
 });
 
-Route::get('/admin/attributes', function () {
-    return view('admin.attributes.index');
-})->name('admin.attributes.index');
-Route::get('/admin/attributes/create', function () {
-    return view('admin.attributes.create');
-})->name('admin.attributes.create');
-Route::get('/admin/attributes/edit', function () {
-    return view('admin.attributes.edit');
-})->name('admin.attributes.edit');
+// --- Cart Routes ---
+Route::prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+});
 
-Route::get('/products', [ProductController::class, 'indexClient']);
-
-
-// Trang chủ sản phẩm
-Route::get('/products', [ProductController::class, 'index']);
-
-Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
+// --- Checkout Routes ---
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.process');
+Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
 
 
-// Admin routes
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+// admin
 
-    // Attributes
+Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {
+    // Dashboard
+    Route::view('/', 'admin.dashboard')->name('dashboard'); // Redirect admin/ to dashboard
+    Route::view('/dashboard', 'admin.dashboard')->name('dashboard'); // Explicit dashboard route
+
+    // --- Quản lý Sản phẩm (Products) ---
+    // Sử dụng Route::controller để nhóm gọn gàng các hành động CRUD
+    Route::controller(ProductController::class)->prefix('products')->name('products.')->group(function () {
+        Route::get('/list', 'index')->name('list'); // admin.products.list
+        Route::get('/create', 'create')->name('create'); // admin.products.create (Show form)
+        Route::post('/store', 'store')->name('store'); // admin.products.store (Save data)
+        Route::get('/edit/{id}', 'edit')->name('edit'); // admin.products.edit (Show edit form)
+        Route::put('/update/{id}', 'update')->name('update'); // admin.products.update (Update data)
+        Route::get('/detail/{id}', 'show')->name('detail'); // admin.products.detail (Show detail)
+
+        // Variants (thuộc về sản phẩm, nên đặt trong nhóm products)
+        Route::put('/variant/update/{id}', [VariantController::class, 'update'])->name('variant-update');
+        Route::delete('/variant/delete/{id}', [VariantController::class, 'destroy'])->name('variant-delete');
+        Route::post('/variant/add', [VariantController::class, 'store'])->name('variant-add');
+    });
+
+    // --- Quản lý Danh mục (Categories) ---
+    Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/trashed', 'trashed')->name('trashed');
+        Route::patch('/restore-all', 'restoreAll')->name('restore-all');
+        Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');
+
+        // Routes với parameter
+        Route::get('/{category}', 'show')->name('show'); // Có thể bỏ nếu không có trang show riêng
+        Route::get('/{category}/edit', 'edit')->name('edit');
+        Route::put('/{category}', 'update')->name('update');
+        Route::delete('/{category}', 'destroy')->name('destroy');
+
+        // Soft delete routes với parameter
+        Route::patch('/{id}/restore', 'restore')->name('restore');
+        Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
+    });
+
+    // --- Quản lý Thuộc tính (Attributes) ---
     Route::controller(AttributeController::class)->prefix('attributes')->name('attributes.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -264,94 +157,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    // Products
-    // Route::prefix('products')->name('products.')->group(function () {
-    //     // Danh sách sản phẩm
-    //     Route::get('/', function () {
-    //         return view('admin.products.list');
-    //     })->name('list');
-
-    //     // Tạo sản phẩm
-    //     Route::get('/create', function () {
-    //         $categories = [
-    //             (object) ['category_id' => 1, 'description' => 'Fashion', 'parent_category_id' => null, 'status' => 'active'],
-    //             (object) ['category_id' => 2, 'description' => 'Electronics', 'parent_category_id' => null, 'status' => 'active'],
-    //             (object) ['category_id' => 3, 'description' => 'Footwear', 'parent_category_id' => 1, 'status' => 'active'],
-    //             (object) ['category_id' => 4, 'description' => 'Smartphones', 'parent_category_id' => 2, 'status' => 'active'],
-    //             (object) ['category_id' => 5, 'description' => 'Watches', 'parent_category_id' => 1, 'status' => 'active'],
-    //         ];
-
-    //         $attributes = [
-    //             (object) ['attribute_id' => 1, 'name' => 'Color'],
-    //             (object) ['attribute_id' => 2, 'name' => 'Size'],
-    //             (object) ['attribute_id' => 3, 'name' => 'Material'],
-    //             (object) ['attribute_id' => 4, 'name' => 'Brand'],
-    //         ];
-
-    //         $attributeValues = [
-    //             (object) ['attribute_value_id' => 1, 'value' => 'Red'],
-    //             (object) ['attribute_value_id' => 2, 'value' => 'Blue'],
-    //             (object) ['attribute_value_id' => 3, 'value' => 'Green'],
-    //             (object) ['attribute_value_id' => 4, 'value' => 'XS'],
-    //             (object) ['attribute_value_id' => 5, 'value' => 'S'],
-    //             (object) ['attribute_value_id' => 6, 'value' => 'M'],
-    //             (object) ['attribute_value_id' => 7, 'value' => 'L'],
-    //             (object) ['attribute_value_id' => 8, 'value' => 'Cotton'],
-    //             (object) ['attribute_value_id' => 9, 'value' => 'Leather'],
-    //             (object) ['attribute_value_id' => 10, 'value' => 'Polyester'],
-    //             (object) ['attribute_value_id' => 11, 'value' => 'Nike'],
-    //             (object) ['attribute_value_id' => 12, 'value' => 'Adidas'],
-    //             (object) ['attribute_value_id' => 13, 'value' => 'Samsung'],
-    //         ];
-    //         return view('admin.products.create', compact('categories', 'attributes', 'attributeValues'));
-    //     })->name('create');
-    //     Route::post('/', function () {
-    //         //
-    //     })->name('store');
-
-    //     // Chỉnh sửa sản phẩm
-    //     Route::get('/{id}/edit', function () {
-    //         return view('admin.products.edit');
-    //     })->name('edit');
-    //     Route::put('/{id}', function () {
-    //         //
-    //     })->name('update');
-
-    //     // Chi tiết sản phẩm
-    //     Route::get('/{id}', function () {
-    //         return view('admin.products.detail');
-    //     })->name('detail');
-
-    //     // Upload file (dùng POST thay vì GET)
-    //     Route::post('/upload-file', function () {
-    //         // Xử lý upload file
-    //     })->name('upload-file');
-    // });
-
-    // Categories
-    Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-
-        Route::get('/trashed', 'trashed')->name('trashed');
-        Route::patch('/restore-all', 'restoreAll')->name('restore-all');
-        Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');
-
-        // Routes với parameter
-        Route::get('/{category}', 'show')->name('show');
-        Route::get('/{category}/edit', 'edit')->name('edit');
-        Route::put('/{category}', 'update')->name('update');
-        Route::delete('/{category}', 'destroy')->name('destroy');
-
-        // Soft delete routes với parameter
-        Route::patch('/{id}/restore', 'restore')->name('restore');
-        Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
-    });
-    Route::get('/products', [ProductController::class, 'indexClient']);
-    Route::get('/products/{id}', [ProductController::class, 'showClient'])->name('products.show');
-    // Orders
-    Route::controller(OrderController::class)->prefix('orders')->name('orders.')->group(function () {
+    // --- Quản lý Đơn hàng (Orders) ---
+    Route::controller(AdminOrderController::class)->prefix('orders')->name('orders.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'show')->name('show');
         Route::get('/{id}/edit', 'edit')->name('edit');
@@ -359,16 +166,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    // Roles
-    Route::prefix('roles')->name('roles.')->group(function () {
-        Route::get('/',[RoleController::class , "index"])->name('index');
-        Route::get('/create',[RoleController::class , "create"] )->name('create');
-        Route::post('/',[RoleController::class , "store"])->name('store');
-        Route::get('/{id}', [RoleController::class , "show"])->name('show');
-        Route::get('/{id}/edit',[RoleController::class , "edit"])->name('edit');
+    // --- Quản lý Vai trò (Roles) ---
+    Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}', 'show')->name('show');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        // Không có route update/delete? Có thể thêm vào nếu cần
     });
 
-});
-Route::prefix('orders')->name('orders.')->group(function () {
-    Route::get('/',[OrderController::class , "indexClient"])->name('index');  
+    // --- Quản lý Tài khoản Admin (Accounts) ---
+    // Nếu có quản lý tài khoản người dùng/admin trong admin panel
+    // Route::controller(AdminAccountController::class)->prefix('accounts')->name('accounts.')->group(function () {
+    //     Route::get('/', 'index')->name('index');
+    //     Route::get('/create', 'create')->name('create');
+    //     Route::post('/', 'store')->name('store');
+    //     Route::get('/{id}/edit', 'edit')->name('edit');
+    //     Route::put('/{id}', 'update')->name('update');
+    //     Route::delete('/{id}', 'destroy')->name('destroy');
+    // });
 });
