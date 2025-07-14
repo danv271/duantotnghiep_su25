@@ -19,9 +19,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('carts', function (Blueprint $table) {
+            $table->dropForeign(['user_id']); // Xóa ràng buộc khóa ngoại user_id
+        });
         Schema::dropIfExists('cart');
     }
 };

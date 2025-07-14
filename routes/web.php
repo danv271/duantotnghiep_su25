@@ -46,7 +46,6 @@ Route::get('/account', [AccountController::class ,"index"])->name('account');
 Route::put('/update_pass',[AuthController::class , 'updatePass'])->name('update_pass');
 
 Route::view('/', 'index',[HomeController::class,'index']);
-Route::view('/account', 'account')->name('account');
 
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');

@@ -41,7 +41,7 @@
                             <!-- User Info -->
                             <div class="user-info aos-init aos-animate" data-aos="fade-right">
                                 <div class="user-avatar">
-                                    <img src="{{ asset($data->avatar) }}" alt="Profile" loading="lazy">
+                                    <img src="#" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
                                 <h4>Sarah Anderson</h4>
@@ -756,7 +756,7 @@
                                                 </div>
 
                                                 <div class="loading">Loading</div>
-                                                <div class="error-message"></div>
+                                                <div class="text-red-700"></div>
                                                 <div class="sent-message">Your changes have been saved successfully!</div>
                                             </form>
                                         </div>
@@ -815,7 +815,7 @@
                                                         <input type="password" name="current_password"
                                                             class="form-control" id="currentPassword">
                                                         @error('current_password')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
@@ -823,7 +823,7 @@
                                                         <input type="password" name="password" class="form-control"
                                                             id="newPassword">
                                                         @error('password')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
@@ -832,7 +832,7 @@
                                                         <input type="password" class="form-control"
                                                             name="password_confirmation" id="confirmPassword">
                                                         @error('password_confirmation')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -840,9 +840,9 @@
                                                 <div class="form-buttons">
                                                     <button type="submit" class="btn-save">Update Password</button>
                                                 </div>
-                                                <div class="error-message"></div>
+                                                <div class="text-red-700"></div>
                                                 @if (session('success'))
-                                                    <div class="sent-message">
+                                                    <div class="text-green-700">
                                                         {{ session('success') }} 
                                                     </div>
                                                 @endif
