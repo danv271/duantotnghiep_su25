@@ -40,6 +40,7 @@
                             <!-- User Info -->
                             <div class="user-info aos-init aos-animate" data-aos="fade-right">
                                 <div class="user-avatar">
+
                                     <img src="" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
@@ -58,7 +59,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>My Orders</span>
-                                            <span class="badge">{{count($data->order)}}</span>
+                                            <span class="badge">{{ count($data->order) }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -171,9 +172,11 @@
                                                 </div>
                                                 <div class="order-footer">
                                                     <button type="button" class="btn-track" data-bs-toggle="collapse"
-                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn hàng</button>
+                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn
+                                                        hàng</button>
                                                     <button type="button" class="btn-details" data-bs-toggle="collapse"
-                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn hàng</button>
+                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn
+                                                        hàng</button>
                                                 </div>
 
                                                 <!-- Order Tracking -->
@@ -242,7 +245,7 @@
                                                             <div class="info-grid">
                                                                 <div class="info-item">
                                                                     <span class="label">Phương thức thanh toán</span>
-                                                                    <span class="value">{{$order->type_payment}}</span>
+                                                                    <span class="value">{{ $order->type_payment }}</span>
                                                                 </div>
                                                                 <div class="info-item">
                                                                     <span class="label">Giao hàng</span>
@@ -252,25 +255,26 @@
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Items {{count($order->OrderDetail)}}</h5>
+                                                            <h5>Items {{ count($order->OrderDetail) }}</h5>
                                                             <div class="order-items">
-                                                                
-                                                                @forEach($order->OrderDetail as $item)
+
+                                                                @foreach ($order->OrderDetail as $item)
                                                                     <div class="item">
-                                                                        @forEach($item->variant->product->images as $image)
+                                                                        @foreach ($item->variant->product->images as $image)
                                                                             @if ($image->is_featured == 1)
-                                                                                <img src="{{asset('storage/'.$image->path)}}" alt="Product" loading="lazy">
+                                                                                <img src="{{ asset('storage/' . $image->path) }}"
+                                                                                    alt="Product" loading="lazy">
                                                                             @endif
                                                                         @endforeach
-                                                                    <div class="item-info">
-                                                                        <h6>{{$item->variant->product->name}}</h6>
-                                                                        <div class="item-meta">
-                                                                            <span class="sku">SKU: PRD-001</span>
-                                                                            <span class="qty">Qty: 1</span>
+                                                                        <div class="item-info">
+                                                                            <h6>{{ $item->variant->product->name }}</h6>
+                                                                            <div class="item-meta">
+                                                                                <span class="sku">SKU: PRD-001</span>
+                                                                                <span class="qty">Qty: 1</span>
+                                                                            </div>
                                                                         </div>
+                                                                        <div class="item-price">$899.99</div>
                                                                     </div>
-                                                                    <div class="item-price">$899.99</div>
-                                                                </div>
                                                                 @endforeach
                                                             </div>
                                                         </div>
@@ -732,7 +736,7 @@
                                                 </div>
 
                                                 <div class="loading">Loading</div>
-                                                <div class="error-message"></div>
+                                                <div class="text-red-700"></div>
                                                 <div class="sent-message">Your changes have been saved successfully!</div>
                                             </form>
                                         </div>
@@ -791,7 +795,7 @@
                                                         <input type="password" name="current_password"
                                                             class="form-control" id="currentPassword">
                                                         @error('current_password')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
@@ -799,7 +803,7 @@
                                                         <input type="password" name="password" class="form-control"
                                                             id="newPassword">
                                                         @error('password')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
@@ -808,7 +812,7 @@
                                                         <input type="password" class="form-control"
                                                             name="password_confirmation" id="confirmPassword">
                                                         @error('password_confirmation')
-                                                            <div class="error-message">{{ $message }}</div>
+                                                            <div class="text-red-700">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -816,10 +820,10 @@
                                                 <div class="form-buttons">
                                                     <button type="submit" class="btn-save">Update Password</button>
                                                 </div>
-                                                <div class="error-message"></div>
+                                                <div class="text-red-700"></div>
                                                 @if (session('success'))
-                                                    <div class="sent-message">
-                                                        {{ session('success') }} 
+                                                    <div class="text-green-700">
+                                                        {{ session('success') }}
                                                     </div>
                                                 @endif
                                             </form>
