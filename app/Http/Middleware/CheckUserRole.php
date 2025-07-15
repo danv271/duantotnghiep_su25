@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 class CheckUserRole
 {
     /**
@@ -24,7 +23,6 @@ class CheckUserRole
             return $next($request); // Cho phép tiếp tục
         }
     }
-
         return redirect('/'); // Không phải admin -> chuyển hướng
     }
 }
