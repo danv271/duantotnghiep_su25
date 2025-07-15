@@ -12,7 +12,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center gap-1">
                         <h4 class="card-title">Chi Tiết Sản Phẩm</h4>
                         <div class="d-flex">
-                            <a href="{{ route('admin.products-list') }}" class="btn btn-sm btn-secondary">
+                            <a href="{{ route('admin.products.list') }}" class="btn btn-sm btn-secondary">
                                 Quay Lại
                             </a>
                         </div>
@@ -395,7 +395,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.products-update', $product->id)}}" method="POST" id="edit-product-form" enctype="multipart/form-data">
+                <form action="{{route('admin.products.update', $product->id)}}" method="POST" id="edit-product-form" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <!-- Thông Tin Cơ Bản -->

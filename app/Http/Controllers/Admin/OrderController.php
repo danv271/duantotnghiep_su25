@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -75,7 +76,16 @@ public function update(Request $request, $id)
     {
          // Lấy ID của khách hàng đang đăng nhập
         $userId = Auth::id();
-
+        $data = User::findOrFail($userId);
+        // dd($data->order);
+        $nameparts = explode(' ', $data->name);
+        if (count($nameparts) > 2) {
+            $data->first_name = $nameparts[0] . ' ' . $nameparts[1];
+            $data->last_name = implode(' ', array_slice($nameparts, 2));
+        } else {
+            $data->first_name = $nameparts[0];
+            $data->last_name = $nameparts[1];
+        }
         // Query lấy các đơn hàng của người dùng
         $query = Order::with([
             'OrderDetail.variant.product.images'
@@ -93,6 +103,6 @@ public function update(Request $request, $id)
         // Sắp xếp mới nhất và phân trang
         $orders = $query->orderBy('id', 'desc')->paginate(10);
 
-        return view('account', compact('orders'));
+        return view('account', compact('orders','data'));
     }
 }
