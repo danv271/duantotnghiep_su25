@@ -21,7 +21,7 @@ class ProductController extends Controller
     {
         // lấy danh sách sản phẩm với các quan hệ category, images và variants
         // sử dụng eager loading để giảm số lượng truy vấn và cải thiện hiệu suất
-        $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->paginate(10);
+        $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->orderBy('id','desc')->paginate(10);
         return view('admin.products.list', compact('products'));
     }
 
@@ -103,7 +103,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm được thêm thành công!');
+        return redirect()->route('admin.products.list')->with('success', 'Sản phẩm được thêm thành công!');
     }
 
     /**
@@ -224,7 +224,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm đã được cập nhật thành công!');
+        return redirect()->route('admin.products.list')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
     /**
