@@ -197,21 +197,40 @@
                         </div>
                         <div class="order-summary-content">
                             <div class="order-items">
-                            @forEach($cartItems as $item)
-                                <div class="order-item">
-                                    <div class="order-item-image">
-                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Product" class="img-fluid">
-                                    </div>
-                                    <div class="order-item-details">
-                                        <h4>{{$item->product_name}}</h4>
-                                        <p class="order-item-variant">Color: Black | Size: M</p>
-                                        <div class="order-item-price">
-                                            <span class="quantity">{{$item->quantity}} ×</span>
-                                            <span class="price">{{$item->variant_price}}</span>
+                                @if (is_array($cartItems))
+                                     @forEach($cartItems as $item)
+                                        <div class="order-item">
+                                            <div class="order-item-image">
+                                                <img src="{{ asset('storage/'.$item['image_path']) }}" alt="Product" class="img-fluid">
+                                            </div>
+                                            <div class="order-item-details">
+                                                <h4>{{$item['product_name']}}</h4>
+                                                <p class="order-item-variant">Color: Black | Size: M</p>
+                                                <div class="order-item-price">
+                                                    <span class="quantity">{{$item['quantity']}} ×</span>
+                                                    <span class="price">{{$item['price']}}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                                    @endforeach
+                                @else
+                                     @forEach($cartItems as $item)
+                                        <div class="order-item">
+                                            <div class="order-item-image">
+                                                <img src="{{ asset('storage/'.$item->image_path) }}" alt="Product" class="img-fluid">
+                                            </div>
+                                            <div class="order-item-details">
+                                                <h4>{{$item->product_name}}</h4>
+                                                <p class="order-item-variant">Color: Black | Size: M</p>
+                                                <div class="order-item-price">
+                                                    <span class="quantity">{{$item->quantity}} ×</span>
+                                                    <span class="price">{{$item->variant_price}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            
                                 {{-- <div class="order-item">
                                     <div class="order-item-image">
                                         <img src="{{ asset('estore/img/product/product-2.webp') }}" alt="Product" class="img-fluid">

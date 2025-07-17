@@ -162,34 +162,11 @@
                 <nav id="navmenu" class="navmenu">
                     <ul>
                         <li><a href="{{ url('/') }}"
-                                class="@if (Route::is('home')) active @endif">Home</a></li>
-                        <li><a href="{{ url('about') }}">About</a></li>
-                        <li><a href="{{ url('category') }}">Category</a></li>
-                        <li><a href="{{ url('product-details') }}">Product Details</a></li>
-                        <li><a href="{{ url('cart') }}">Cart</a></li>
-                        <li><a href="">Checkout</a></li>
-                        <li class="dropdown"><a href="#"><span>Dropdown</span> <i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Dropdown 1</a></li>
-                                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
-                                            class="bi bi-chevron-down toggle-dropdown"></i></a>
-                                    <ul>
-                                        <li><a href="#">Deep Dropdown 1</a></li>
-                                        <li><a href="#">Deep Dropdown 2</a></li>
-                                        <li><a href="#">Deep Dropdown 3</a></li>
-                                        <li><a href="#">Deep Dropdown 4</a></li>
-                                        <li><a href="#">Deep Dropdown 5</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Dropdown 2</a></li>
-                                <li><a href="#">Dropdown 3</a></li>
-                                <li><a href="#">Dropdown 4</a></li>
-                            </ul>
-                        </li>
-                        @include('partials.megamenu-1')
-                        @include('partials.megamenu-2')
-                        <li><a href="{{ url('contact') }}">Contact</a></li>
+                                class="@if (Route::is('home')) active @endif">Trang chủ</a></li>
+                        <li><a href="{{ url('about') }}">Giới thiệu</a></li>
+                        <li><a href="{{ url('/products') }}">Sản phẩm</a></li>
+                        <li><a href="{{ url('cart') }}">Giỏ hàng</a></li>
+                        <li><a href="{{ url('contact') }}">Liên hệ</a></li>
                     </ul>
                 </nav>
             </div>

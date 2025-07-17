@@ -96,7 +96,7 @@ public function add(Request $request)
     $variantId = $request->input('variant_id');
     $quantity = (int) $request->input('quantity', 1);
 
-    $variant = \App\Models\Variants::with('product')->findOrFail($variantId);
+    $variant = \App\Models\Variant::with('product')->findOrFail($variantId);
 
     // Người dùng đã đăng nhập
     if (Auth::check()) {
@@ -148,7 +148,7 @@ public function add(Request $request)
                 'price' => $variant->price,
                 'quantity' => $quantity,
                 'variant_id' => $variant->id,
-                'image_path' => $variant->product->images
+                'image_path' => $variant->product->images->first()->path
             ];
         }
 
