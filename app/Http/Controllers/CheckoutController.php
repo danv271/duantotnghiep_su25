@@ -55,6 +55,9 @@ class CheckoutController extends Controller
                 $subtotal += $item->variant_price * $item->quantity;
                 $itemCount += $item->quantity;
             }
+            $total = $subtotal + $shipping;
+
+        return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
         } else {
             $cartItems = session('cart', []);
 
@@ -62,11 +65,14 @@ class CheckoutController extends Controller
                 $subtotal += $item['price'] * $item['quantity'];
                 $itemCount += $item['quantity'];
             }
+            $total = $subtotal + $shipping;
+
+            return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId'));
         }
 
-        $total = $subtotal + $shipping;
+        // $total = $subtotal + $shipping;
 
-        return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
+        // return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
     }
 
     public function store(Request $request)

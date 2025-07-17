@@ -238,7 +238,7 @@ class ProductController extends Controller
     public function indexClient()
     {
         $products = Product::all();
-        return view('products', compact('products'));
+        return view('category', compact('products'));
     }
 
 
