@@ -49,7 +49,7 @@
                 @endforeach
             </div>
             <div class="text-center mt-5 mb-5" data-aos="fade-up">
-                <a href="{{ url('/product-category/' . $parentCategory->id) }}" class="view-all-btn">Xem tất cả sản phẩm <i class="bi bi-arrow-right"></i></a>
+                <a href="{{ route('products.index', $parentCategory->id) }}" class="view-all-btn">Xem tất cả sản phẩm <i class="bi bi-arrow-right"></i></a>
             </div>
         @endforeach
     </div>
