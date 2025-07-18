@@ -22,7 +22,7 @@
                                         <a href="{{ url('/products/' . $product->id) }}" class="btn-cart"><i class="bi bi-cart-plus"></i> Mua ngay</a>
                                         <div class="product-actions">
                                             <a href="#" class="action-btn"><i class="bi bi-heart"></i></a>
-                                            <a href="{{ url('/products/' . $product->id) }}" class="action-btn"><i class="bi bi-eye"></i></a>
+                                            <a href="{{ route('products.show', $product->id) }}" class="action-btn"><i class="bi bi-eye"></i></a>
                                             <a href="#" class="action-btn"><i class="bi bi-arrow-left-right"></i></a>
                                         </div>
                                     </div>

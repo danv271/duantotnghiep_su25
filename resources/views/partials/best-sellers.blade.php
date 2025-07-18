@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <div class="product-info">
-                            <h3 class="product-title"><a href="{{ url('products/'.$product->id) }}">{{ $product->name }}</a></h3>
+                            <h3 class="product-title"><a href="{{ route('products.show',$product->id) }}">{{ $product->name }}</a></h3>
                             <div class="product-price">
                                 <span class="current-price">{{ $product->base_price }}</span>
                                 @if(isset($product->base_price))
@@ -57,7 +57,7 @@
                 </div>
             @endforeach
             <div class="text-center mt-5" data-aos="fade-up">
-                <a href="{{ url('/products') }}" class="btn btn-primary rounded-pill">Xem tất cả sản phẩm <i class="bi bi-arrow-right"></i></a>
+                <a href="{{ route('products.index','') }}" class="btn btn-primary rounded-pill">Xem tất cả sản phẩm <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </div>

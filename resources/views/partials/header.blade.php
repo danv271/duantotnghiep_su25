@@ -164,7 +164,7 @@
                         <li><a href="{{ url('/') }}"
                                 class="@if (Route::is('home')) active @endif">Trang chủ</a></li>
                         <li><a href="{{ url('about') }}">Giới thiệu</a></li>
-                        <li><a href="{{route('products.index',' ') }}}}">Sản phẩm</a></li>
+                        <li><a href="{{ route('products.index','') }}">Sản phẩm</a></li>
                         <li><a href="{{ url('cart') }}">Giỏ hàng</a></li>
                         <li><a href="{{ url('contact') }}">Liên hệ</a></li>
                     </ul>
