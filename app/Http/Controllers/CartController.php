@@ -96,7 +96,7 @@ public function add(Request $request)
     $variantId = $request->input('variant_id');
     $quantity = (int) $request->input('quantity', 1);
 
-    $variant = \App\Models\Variant::with('product')->findOrFail($variantId);
+    $variant = \App\Models\Variant::with('product','attributesValue.attribute')->findOrFail($variantId);
 
     // Người dùng đã đăng nhập
     if (Auth::check()) {
