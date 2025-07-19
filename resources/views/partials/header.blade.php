@@ -6,8 +6,8 @@
                 <div class="col-lg-4 d-none d-lg-flex">
                     <div class="top-bar-item">
                         <i class="bi bi-telephone-fill me-2"></i>
-                        <span>Need help? Call us: </span>
-                        <a href="tel:+1234567890">+1 (234) 567-890</a>
+                        <span>Bạn cần trợ giúp ? Liên hệ : </span>
+                        <a href="tel:+338134988"> 0338-134-988</a>
                     </div>
                 </div>
 
@@ -26,9 +26,9 @@
                             }
                         </script>
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">🚚 Free shipping on orders over $50</div>
-                            <div class="swiper-slide">💰 30 days money back guarantee.</div>
-                            <div class="swiper-slide">🎁 20% off on your first order</div>
+                            <div class="swiper-slide">🚚 Miễn phí giao hàng cho đơn từ 500.000 vnđ</div>
+                            <div class="swiper-slide">💰 Hỗ trợ hoàn tiền trong 30 ngày</div>
+                            <div class="swiper-slide">🎁 Giảm 20% cho đơn hàng đầu tiên</div>
                         </div>
                     </div>
                 </div>
@@ -37,25 +37,20 @@
                     <div class="d-flex justify-content-end">
                         <div class="top-bar-item dropdown me-3">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="bi bi-translate me-2"></i>EN
+                                <i class="bi bi-translate me-2"></i>VN
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#"><i
-                                            class="bi bi-check2 me-2 selected-icon"></i>English</a></li>
-                                <li><a class="dropdown-item" href="#">Español</a></li>
-                                <li><a class="dropdown-item" href="#">Français</a></li>
-                                <li><a class="dropdown-item" href="#">Deutsch</a></li>
+                                            class="bi bi-check2 me-2 selected-icon"></i>Vietnamese</a></li>
                             </ul>
                         </div>
                         <div class="top-bar-item dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="bi bi-currency-dollar me-2"></i>USD
+                                <i class="bi bi-currency-dollar me-2"></i>VNĐ
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#"><i
-                                            class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
-                                <li><a class="dropdown-item" href="#">EUR</a></li>
-                                <li><a class="dropdown-item" href="#">GBP</a></li>
+                                            class="bi bi-check2 me-2 selected-icon"></i>VNĐ</a></li>
                             </ul>
                         </div>
                     </div>
@@ -70,13 +65,13 @@
             <div class="d-flex py-3 align-items-center justify-content-between">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="logo d-flex align-items-center">
-                    <h1 class="sitename">eStore</h1>
+                    <h1 class="sitename">ViStar</h1>
                 </a>
 
                 <!-- Search -->
                 <form class="search-form desktop-search-form">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
                         <button class="btn" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
@@ -99,8 +94,8 @@
                         </button>
                         <div class="dropdown-menu">
                             <div class="dropdown-header">
-                                <h6>Welcome to <span class="sitename">eStore</span></h6>
-                                <p class="mb-0">Access account & manage orders</p>
+                                <h6>ViStar <span class="sitename">xin chào</span></h6>
+                                <p class="mb-0">Quản lý tài khoản</p>
                             </div>
                             <div class="dropdown-body">
                                 <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
@@ -178,7 +173,7 @@
         <div class="container">
             <form class="search-form">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for products">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
                     <button class="btn" type="submit">
                         <i class="bi bi-search"></i>
                     </button>

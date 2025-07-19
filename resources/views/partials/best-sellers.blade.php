@@ -49,7 +49,7 @@
                                 @endfor
                                 <span class="rating-count">({{ $product['rating_count'] }})</span>
                             </div>
-                            <a href="{{ url('/products/' . $product->id) }}" class="btn btn-add-to-cart @if(isset($product->quantity) && $product->quantity<=0) btn-disabled @endif" @if(isset($product->quantity) && $product->quantity<=0) disabled @endif>
+                            <a href="{{ route('products.show' , $product->id) }}" class="btn btn-add-to-cart @if(isset($product->quantity) && $product->quantity<=0) btn-disabled @endif" @if(isset($product->quantity) && $product->quantity<=0) disabled @endif>
                                 <i class="bi bi-bag-plus me-2"></i>{{ isset($product->quantity) && $product->quantity <= 0 ? 'Hết hàng' : 'Mua ngay' }}
                             </a>
                         </div>

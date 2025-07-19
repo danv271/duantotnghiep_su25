@@ -210,18 +210,29 @@ class CheckoutController extends Controller
         }
 
         // Tính lại tổng tiền từ giỏ hàng
-        $userId = Auth::id();
-        $cart = Cart::where('user_id', $userId)
-            ->with(['cartItem.variant'])
-            ->first();
+        if(Auth::check()){
+            $userId = Auth::id();
+            $cart = Cart::where('user_id', $userId)
+                ->with(['cartItem.variant'])
+                ->first();
+            $subtotal = 0;
 
-        $subtotal = 0;
+            if ($cart && $cart->cartItem) {
+                foreach ($cart->cartItem as $item) {
+                    $subtotal += $item->variant->price * $item->quantity;
+                }
+            }
+        }else{
+            $cart = session('cart', []);
+            $subtotal = 0;
 
-        if ($cart && $cart->cartItem) {
-            foreach ($cart->cartItem as $item) {
-                $subtotal += $item->variant->price * $item->quantity;
+            if ($cart) {
+                foreach ($cart as $item) {
+                    $subtotal += $item['price']* $item['quantity'];
+                }
             }
         }
+        
 
         $shipping = 30000;
         $total = $subtotal + $shipping;
@@ -266,49 +277,58 @@ class CheckoutController extends Controller
     }
 
     public function vnpayReturn(Request $request)
-    {
-        $vnp_HashSecret = env('VNPAY_HASH_SECRET');
+{
+    $vnp_HashSecret = env('VNPAY_HASH_SECRET');
 
-        // Loại bỏ hash khỏi dữ liệu
-        $inputData = $request->except(['vnp_SecureHash', 'vnp_SecureHashType']);
+    // Loại bỏ hash khỏi dữ liệu
+    $inputData = $request->except(['vnp_SecureHash', 'vnp_SecureHashType']);
+    ksort($inputData);
 
-        // Sắp xếp theo thứ tự key
-        ksort($inputData);
+    // Tạo chuỗi hash theo chuẩn VNPay
+    $hashData = http_build_query($inputData, '', '&');
+    $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
-        // Tạo chuỗi hash đúng chuẩn VNPAY
-        $hashData = http_build_query($inputData, '', '&');
+    if ($secureHash === $request->input('vnp_SecureHash') && $request->input('vnp_ResponseCode') == '00') {
+        $userId = Auth::check() ? Auth::id() : null;
 
-        $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+        $checkoutData = session('checkout_data');
+        if (!$checkoutData) {
+            return redirect()->route('cart.index')->with('error', 'Không tìm thấy dữ liệu đơn hàng.');
+        }
 
-        if ($secureHash === $request->input('vnp_SecureHash') && $request->input('vnp_ResponseCode') == '00') {
-            $userId = Auth::check() ? Auth::id() : null;
-            $cart = $userId ? Cart::where('user_id', $userId)->with('cartItem.variant.product')->first() : null;
-
+        // Lấy giỏ hàng từ DB nếu đã đăng nhập, hoặc từ session nếu chưa
+        $cartItems = null;
+        if ($userId) {
+            $cart = Cart::where('user_id', $userId)->with('cartItem.variant.product')->first();
             if (!$cart || $cart->cartItem->isEmpty()) {
                 return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
             }
-
-            $checkoutData = session('checkout_data');
-            if (!$checkoutData) {
-                return redirect()->route('cart.index')->with('error', 'Không tìm thấy dữ liệu đơn hàng.');
+            $cartItems = $cart->cartItem;
+        } else {
+            $cartItems = session('cart');
+            if (!$cartItems || empty($cartItems)) {
+                return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
             }
+        }
 
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            $order = Order::create([
-                'user_id' => $userId,
-                'name' => $checkoutData['name'],
-                'user_email' => $checkoutData['email'],
-                'user_phone' => $checkoutData['phone'],
-                'user_address' => $checkoutData['address'],
-                'user_note' => $checkoutData['note'],
-                'type_payment' => 'transfer',
-                'status_order' => 'pending',
-                'status_payment' => 'paid',
-                'total_price' => $checkoutData['total'],
-            ]);
+        $order = Order::create([
+            'user_id' => $userId,
+            'name' => $checkoutData['name'],
+            'user_email' => $checkoutData['email'],
+            'user_phone' => $checkoutData['phone'],
+            'user_address' => $checkoutData['address'],
+            'user_note' => $checkoutData['note'],
+            'type_payment' => 'transfer',
+            'status_order' => 'pending',
+            'status_payment' => 'paid',
+            'total_price' => $checkoutData['total'],
+        ]);
 
-            foreach ($cart->cartItem as $item) {
+        // Lưu chi tiết đơn hàng
+        if ($userId) {
+            foreach ($cartItems as $item) {
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'variant_id' => $item->variant_id,
@@ -318,35 +338,51 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // Xóa giỏ hàng
+            // Xóa giỏ hàng DB
             CartItem::where('cart_id', $cart->id)->delete();
-
-            DB::commit();
-            $payment = Payment::create([
-                'order_id' => $order->id,
-                'payment_method' => 'vnpay',
-                'amount' => $checkoutData['total'],
-                'payment_date' => now(),
-            ]);
-
-            // Thêm bản ghi vào bảng payment_transactions
-            PaymentTransaction::create([
-                'payment_id' => $payment->id,
-                'order_id' => $order->id,
-                'gateway' => 'vnpay',
-                'transaction_status' => 'success ',
-                'amount' => $checkoutData['total'],
-                'currency' => 'VND',
-                'transaction_date' => now(),
-                'response_transaction' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
-            ]);
-            session()->forget('checkout_data');
-
-            return redirect()->route('checkout.success', $order->id)->with('success', 'Thanh toán thành công!');
+        } else {
+            foreach ($cartItems as $item) {
+                OrderDetail::create([
+                    'order_id' => $order->id,
+                    'variant_id' => $item['variant_id'],
+                    'quantity' => $item['quantity'],
+                    'variant_price' => $item['price'],
+                    'total_price' => $item['price'] * $item['quantity'],
+                ]);
+            }
+            session()->push('order_code', $order->id);
+            // Xóa giỏ hàng trong session
+            session()->forget('cart');
         }
 
-        return redirect()->route('checkout')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'payment_method' => 'vnpay',
+            'amount' => $checkoutData['total'],
+            'payment_date' => now(),
+        ]);
+
+        PaymentTransaction::create([
+            'payment_id' => $payment->id,
+            'order_id' => $order->id,
+            'gateway' => 'vnpay',
+            'transaction_status' => 'success',
+            'amount' => $checkoutData['total'],
+            'currency' => 'VND',
+            'transaction_date' => now(),
+            'response_transaction' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+        ]);
+
+        DB::commit();
+
+        session()->forget('checkout_data');
+
+        return redirect()->route('checkout.success', $order->id)->with('success', 'Thanh toán thành công!');
     }
+
+    return redirect()->route('checkout')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
+}
+
 
     public function success($orderId)
     {

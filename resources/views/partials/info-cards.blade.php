@@ -6,8 +6,8 @@
                     <div class="icon-box">
                         <i class="bi bi-truck"></i>
                     </div>
-                    <h3>Free Shipping</h3>
-                    <p>Nulla sit morbi vestibulum eros duis amet, consectetur vitae lacus. Ut quis tempor felis sed nunc viverra.</p>
+                    <h3>Miễn Phí Vận Chuyển</h3>
+                    <p>Mọi đơn hàng được giao miễn phí, đảm bảo tiện lợi và tiết kiệm cho bạn khi mua sắm.</p>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
@@ -15,8 +15,8 @@
                     <div class="icon-box">
                         <i class="bi bi-piggy-bank"></i>
                     </div>
-                    <h3>Money Back Guarantee</h3>
-                    <p>Nullam gravida felis ac nunc tincidunt, sed malesuada justo pulvinar. Vestibulum nec diam vitae eros.</p>
+                    <h3>Bảo Đảm Hoàn Tiền</h3>
+                    <p>Chúng tôi cam kết hoàn tiền 100% nếu sản phẩm không đúng như mô tả hoặc bạn không hài lòng.</p>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
@@ -24,8 +24,8 @@
                     <div class="icon-box">
                         <i class="bi bi-percent"></i>
                     </div>
-                    <h3>Discount Offers</h3>
-                    <p>Nulla ipsum nisi vel adipiscing amet, dignissim consectetur ornare. Vestibulum quis posuere elit auctor.</p>
+                    <h3>Ưu Đãi Giảm Giá</h3>
+                    <p>Nhận ngay các chương trình khuyến mãi hấp dẫn, giúp bạn tiết kiệm hơn khi mua sắm.</p>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
@@ -33,8 +33,8 @@
                     <div class="icon-box">
                         <i class="bi bi-headset"></i>
                     </div>
-                    <h3>24/7 Support</h3>
-                    <p>Ipsum dolor amet sit consectetur adipiscing, nullam vitae euismod tempor nunc felis vestibulum ornare.</p>
+                    <h3>Hỗ Trợ 24/7</h3>
+                    <p>Đội ngũ hỗ trợ luôn sẵn sàng giải đáp mọi thắc mắc của bạn bất kỳ lúc nào, cả ngày lẫn đêm.</p>
                 </div>
             </div>
         </div>
