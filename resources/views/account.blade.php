@@ -59,8 +59,8 @@
                                         <a class="nav-link" data-bs-toggle="tab" href="#orders" aria-selected="false"
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
-                                            <span>My Orders</span>
-                                            <span class="badge"></span>
+                                            <span>Đơn hàng của tôi </span>
+                                            <span class="badge">{{count($orders)}}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -89,14 +89,14 @@
                                         <a class="nav-link" data-bs-toggle="tab" href="#addresses" aria-selected="false"
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-geo-alt"></i>
-                                            <span>Addresses</span>
+                                            <span>Địa chỉ </span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" data-bs-toggle="tab" href="#settings"
                                             aria-selected="true" role="tab">
                                             <i class="bi bi-gear"></i>
-                                            <span>Account Settings</span>
+                                            <span>Cài đặt tài khoản </span>
                                         </a>
                                     </li>
                                 </ul>
@@ -122,7 +122,7 @@
                                 <!-- Orders Tab -->
                                 <div class="tab-pane fade" id="orders" role="tabpanel">
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2>My Orders</h2>
+                                        <h2>Đơn hàng của tôi </h2>
                                         <div class="header-actions">
                                             <div class="search-box">
                                                 <i class="bi bi-search"></i>
@@ -159,7 +159,7 @@
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
                                                             <span class="status processing">
-                                                                @if($order->status_order == 'pending')
+                                                                @if ($order->status_order == 'pending')
                                                                     chưa xác nhận
                                                                 @endif
                                                             </span>
@@ -250,12 +250,12 @@
                                                                 <div class="info-item">
                                                                     <span class="label">Phương thức thanh toán</span>
                                                                     <span class="value">
-                                                                        @if ($order->type_payment=='transfer')
+                                                                        @if ($order->type_payment == 'transfer')
                                                                             thanh toán online
                                                                         @else
                                                                             thanh toán khi nhận hàng
                                                                         @endif
-                                                                        
+
                                                                     </span>
                                                                 </div>
                                                                 <div class="info-item">
@@ -280,11 +280,14 @@
                                                                         <div class="item-info">
                                                                             <h6>{{ $item->variant->product->name }}</h6>
                                                                             <div class="item-meta">
-                                                                                <span class="sku">Thuộc tính : {{$item->variant->attributesValue[0]->value }}</span>
-                                                                                <span class="qty">Số lượng: {{$item->quantity}}</span>
+                                                                                <span class="sku">Thuộc tính :
+                                                                                    {{ $item->variant->attributesValue[0]->value }}</span>
+                                                                                <span class="qty">Số lượng:
+                                                                                    {{ $item->quantity }}</span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="item-price">{{$item->total_price}} vnđ</div>
+                                                                        <div class="item-price">{{ $item->total_price }}
+                                                                            vnđ</div>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -644,11 +647,11 @@
                                 <!-- Addresses Tab -->
                                 <div class="tab-pane fade" id="addresses" role="tabpanel">
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2>My Addresses</h2>
+                                        <h2>Địa chỉ của tôi </h2>
                                         <div class="header-actions">
                                             <button type="button" class="btn-add-new">
                                                 <i class="bi bi-plus-lg"></i>
-                                                Add New Address
+                                                Thêm mới địa chỉ 
                                             </button>
                                         </div>
                                     </div>
@@ -658,7 +661,7 @@
                                         <div class="address-card default aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="100">
                                             <div class="card-header">
-                                                <span class="default-badge">Default</span>
+                                                <span class="default-badge">Mặc định</span>
                                             </div>
                                             <div class="card-body">
                                                 <p class="address-text"></p>
@@ -670,11 +673,11 @@
                                             <div class="card-actions">
                                                 <button type="button" class="btn-edit">
                                                     <i class="bi bi-pencil"></i>
-                                                    Edit
+                                                    Sửa
                                                 </button>
                                                 <button type="button" class="btn-remove">
                                                     <i class="bi bi-trash"></i>
-                                                    Remove
+                                                    Xóa 
                                                 </button>
                                             </div>
                                         </div>
@@ -711,22 +714,22 @@
                                 <!-- Settings Tab -->
                                 <div class="tab-pane fade active show" id="settings" role="tabpanel">
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2>Account Settings</h2>
+                                        <h2>Cài đặt tài khoản </h2>
                                     </div>
 
                                     <div class="settings-content">
                                         <!-- Personal Information -->
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up">
-                                            <h3>Personal Information</h3>
+                                            <h3>Thông tin người dùng </h3>
                                             <form class="php-email-form settings-form">
                                                 <div class="row g-3">
                                                     <div class="col-md-6">
-                                                        <label for="firstName" class="form-label">First Name</label>
+                                                        <label for="firstName" class="form-label">Họ</label>
                                                         <input type="text" class="form-control" id="firstName"
                                                             value="" required="">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="lastName" class="form-label">Last Name</label>
+                                                        <label for="lastName" class="form-label">Tên </label>
                                                         <input type="text" class="form-control" id="lastName"
                                                             value="" required="">
                                                     </div>
@@ -736,31 +739,31 @@
                                                             value="" required="">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="phone" class="form-label">Phone</label>
+                                                        <label for="phone" class="form-label">Số điên thoại</label>
                                                         <input type="tel" class="form-control" id="phone"
                                                             value="">
                                                     </div>
                                                 </div>
 
                                                 <div class="form-buttons">
-                                                    <button type="submit" class="btn-save">Save Changes</button>
+                                                    <button type="submit" class="btn-save">Lưu</button>
                                                 </div>
 
                                                 <div class="loading">Loading</div>
                                                 <div class="text-red-700"></div>
-                                                <div class="sent-message">Your changes have been saved successfully!</div>
+                                                <div class="sent-message">Cập nhật thành công </div>
                                             </form>
                                         </div>
 
                                         <!-- Email Preferences -->
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="100">
-                                            <h3>Email Preferences</h3>
+                                            <h3>Tùy chọn email</h3>
                                             <div class="preferences-list">
                                                 <div class="preference-item">
                                                     <div class="preference-info">
-                                                        <h4>Order Updates</h4>
-                                                        <p>Receive notifications about your order status</p>
+                                                        <h4>Cập nhật đơn hàng</h4>
+                                                        <p>Nhận thông báo về trạng thái đơn hàng của bạn</p>
                                                     </div>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" id="orderUpdates"
@@ -770,8 +773,8 @@
 
                                                 <div class="preference-item">
                                                     <div class="preference-info">
-                                                        <h4>Promotions</h4>
-                                                        <p>Receive emails about new promotions and deals</p>
+                                                        <h4>Khuyến mãi</h4>
+                                                        <p>Nhận email về các chương trình khuyến mãi và ưu đãi mới</p>
                                                     </div>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" id="promotions">
@@ -780,8 +783,8 @@
 
                                                 <div class="preference-item">
                                                     <div class="preference-info">
-                                                        <h4>Newsletter</h4>
-                                                        <p>Subscribe to our weekly newsletter</p>
+                                                        <h4>Bản tin</h4>
+                                                        <p>Đăng ký nhận bản tin hàng tuần của chúng tôi</p>
                                                     </div>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" id="newsletter"
@@ -794,15 +797,15 @@
                                         <!-- Security Settings -->
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="200">
-                                            <h3>Security</h3>
+                                            <h3>Bảo Mật </h3>
                                             <form class=" settings-form" method="post"
                                                 action="{{ route('update_pass') }}">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-3">
                                                     <div class="col-md-12">
-                                                        <label for="current_password" class="form-label">Current
-                                                            Password</label>
+                                                        <label for="current_password" class="form-label">Mật khẩu hiện tại
+                                                        </label>
                                                         <input type="password" name="current_password"
                                                             class="form-control" id="currentPassword">
                                                         @error('current_password')
@@ -810,7 +813,7 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="newPassword" class="form-label">New Password</label>
+                                                        <label for="newPassword" class="form-label">Mật khẩu mới </label>
                                                         <input type="password" name="password" class="form-control"
                                                             id="newPassword">
                                                         @error('password')
@@ -818,8 +821,8 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="confirmPassword" class="form-label">Confirm
-                                                            Password</label>
+                                                        <label for="confirmPassword" class="form-label">Nhập lại mật khẩu
+                                                        </label>
                                                         <input type="password" class="form-control"
                                                             name="password_confirmation" id="confirmPassword">
                                                         @error('password_confirmation')
@@ -829,7 +832,7 @@
                                                 </div>
 
                                                 <div class="form-buttons">
-                                                    <button type="submit" class="btn-save">Update Password</button>
+                                                    <button type="submit" class="btn-save">Cập nhật Mật khẩu </button>
                                                 </div>
                                                 <div class="text-red-700"></div>
                                                 @if (session('success'))
@@ -840,14 +843,15 @@
                                             </form>
                                         </div>
 
-                                        <!-- Delete Account -->
+                                        <!-- Xóa tài khoản -->
                                         <div class="settings-section danger-zone aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="300">
-                                            <h3>Delete Account</h3>
+                                            <h3>Xóa tài khoản</h3>
                                             <div class="danger-zone-content">
-                                                <p>Once you delete your account, there is no going back. Please be certain.
+                                                <p>Một khi bạn đã xóa tài khoản, bạn sẽ không thể quay lại được nữa. Hãy
+                                                    chắc chắn nhé.
                                                 </p>
-                                                <button type="button" class="btn-danger">Delete Account</button>
+                                                <button type="button" class="btn-danger">Xóa tài khoản</button>
                                             </div>
                                         </div>
                                     </div>

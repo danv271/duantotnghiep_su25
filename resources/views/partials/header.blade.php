@@ -100,7 +100,7 @@
                             <div class="dropdown-body">
                                 <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
                                     <i class="bi bi-person-circle me-2"></i>
-                                    <span>My Profile</span>
+                                    <span>Thông tin cá nhân </span>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('orders.index') }}">
                                     <i class="bi bi-bag-check me-2"></i>
@@ -108,7 +108,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
                                     <i class="bi bi-heart me-2"></i>
-                                    <span>My Wishlist</span>
+                                    <span>Sản phẩm yêu thích </span>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
                                     <i class="bi bi-gear me-2"></i>
@@ -119,13 +119,13 @@
                                 <div class="dropdown-footer">
                                     <form method="POST" action="{{ route('auth.destroy') }}">
                                         @csrf
-                                        <button type="submit" class="btn btn-secondary w-100">Logout</button>
+                                        <button type="submit" class="btn btn-secondary w-100">Đăng xuất </button>
                                     </form>
                                 </div>
                             @else
                                 <div class="dropdown-footer">
-                                    <a class="btn btn-primary w-100" href="{{ url('login') }}">Login</a>
-                                    <a class="btn btn-secondary w-100 mt-2" href="{{ url('register') }}">Register</a>
+                                    <a class="btn btn-primary w-100" href="{{ url('login') }}">Đăng Nhập </a>
+                                    <a class="btn btn-secondary w-100 mt-2" href="{{ url('register') }}">Đăng Kí</a>
                                 </div>
                             @endif
                         </div>
