@@ -94,10 +94,12 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/update', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
     Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::delete('/remove-session/{variantId}', [CartController::class, 'removeSession'])->name('removeSession');
 });
 
 // --- Checkout Routes ---
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+// Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.process');
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
