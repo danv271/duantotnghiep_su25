@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Roles List')
+@section('title', 'Danh Sách Vai Trò')
 
-@section('header', 'Roles List')
+@section('header', 'Danh Sách Vai Trò')
 
 @section('content')
     <!-- Start Container Fluid -->
@@ -18,12 +18,12 @@
                     <table class="table align-middle mb-0 table-hover table-centered">
                         <thead class="bg-light-subtle">
                             <tr>
-                                <th>Role</th>
-                                <th>Description</th>
-                                <th>Tags</th>
-                                <th>Users</th>
+                                <th>Vai Trò</th>
+                                <th>Mô Tả</th>
+                                <th>Nhãn</th>
+                                <th>Người Dùng</th>
                                 <th></th>
-                                <th>Action</th>
+                                <th>Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,7 +101,7 @@
 
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.roles.create') }}" class="link-primary">+ Add Role</a>
+                                    <a href="{{ route('admin.roles.create') }}" class="link-primary">+ Thêm Vai Trò</a>
                                 </td>
                             </tr>
 
@@ -113,19 +113,19 @@
             <div class="row g-0 align-items-center justify-content-between text-center text-sm-start p-3 border-top">
                 <div class="col-sm">
                     <div class="text-muted">
-                        Showing <span class="fw-semibold">1</span> to <span class="fw-semibold">2</span> of <span
-                            class="fw-semibold">2</span> Results
+                        Hiển thị <span class="fw-semibold">1</span> đến <span class="fw-semibold">2</span> trong <span
+                            class="fw-semibold">2</span> kết quả
                     </div>
                 </div>
                 <div class="col-sm-auto mt-3 mt-sm-0">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm mb-0">
                             <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
                             </li>
                             <li class="page-item active"><a class="page-link" href="#">1</a></li>
                             <li class="page-item disabled">
-                                <a class="page-link" href="#">Next</a>
+                                <a class="page-link" href="#">Sau</a>
                             </li>
                         </ul>
                     </nav>

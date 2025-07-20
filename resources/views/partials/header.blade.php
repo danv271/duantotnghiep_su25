@@ -113,7 +113,7 @@
                                 <div class="dropdown-footer">
                                     <form method="POST" action="{{ route('auth.destroy') }}">
                                         @csrf
-                                        <button type="submit" class="btn btn-secondary w-100">Logout</button>
+                                        <button type="submit" class="btn btn-secondary w-100">Đăng xuất </button>
                                     </form>
                                 </div>
                             @else

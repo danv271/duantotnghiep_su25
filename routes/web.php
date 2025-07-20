@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/account', [AdminAccountController::class, "index"])->name('account'); // Có vẻ là AccountController của Admin, cần đổi tên nếu có AccountController riêng cho user
     Route::put('/update_pass', [AuthController::class, 'updatePass'])->name('update_pass');
 
-    
+
 });
     // User's Orders
 Route::prefix('orders')->name('orders.')->group(function () {
@@ -105,7 +105,6 @@ Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->na
 Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
 
 // admin
-
 Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {
     // Dashboard
     Route::view('/', 'admin.dashboard')->name('dashboard'); // Redirect admin/ to dashboard
