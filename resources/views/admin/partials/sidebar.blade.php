@@ -125,18 +125,12 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Orders </span>
+                    <span class="nav-text"> Đơn hàng </span>
                 </a>
                 <div class="collapse" id="sidebarOrders">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{route('admin.orders.index')}}">List</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="order-cart.html">Cart</a>
-                        </li>
-                        <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="order-checkout.html">Check Out</a>
+                            <a class="sub-nav-link" href="{{route('admin.orders.index')}}">Danh sách</a>
                         </li>
                     </ul>
                 </div>

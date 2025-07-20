@@ -121,23 +121,23 @@
                                 <!-- Orders Tab -->
                                 <div class="tab-pane fade" id="orders" role="tabpanel">
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2>My Orders</h2>
+                                        <h2>Đơn hàng của tôi</h2>
                                         <div class="header-actions">
                                             <div class="search-box">
                                                 <i class="bi bi-search"></i>
-                                                <input type="text" placeholder="Search orders...">
+                                                <input type="text" placeholder="Tim kiếm đơn hàng...">
                                             </div>
                                             <div class="dropdown">
                                                 <button class="filter-btn" data-bs-toggle="dropdown">
                                                     <i class="bi bi-funnel"></i>
-                                                    <span>Filter</span>
+                                                    <span>Bộ lọc</span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#">All Orders</a></li>
-                                                    <li><a class="dropdown-item" href="#">Processing</a></li>
-                                                    <li><a class="dropdown-item" href="#">Shipped</a></li>
-                                                    <li><a class="dropdown-item" href="#">Delivered</a></li>
-                                                    <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                                                    <li><a class="dropdown-item" href="#">Tất cả đơn hàng</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đang xử lí</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đã vẫn chuyển</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đã giao</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đã hủy</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -319,7 +319,7 @@
                                             data-aos-delay="400">
                                             <div class="order-header">
                                                 <div class="order-id">
-                                                    <span class="label">Order ID:</span>
+                                                    <span class="label">Mã đơn hàng:</span>
                                                     <span class="value">#ORD-2024-1245</span>
                                                 </div>
                                                 <div class="order-date">Feb 5, 2025</div>

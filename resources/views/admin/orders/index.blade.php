@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Payment Refund</h4>
+                                <h4 class="card-title mb-2">Đơn hoàn tiền</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">490</p>
                             </div>
                             <div>
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Order Cancel</h4>
+                                <h4 class="card-title mb-2"> Đơn hàng bị hủy</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">241</p>
                             </div>
                             <div>
@@ -51,7 +51,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Order Shipped</h4>
+                                <h4 class="card-title mb-2">Đơn hàng đã được chuyển đi</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">630</p>
                             </div>
                             <div>
@@ -69,7 +69,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Order Delivering</h4>
+                                <h4 class="card-title mb-2">Đơn hàng đang giao</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">170</p>
                             </div>
                             <div>
@@ -87,7 +87,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Pending Review</h4>
+                                <h4 class="card-title mb-2">Đang chờ duyệt</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">210</p>
                             </div>
                             <div>
@@ -105,7 +105,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Pending Payment</h4>
+                                <h4 class="card-title mb-2">Chờ thanh toán</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">608</p>
                             </div>
                             <div>
@@ -123,7 +123,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">Delivered</h4>
+                                <h4 class="card-title mb-2">Giao hàng thành công</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">200</p>
                             </div>
                             <div>
@@ -141,7 +141,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h4 class="card-title mb-2">In Progress</h4>
+                                <h4 class="card-title mb-2">Đang xử lý</h4>
                                 <p class="text-muted fw-medium fs-22 mb-0">656</p>
                             </div>
                             <div>
@@ -278,20 +278,6 @@
         {{-- Kết thúc phần Bảng Danh Sách Đơn Hàng --}}
 
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>2025 © Larkon. Crafted by <iconify-icon icon="iconamoon:heart-duotone"
-                        class="fs-18 align-middle text-danger"></iconify-icon> <a
-                        href="https://1.envato.market/techzaa" class="fw-bold footer-text"
-                        target="_blank">Techzaa</a>
-                </div>
-            </div>
-        </div>
-    </footer>
     {{-- Modal để cập nhật trạng thái đơn hàng --}}
     <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel"
         aria-hidden="true">
