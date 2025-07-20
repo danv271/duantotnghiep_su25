@@ -103,7 +103,7 @@ public function update(Request $request, $id)
 
             // Sắp xếp mới nhất và phân trang
             $orders = $query->orderBy('id', 'desc')->paginate(10);
-            return view('account', compact('orders','data'));
+            return view('order', compact('orders','data'));
         }else{
             $order_code = session('order_code', []);
 
@@ -116,7 +116,7 @@ public function update(Request $request, $id)
                     ->whereIn('id', $order_code) // Lấy tất cả đơn hàng có id trong mảng $order_code
                     ->get();
             }
-            return view('account', compact('orders'));
+            return view('order', compact('orders'));
         }
         // return view('account', compact('order_code'));
         

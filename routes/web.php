@@ -81,12 +81,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/account', [AdminAccountController::class, "index"])->name('account'); // Có vẻ là AccountController của Admin, cần đổi tên nếu có AccountController riêng cho user
     Route::put('/update_pass', [AuthController::class, 'updatePass'])->name('update_pass');
 
-    
+
 });
     // User's Orders
-    Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
-    });
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
+});
 // --- Cart Routes ---
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
@@ -94,16 +94,17 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/update', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
     Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::delete('/remove-session/{variantId}', [CartController::class, 'removeSession'])->name('removeSession');
 });
 
 // --- Checkout Routes ---
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+// Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.process');
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
 
 // admin
-
 Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {
     // Dashboard
     Route::view('/', 'admin.dashboard')->name('dashboard'); // Redirect admin/ to dashboard

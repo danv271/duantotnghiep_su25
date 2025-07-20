@@ -171,15 +171,15 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:confetti-minimalistic-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Attributes </span>
+                    <span class="nav-text"> Thuộc tính </span>
                 </a>
                 <div class="collapse" id="sidebarAttributes">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.attributes.index') }}">List</a>
+                            <a class="sub-nav-link" href="{{ route('admin.attributes.index') }}">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.attributes.create') }}">Create</a>
+                            <a class="sub-nav-link" href="{{ route('admin.attributes.create') }}">Thêm mới</a>
                         </li>
                     </ul>
                 </div>
