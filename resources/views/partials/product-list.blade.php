@@ -19,7 +19,7 @@
                                         @endif
                                     @endforeach
                                     <div class="product-overlay">
-                                        <a href="{{ url('/products/' . $product->id) }}" class="btn-cart"><i class="bi bi-cart-plus"></i> Mua ngay</a>
+                                        <a href="{{route('products.show' , $product->id) }}" class="btn-cart"><i class="bi bi-cart-plus"></i> Mua ngay</a>
                                         <div class="product-actions">
                                             <a href="#" class="action-btn"><i class="bi bi-heart"></i></a>
                                             <a href="{{ route('products.show', $product->id) }}" class="action-btn"><i class="bi bi-eye"></i></a>
@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="product-info">
                                     <h5 class="product-title">
-                                        <a href="{{ url('/products/' . $product->id) }}">{{ $product->name }}</a>
+                                        <a href="{{ route('products.show' , $product->id) }}">{{ $product->name }}</a>
                                     </h5>
                                     <div class="product-price">
                                         <span class="current-price">{{ number_format($product->base_price, 0) }}₫</span>

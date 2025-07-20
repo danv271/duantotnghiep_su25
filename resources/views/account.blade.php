@@ -6,6 +6,7 @@
 
 @section('content')
     <main class="main">
+
         <!-- Page Title -->
         <div class="page-title light-background">
             <div class="container d-lg-flex justify-content-between align-items-center">
@@ -59,7 +60,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>My Orders</span>
-                                            <span class="badge">{{ count($data->order) }}</span>
+                                            <span class="badge"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -144,7 +145,7 @@
                                     </div>
                                     <div class="orders-grid">
                                         <!-- Order Card 1 -->
-                                        @foreach ($data->order as $order)
+                                        @foreach ($orders as $order)
                                             <div class="order-card aos-init aos-animate" data-aos="fade-up"
                                                 data-aos-delay="100">
                                                 <div class="order-header">
@@ -157,12 +158,15 @@
                                                     <div class="order-info">
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
-                                                            <span
-                                                                class="status processing">{{ $order->status_order }}</span>
+                                                            <span class="status processing">
+                                                                @if($order->status_order == 'pending')
+                                                                    chưa xác nhận
+                                                                @endif
+                                                            </span>
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Sản phẩm</span>
-                                                            <span>{{ count($order->OrderDetail) }} items</span>
+                                                            <span>{{ count($order->OrderDetail) }} sản phẩm</span>
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
@@ -241,11 +245,18 @@
                                                 <div class="collapse order-details" id="details1">
                                                     <div class="details-content">
                                                         <div class="detail-section">
-                                                            <h5>Order Information</h5>
+                                                            <h5>Thông tin đơn hàng</h5>
                                                             <div class="info-grid">
                                                                 <div class="info-item">
                                                                     <span class="label">Phương thức thanh toán</span>
-                                                                    <span class="value">{{ $order->type_payment }}</span>
+                                                                    <span class="value">
+                                                                        @if ($order->type_payment=='transfer')
+                                                                            thanh toán online
+                                                                        @else
+                                                                            thanh toán khi nhận hàng
+                                                                        @endif
+                                                                        
+                                                                    </span>
                                                                 </div>
                                                                 <div class="info-item">
                                                                     <span class="label">Giao hàng</span>
@@ -255,7 +266,7 @@
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Items {{ count($order->OrderDetail) }}</h5>
+                                                            <h5>Sản phẩm {{ count($order->OrderDetail) }}</h5>
                                                             <div class="order-items">
 
                                                                 @foreach ($order->OrderDetail as $item)
@@ -269,11 +280,11 @@
                                                                         <div class="item-info">
                                                                             <h6>{{ $item->variant->product->name }}</h6>
                                                                             <div class="item-meta">
-                                                                                <span class="sku">SKU: PRD-001</span>
-                                                                                <span class="qty">Qty: 1</span>
+                                                                                <span class="sku">Thuộc tính : {{$item->variant->attributesValue[0]->value }}</span>
+                                                                                <span class="qty">Số lượng: {{$item->quantity}}</span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="item-price">$899.99</div>
+                                                                        <div class="item-price">{{$item->total_price}} vnđ</div>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
