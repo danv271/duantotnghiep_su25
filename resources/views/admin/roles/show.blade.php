@@ -1,26 +1,26 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Role Details')
+@section('title', 'Chi Tiết Vai Trò')
 
-@section('header', 'Role Details')
+@section('header', 'Chi Tiết Vai Trò')
 
 @section('content')
     <!-- Start Container Fluid -->
     <div class="container-xxl">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Role Information</h4>
+                <h4 class="card-title">Thông Tin Vai Trò</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
-                                <th class="text-nowrap" style="width: 200px;">Role Name</th>
+                                <th class="text-nowrap" style="width: 200px;">Tên Vai Trò</th>
                                 <td>{{ $role->role_name }}</td>
                             </tr>
                             <tr>
-                                <th class="text-nowrap">Tags</th>
+                                <th class="text-nowrap">Nhãn</th>
                                 <td>
                                     <div class="d-flex flex-wrap gap-2">
                                         <span class="badge bg-primary">{{ $role->role_name }}</span>
@@ -28,7 +28,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-nowrap">Users</th>
+                                <th class="text-nowrap">Người Dùng</th>
                                 <td>
                                     <div class="d-flex flex-wrap gap-2">
                                         @if (isset($role->users))
@@ -45,11 +45,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-nowrap">Created At</th>
+                                <th class="text-nowrap">Ngày Tạo</th>
                                 <td>{{$role->created_at}}</td>
                             </tr>
                             <tr>
-                                <th class="text-nowrap">Last Updated</th>
+                                <th class="text-nowrap">Cập Nhật Cuối</th>
                                 <td>{{$role->updated_at}}</td>
                             </tr>
                         </tbody>
@@ -58,8 +58,8 @@
             </div>
             <div class="card-footer border-top">
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-light">Back to List</a>
-                    <a href="{{ route('admin.roles.edit', 1) }}" class="btn btn-primary">Edit Role</a>
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-light">Quay Lại Danh Sách</a>
+                    <a href="{{ route('admin.roles.edit', 1) }}" class="btn btn-primary">Chỉnh Sửa Vai Trò</a>
                 </div>
             </div>
         </div>
