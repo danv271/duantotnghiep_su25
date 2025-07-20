@@ -95,24 +95,18 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-header">
                                 <h6>ViStar <span class="sitename">xin chào</span></h6>
-                                <p class="mb-0">Quản lý tài khoản</p>
+                                <p class="mb-0">CHÀO MỪNG QUÝ KHÁCH ĐẾN VỚI VISTAR</p>
                             </div>
                             <div class="dropdown-body">
-                                <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
-                                    <i class="bi bi-person-circle me-2"></i>
-                                    <span>My Profile</span>
-                                </a>
+                                @if (isset(session('user')->id) && session('user')->id > 0)
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
+                                        <i class="bi bi-person-circle me-2"></i>
+                                        <span>Tài khoản</span>
+                                    </a>
+                                @endif
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('orders.index') }}">
                                     <i class="bi bi-bag-check me-2"></i>
                                     <span>Đơn hàng</span>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
-                                    <i class="bi bi-heart me-2"></i>
-                                    <span>My Wishlist</span>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ url('account') }}">
-                                    <i class="bi bi-gear me-2"></i>
-                                    <span>Settings</span>
                                 </a>
                             </div>
                             @if (isset(session('user')->id) && session('user')->id > 0)
@@ -124,16 +118,16 @@
                                 </div>
                             @else
                                 <div class="dropdown-footer">
-                                    <a class="btn btn-primary w-100" href="{{ url('login') }}">Login</a>
-                                    <a class="btn btn-secondary w-100 mt-2" href="{{ url('register') }}">Register</a>
+                                    <a class="btn btn-primary w-100" href="{{ url('login') }}">Đăng nhập</a>
+                                    <a class="btn btn-secondary w-100 mt-2" href="{{ url('register') }}">Đăng ký</a>
                                 </div>
                             @endif
                         </div>
                     </div>
 
                     <!-- Wishlist -->
-                    <a href="{{ url('account') }}" class="header-action-btn d-none d-md-block">
-                        <i class="bi bi-heart"></i>
+                    <a href="{{ route('orders.index') }}" class="header-action-btn d-none d-md-block">
+                        <i class="bi bi-bag-check me-2"></i>
                         <span class="badge">0</span>
                     </a>
 

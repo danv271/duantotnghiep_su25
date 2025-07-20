@@ -84,9 +84,9 @@ Route::middleware('auth')->group(function () {
     
 });
     // User's Orders
-    Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
-    });
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
+});
 // --- Cart Routes ---
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
