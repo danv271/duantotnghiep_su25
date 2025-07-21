@@ -47,7 +47,7 @@ Route::get('/account', [AccountController::class ,"index"])->name('account');
 Route::put('/update_pass',[AuthController::class , 'updatePass'])->name('update_pass');
 
 Route::view('/', 'index',[HomeController::class,'index']);
-Route::view('/account', 'account')->name('account');
+// Route::view('/account', 'account')->name('account');
 
 Route::view('/checkout', 'checkout')->name('checkout');
 Route::post('/checkout', fn () => view('checkout'))->name('checkout.process');
@@ -152,8 +152,9 @@ Route::get('/', [HomeController::class, 'index']);
 
 
 Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
-Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
 Route::post('/checkout/store',[CheckoutController::class, 'store'])->name('checkout.process');
+Route::get('/checkout/success/{id}',[CheckoutController::class,'success'])->name('checkout.success');
 
 Route::get('/login', function () {
     return view('auth.login-register');
@@ -367,4 +368,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/{id}/edit',[RoleController::class , "edit"])->name('edit');
     });
 
+});
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('/',[OrderController::class , "indexClient"])->name('index');  
 });

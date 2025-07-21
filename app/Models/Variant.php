@@ -33,4 +33,8 @@ class Variant extends Model
     {
         return $this->hasOne(Variant::class);
     }
+    public function OrderDetail()
+    {
+        return $this->hasOne(OrderDetail::class,'variant_id','id');
+    }
 }

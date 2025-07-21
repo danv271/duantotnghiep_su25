@@ -24,7 +24,7 @@ class User extends Authenticatable
         'role_id',
         'is_active',
     ];
-
+    protected $table = 'users';
     /**
      * The attributes that should be hidden for serialization.
      *
