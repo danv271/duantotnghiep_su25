@@ -14,6 +14,7 @@ class AccountController extends Controller
         // dd(session());
         $data = User::findOrFail(session('user')->id);
         // dd($data->order);
+        $orders = $data->order;
         $nameparts = explode(' ', $data->name);
         if (count($nameparts) > 2) {
             $data->first_name = $nameparts[0] . ' ' . $nameparts[1];
@@ -23,6 +24,6 @@ class AccountController extends Controller
             $data->last_name = $nameparts[1];
         }
         // dd($data);
-        return view('account', compact('data'));
+        return view('account', compact('data','orders'));
     }
 }

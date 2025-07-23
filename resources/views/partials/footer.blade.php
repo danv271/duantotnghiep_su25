@@ -3,13 +3,13 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2>Join Our Newsletter</h2>
-                    <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+                    <h2>Kết nối với chúng tôi</h2>
+                    <p>Đăng ký nhận ưu đãi đặc biệt, miễn phí vận chuyển, và những ưu đãi dành riêng cho bạn.</p>
                     <form action="{{ url('forms/newsletter') }}" method="post" class="php-email-form">
                         @csrf
                         <div class="newsletter-form d-flex">
-                            <input type="email" name="email" placeholder="Your email address" required>
-                            <button type="submit">Subscribe</button>
+                            <input type="email" name="email" placeholder="Email của bạn" required>
+                            <button type="submit">Đăng ký ngay</button>
                         </div>
                         <div class="loading">Loading</div>
                         <div class="error-message"></div>

@@ -16,10 +16,10 @@
     <!-- Page Title -->
     <div class="page-title light-background">
         <div class="container d-lg-flex justify-content-between align-items-center">
-            <h1 class="mb-2 mb-lg-0">Product Detail</h1>
+            <h1 class="mb-2 mb-lg-0">Chi tiết sản phẩm</h1>
             <nav class="breadcrumbs">
                 <ol>
-                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('/') }}">Trang chủ</a></li>
                     <li class="current">{{ $product->name }}</li>
                 </ol>
             </nav>
@@ -31,23 +31,49 @@
         <div class="container" data-aos="fade-up" data-aos-delay="100">
             <div class="row">
                 <!-- Product Image -->
-                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-delay="200">
-                    <div class="product-images">
+                <div class="col-lg-7 mb-5 mb-lg-0" data-aos="fade-right" data-aos-delay="200">
+                    {{-- <div class="product-images">
                         <div class="main-image-container mb-3">
                             <div class="image-zoom-container">
-                                <img src="{{ asset('assets/img/product/default.webp') }}" alt="{{ $product->name }}" class="img-fluid main-image drift-zoom">
+                                @foreach ($product->images as $image)
+                                    @if ($image->is_featured !== 1)
+                                         <img src="{{ asset('storage/'.$image->path) }}" alt="{{ $product->name }}" class="img-fluid main-image drift-zoom">
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+                    <div id="carouselExampleIndicators" class="carousel slide">
+                        <div class="carousel-inner">
+                            @foreach ($product->images  as $index => $image)
+                                @if ($image->is_featured !== 1 && $index === 1)
+                                    <div class="carousel-item active">
+                                        <img src="{{asset('storage/'.$image->path)}}" class="d-block w-100" alt="...">
+                                    </div>
+                                @endif
+                            @endforeach
+                            @foreach ($product->images  as $index => $image)
+                                @if ($image->is_featured !== 1 && $index !== 1)
+                                    <div class="carousel-item">
+                                        <img src="{{asset('storage/'.$image->path)}}" class="d-block w-100" alt="...">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        </div>
                 </div>
 
                 <!-- Product Info -->
-                <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
                     <div class="product-info">
-                        <div class="product-meta mb-2">
-                            <span class="product-category">Category ID: {{ $product->category_id }}</span>
-                        </div>
-
                         <h1 class="product-title">{{ $product->name }}</h1>
                         
                             {{-- @if($product->variants->count())
@@ -75,20 +101,15 @@
                             @else
                                 <p class="text-muted">Sản phẩm này chưa có biến thể.</p>
                             @endif --}}
-
-                        <div class="product-price-container mb-4">
-                            <span class="current-price">{{ number_format($product->base_price, 0) }}₫</span>
+                        <div class="row mb-1">
+                            <div class="product-price-container col-4">
+                                <span class="current-price">{{ number_format($product->base_price, 0) }}₫</span>
+                            </div>
+                            <div class="product-availability col-8">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span>Còn hàng</span>
+                            </div>
                         </div>
-
-                        <div class="product-short-description mb-4">
-                            <p>{{ $product->description }}</p>
-                        </div>
-
-                        <div class="product-availability mb-4">
-                            <i class="bi bi-check-circle-fill text-success"></i>
-                            <span>In Stock</span>
-                        </div>
-
                         {{-- <div class="product-quantity mb-4">
                             <h6 class="option-title">Quantity:</h6>
                             <div class="quantity-selector">
@@ -98,18 +119,17 @@
                             </div>
                         </div> --}}
 
-                            <div class="product-actions">
-                                 <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="d-inline-flex flex-column gap-2">
-                                    @csrf
-
-                                    <div class="mb-3">
-                                        <label for="variant_id" class="form-label">Chọn biến thể:</label>
+                        <div class="product-actions">
+                                <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="d-inline-flex flex-column gap-2">
+                                @csrf
+                                <div class="row">
+                                    <div class="mb-3 col-6">
+                                        <label for="variant_id" class="form-label mb-3">Chọn thuộc tính:</label>
                                         <select name="variant_id" id="variant_id" class="form-select">
                                             @foreach($product->variants as $variant)
                                                 <option value="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}"
                                                     data-stock="{{ $variant->stock_quantity }}">
-                                                    {{ number_format($variant->price, 0) }}₫ -
                                                     @foreach($variant->attributesValue as $value)
                                                         {{ $value->attribute->name }}: {{ $value->value }}
                                                     @endforeach
@@ -117,48 +137,32 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label>Giá:</label>
-                                        <div id="variant-price">{{ number_format($product->variants->first()->price ?? 0, 0) }}₫</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label>Số lượng trong kho:</label>
-                                        <div id="variant-stock">{{ $product->variants->first()->stock_quantity ?? 0 }}</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="quantity">Số lượng:</label>
+                                    <div class="mb-3 col-6">
+                                        <label for="quantity" class="form-label mb-3">Số lượng:</label>
                                         <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1">
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-                                    </button>
-                                </form>
-
-
-
-                        
-                    </div>
-                    <a href="{{ url('/products') }}" class="btn btn-outline-secondary ms-2">← Back to List</a>
-                    </div>
-
-                        <div class="additional-info mt-4">
-                            <div class="info-item">
-                                <i class="bi bi-truck"></i>
-                                <span>Free shipping on orders over 500,000₫</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="bi bi-arrow-repeat"></i>
-                                <span>7-day return policy</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="bi bi-shield-check"></i>
-                                <span>Genuine warranty</span>
-                            </div>
+                                    <div class="additional-info mt-3 ">
+                                        <div class="info-item">
+                                            <i class="bi bi-truck"></i>
+                                            <span>Giao nhanh 30p trong nội thành</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <i class="bi bi-arrow-repeat"></i>
+                                            <span>Chính sách bảo hành</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <i class="bi bi-shield-check"></i>
+                                            <span>Khuyến mãi hấp dẫn</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                                </button>
+                            </form>
                         </div>
+                    </div>
+                        
                     </div>
                 </div>
             </div>

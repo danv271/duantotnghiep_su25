@@ -9,7 +9,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center gap-1">
                     <h4 class="card-title flex-grow-1">All Product List</h4>
 
-                    <a href="{{route('admin.products-create')}}" class="btn btn-sm btn-primary">
+                    <a href="{{route('admin.products.create')}}" class="btn btn-sm btn-primary">
                         Add Product
                     </a>
 
@@ -88,10 +88,10 @@
                                     <td>{{$product->category->category_name}}</td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('admin.products-detail',$product->id) }}" class="btn btn-light btn-sm">
+                                            <a href="{{ route('admin.products.detail',$product->id) }}" class="btn btn-light btn-sm">
                                                 <iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon>
                                             </a>
-                                            <a href="{{ route('admin.products-edit',$product->id) }}" class="btn btn-soft-primary btn-sm">
+                                            <a href="{{ route('admin.products.edit',$product->id) }}" class="btn btn-soft-primary btn-sm">
                                                 <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
                                             </a>
                                             <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm">

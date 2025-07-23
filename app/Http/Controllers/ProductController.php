@@ -21,7 +21,7 @@ class ProductController extends Controller
     {
         // lấy danh sách sản phẩm với các quan hệ category, images và variants
         // sử dụng eager loading để giảm số lượng truy vấn và cải thiện hiệu suất
-        $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->paginate(10);
+        $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->orderBy('id','desc')->paginate(10);
         return view('admin.products.list', compact('products'));
     }
 
@@ -103,7 +103,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm được thêm thành công!');
+        return redirect()->route('admin.products.list')->with('success', 'Sản phẩm được thêm thành công!');
     }
 
     /**
@@ -224,7 +224,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.products-list')->with('success', 'Sản phẩm đã được cập nhật thành công!');
+        return redirect()->route('admin.products.list')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
     /**
@@ -235,10 +235,48 @@ class ProductController extends Controller
         //
     }
 
-    public function indexClient()
+    public function indexClient(Request $request, $categoryId = null)
     {
-        $products = Product::all();
-        return view('products', compact('products'));
+        // Khởi tạo query để lấy sản phẩm
+        $query = Product::with('images');
+
+        // Lấy danh mục cha và danh mục con
+        $category = null;
+        if ($categoryId) {
+            $category = Category::findOrFail($categoryId);
+            $childCategoryIds = Category::where('parent_category_id', $categoryId)
+                ->pluck('id')
+                ->push($categoryId)
+                ->toArray();
+            $query->whereIn('category_id', $childCategoryIds);
+        }
+
+        // Lọc theo tên sản phẩm
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        // Lọc theo giá
+        if ($request->has('min_price') && !empty($request->input('min_price'))) {
+            $query->where('base_price', '>=', $request->input('min_price'));
+        }
+        if ($request->has('max_price') && !empty($request->input('max_price'))) {
+            $query->where('base_price', '<=', $request->input('max_price'));
+        }
+
+        // Lọc theo danh mục con
+        if ($request->has('sub_category') && !empty($request->input('sub_category'))) {
+            $query->where('category_id', $request->input('sub_category'));
+        }
+
+        // Lấy danh sách sản phẩm với phân trang
+        $products = $query->paginate(10); // Sử dụng paginate thay vì get
+
+        // Lấy tất cả danh mục cha và danh mục con
+        $categories = Category::whereNull('parent_category_id')->with('children')->get();
+
+        // Trả về view
+        return view('category', compact('products', 'categories', 'category'));
     }
 
 

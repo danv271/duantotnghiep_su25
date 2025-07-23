@@ -13,7 +13,7 @@
                         <h4 class="card-title">Thêm Sản Phẩm Mới</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('admin.products-store') }}" method="POST" id="add-product-form" enctype="multipart/form-data">
+                        <form action="{{ route('admin.products.store') }}" method="POST" id="add-product-form" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Thông Tin Cơ Bản Của Sản Phẩm -->
@@ -281,7 +281,7 @@
                             <!-- Nút Gửi Form -->
                             <div class="text-end mt-4">
                                 <button type="submit" class="btn btn-primary">Thêm Sản Phẩm</button>
-                                <a href="{{ route('admin.products-list') }}" class="btn btn-secondary ms-2">Hủy</a>
+                                <a href="{{ route('admin.products.list') }}" class="btn btn-secondary ms-2">Hủy</a>
                             </div>
                         </form>
                     </div>

@@ -16,47 +16,54 @@ use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
-    public function index()
-    {
-        $cartItems = [];
-        $subtotal = 0;
-        $shipping = 30000; // phí vận chuyển cố định
-        $total = 0;
-        $itemCount = 0;
 
-        $userId = null;
+    public function index(Request $request)
+    {
+        $selectedItemsString = $request->input('selected_items', '');
+        $selectedIds = array_filter(explode(',', $selectedItemsString));
+        $shipping = 30000; // phí vận chuyển
+        $subtotal = 0;
+        $itemCount = 0;
 
         if (Auth::check()) {
             $userId = Auth::id();
 
+            if (empty($selectedIds)) {
+                return redirect()->route('cart.index')->with('error', 'Vui lòng chọn sản phẩm để thanh toán.');
+            }
+
             $cart = Cart::where('user_id', $userId)
-                ->with(['cartItem.variant.product', 'cartItem.variant.product.images' => function ($query) {
-                    $query->orderBy('id', 'asc')->first();
+                ->with(['cartItem.variant.product.images' => function ($query) {
+                    $query->orderBy('id', 'asc');
                 }])
                 ->first();
 
-            if ($cart && $cart->cartItem) {
-                $cartItems = $cart->cartItem->map(function ($cartItem) {
-                    return (object)[
-                        'cart_item_id' => $cartItem->id,
-                        'quantity' => $cartItem->quantity,
-                        'product_name' => $cartItem->variant->product->name,
-                        'variant_price' => $cartItem->variant->price,
-                        'max_quantity' => $cartItem->variant->stock_quantity,
-                        'image_path' => $cartItem->variant->product->images->first()
-                            ? $cartItem->variant->product->images->first()->path
-                            : null,
-                        'variant_id' => $cartItem->variant->id,
-                    ];
-                });
+            if (!$cart) {
+                return redirect()->route('cart.index')->with('error', 'Không tìm thấy giỏ hàng.');
             }
 
+            $cartItems = $cart->cartItem->whereIn('id', $selectedIds)->values();
+
             foreach ($cartItems as $item) {
-                $subtotal += $item->variant_price * $item->quantity;
+                $subtotal += $item->variant->price * $item->quantity;
                 $itemCount += $item->quantity;
             }
         } else {
-            $cartItems = session('cart', []);
+            // Trường hợp chưa đăng nhập, lấy giỏ hàng từ session
+            $cartSession = session('cart', []);
+
+            if (empty($cartSession)) {
+                return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
+            }
+
+            if (empty($selectedIds)) {
+                return redirect()->route('cart.index')->with('error', 'Vui lòng chọn sản phẩm để thanh toán.');
+            }
+
+            // Lọc các item trong session theo variant_id trong $selectedIds
+            $cartItems = collect(array_filter($cartSession, function ($item) use ($selectedIds) {
+                return in_array($item['variant_id'], $selectedIds);
+            }));
 
             foreach ($cartItems as $item) {
                 $subtotal += $item['price'] * $item['quantity'];
@@ -65,9 +72,70 @@ class CheckoutController extends Controller
         }
 
         $total = $subtotal + $shipping;
+        $userId = Auth::id();
 
-        return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
+        return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId'));
     }
+
+
+    // public function index()
+    // {
+    //     $cartItems = [];
+    //     $subtotal = 0;
+    //     $shipping = 30000; // phí vận chuyển cố định
+    //     $total = 0;
+    //     $itemCount = 0;
+
+    //     $userId = null;
+
+    //     if (Auth::check()) {
+    //         $userId = Auth::id();
+
+    //         $cart = Cart::where('user_id', $userId)
+    //             ->with(['cartItem.variant.product', 'cartItem.variant.product.images' => function ($query) {
+    //                 $query->orderBy('id', 'asc')->first();
+    //             }])
+    //             ->first();
+
+    //         if ($cart && $cart->cartItem) {
+    //             $cartItems = $cart->cartItem->map(function ($cartItem) {
+    //                 return (object)[
+    //                     'cart_item_id' => $cartItem->id,
+    //                     'quantity' => $cartItem->quantity,
+    //                     'product_name' => $cartItem->variant->product->name,
+    //                     'variant_price' => $cartItem->variant->price,
+    //                     'max_quantity' => $cartItem->variant->stock_quantity,
+    //                     'image_path' => $cartItem->variant->product->images->first()
+    //                         ? $cartItem->variant->product->images->first()->path
+    //                         : null,
+    //                     'variant_id' => $cartItem->variant->id,
+    //                 ];
+    //             });
+    //         }
+
+    //         foreach ($cartItems as $item) {
+    //             $subtotal += $item->variant_price * $item->quantity;
+    //             $itemCount += $item->quantity;
+    //         }
+    //         $total = $subtotal + $shipping;
+
+    //         return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
+    //     } else {
+    //         $cartItems = session('cart', []);
+
+    //         foreach ($cartItems as $item) {
+    //             $subtotal += $item['price'] * $item['quantity'];
+    //             $itemCount += $item['quantity'];
+    //         }
+    //         $total = $subtotal + $shipping;
+
+    //         return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId'));
+    //     }
+
+    //     // $total = $subtotal + $shipping;
+
+    //     // return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId', 'cart'));
+    // }
 
     public function store(Request $request)
     {
@@ -179,13 +247,47 @@ class CheckoutController extends Controller
             DB::commit();
 
             return redirect()->route('checkout.success', $order->id)->with('success', 'Đặt hàng thành công!');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('cart.index')->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
         return redirect()->back()->with('error', 'Chỉ hỗ trợ thanh toán online hiện tại!');
     }
+    // public function store(Request $request)
+    // {
+    //     $selectedIds = $request->input('selected_items', []);
+
+    //     if (empty($selectedIds)) {
+    //         return redirect()->route('cart.index')->with('error', 'Vui lòng chọn sản phẩm để thanh toán.');
+    //     }
+
+    //     if (Auth::check()) {
+    //         $userId = Auth::id();
+    //         $cart = Cart::where('user_id', $userId)->with('cartItem.variant.product.images')->first();
+
+    //         if (!$cart) {
+    //             return redirect()->route('cart.index')->with('error', 'Không tìm thấy giỏ hàng.');
+    //         }
+
+    //         // Lọc các item đã chọn
+    //         $cartItems = $cart->cartItem->whereIn('id', $selectedIds)->values();
+
+    //         $subtotal = 0;
+    //         $shipping = 30000;
+    //         $itemCount = 0;
+
+    //         foreach ($cartItems as $item) {
+    //             $subtotal += $item->variant->price * $item->quantity;
+    //             $itemCount += $item->quantity;
+    //         }
+
+    //         $total = $subtotal + $shipping;
+
+    //         return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total', 'itemCount', 'userId'));
+    //     } else {
+    //         return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
+    //     }
+    // }
 
     private function redirectToVNPAY()
     {
@@ -204,18 +306,29 @@ class CheckoutController extends Controller
         }
 
         // Tính lại tổng tiền từ giỏ hàng
-        $userId = Auth::id();
-        $cart = Cart::where('user_id', $userId)
-            ->with(['cartItem.variant'])
-            ->first();
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cart = Cart::where('user_id', $userId)
+                ->with(['cartItem.variant'])
+                ->first();
+            $subtotal = 0;
 
-        $subtotal = 0;
+            if ($cart && $cart->cartItem) {
+                foreach ($cart->cartItem as $item) {
+                    $subtotal += $item->variant->price * $item->quantity;
+                }
+            }
+        } else {
+            $cart = session('cart', []);
+            $subtotal = 0;
 
-        if ($cart && $cart->cartItem) {
-            foreach ($cart->cartItem as $item) {
-                $subtotal += $item->variant->price * $item->quantity;
+            if ($cart) {
+                foreach ($cart as $item) {
+                    $subtotal += $item['price'] * $item['quantity'];
+                }
             }
         }
+
 
         $shipping = 30000;
         $total = $subtotal + $shipping;
@@ -265,26 +378,33 @@ class CheckoutController extends Controller
 
         // Loại bỏ hash khỏi dữ liệu
         $inputData = $request->except(['vnp_SecureHash', 'vnp_SecureHashType']);
-
-        // Sắp xếp theo thứ tự key
         ksort($inputData);
 
-        // Tạo chuỗi hash đúng chuẩn VNPAY
+        // Tạo chuỗi hash theo chuẩn VNPay
         $hashData = http_build_query($inputData, '', '&');
-
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
         if ($secureHash === $request->input('vnp_SecureHash') && $request->input('vnp_ResponseCode') == '00') {
             $userId = Auth::check() ? Auth::id() : null;
-            $cart = $userId ? Cart::where('user_id', $userId)->with('cartItem.variant.product')->first() : null;
-
-            if (!$cart || $cart->cartItem->isEmpty()) {
-                return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
-            }
 
             $checkoutData = session('checkout_data');
             if (!$checkoutData) {
                 return redirect()->route('cart.index')->with('error', 'Không tìm thấy dữ liệu đơn hàng.');
+            }
+
+            // Lấy giỏ hàng từ DB nếu đã đăng nhập, hoặc từ session nếu chưa
+            $cartItems = null;
+            if ($userId) {
+                $cart = Cart::where('user_id', $userId)->with('cartItem.variant.product')->first();
+                if (!$cart || $cart->cartItem->isEmpty()) {
+                    return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
+                }
+                $cartItems = $cart->cartItem;
+            } else {
+                $cartItems = session('cart');
+                if (!$cartItems || empty($cartItems)) {
+                    return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống!');
+                }
             }
 
             DB::beginTransaction();
@@ -302,20 +422,35 @@ class CheckoutController extends Controller
                 'total_price' => $checkoutData['total'],
             ]);
 
-            foreach ($cart->cartItem as $item) {
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'variant_id' => $item->variant_id,
-                    'quantity' => $item->quantity,
-                    'variant_price' => $item->variant->price,
-                    'total_price' => $item->variant->price * $item->quantity,
-                ]);
+            // Lưu chi tiết đơn hàng
+            if ($userId) {
+                foreach ($cartItems as $item) {
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'variant_id' => $item->variant_id,
+                        'quantity' => $item->quantity,
+                        'variant_price' => $item->variant->price,
+                        'total_price' => $item->variant->price * $item->quantity,
+                    ]);
+                }
+
+                // Xóa giỏ hàng DB
+                CartItem::where('cart_id', $cart->id)->delete();
+            } else {
+                foreach ($cartItems as $item) {
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'variant_id' => $item['variant_id'],
+                        'quantity' => $item['quantity'],
+                        'variant_price' => $item['price'],
+                        'total_price' => $item['price'] * $item['quantity'],
+                    ]);
+                }
+                session()->push('order_code', $order->id);
+                // Xóa giỏ hàng trong session
+                session()->forget('cart');
             }
 
-            // Xóa giỏ hàng
-            CartItem::where('cart_id', $cart->id)->delete();
-
-            DB::commit();
             $payment = Payment::create([
                 'order_id' => $order->id,
                 'payment_method' => 'vnpay',
@@ -323,17 +458,19 @@ class CheckoutController extends Controller
                 'payment_date' => now(),
             ]);
 
-            // Thêm bản ghi vào bảng payment_transactions
             PaymentTransaction::create([
                 'payment_id' => $payment->id,
                 'order_id' => $order->id,
                 'gateway' => 'vnpay',
-                'transaction_status' => 'success ',
+                'transaction_status' => 'success',
                 'amount' => $checkoutData['total'],
                 'currency' => 'VND',
                 'transaction_date' => now(),
                 'response_transaction' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
             ]);
+
+            DB::commit();
+
             session()->forget('checkout_data');
 
             return redirect()->route('checkout.success', $order->id)->with('success', 'Thanh toán thành công!');
@@ -341,6 +478,7 @@ class CheckoutController extends Controller
 
         return redirect()->route('checkout')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
     }
+
 
     public function success($orderId)
     {

@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.index')
-            ->with('success', 'Category created successfully.');
+            ->with('Thành công', 'Danh mục được tạo thành công.');
     }
 
     /**
@@ -84,7 +84,7 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.index')
-            ->with('success', 'Category updated successfully.');
+            ->with('Thành công', 'Danh mục được cập nhật thành công.');
     }
 
     /**
@@ -96,21 +96,21 @@ class CategoryController extends Controller
         if ($category->children()->count() > 0) {
             return redirect()
                 ->route('admin.categories.index')
-                ->with('error', 'Cannot delete category with subcategories.');
+                ->with('Lỗi', 'Không thể xóa danh mục có danh mục con.');
         }
 
         // Check if category has products
         if ($category->products()->count() > 0) {
             return redirect()
                 ->route('admin.categories.index')
-                ->with('error', 'Cannot delete category with associated products.');
+                ->with('Lỗi', 'Không thể xóa danh mục có sản phẩm liên quan.');
         }
 
         $category->delete();
 
         return redirect()
             ->route('admin.categories.index')
-            ->with('success', 'Category deleted successfully.');
+            ->with('Thành công', 'Đã xóa danh mục thành công.');
     }
 
      /**
@@ -132,7 +132,7 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.trashed')
-            ->with('success', 'Category restored successfully.');
+            ->with('Thành công', 'Đã khôi phục danh mục thành công.');
     }
 
     /**
@@ -144,7 +144,7 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.trashed')
-            ->with('success', 'All categories restored successfully.');
+            ->with('Thành công', 'Tất cả các danh mục được khôi phục thành công.');
     }
 
     /**
@@ -156,7 +156,7 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.trashed')
-            ->with('success', 'All trashed categories permanently deleted.');
+            ->with('Thành công', 'Tất cả các danh mục đã xóa sẽ bị xóa vĩnh viễn.');
     }
 
     /**
@@ -169,6 +169,6 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('admin.categories.trashed')
-            ->with('success', 'Category permanently deleted.');
+            ->with('Thành công', 'Danh mục bị xóa vĩnh viễn.');
     }
 }
