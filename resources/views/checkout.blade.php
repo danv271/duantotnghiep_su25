@@ -34,23 +34,23 @@
                                     <h3>Thông tin khách hàng</h3>
                                 </div>
                                 <div class="section-content">
-                                    <div class="form-group">
-                                        <label for="first-name">Tên người nhận</label>
-                                        <input type="text" name="name" class="form-control" id="first-name" placeholder="Your First Name" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                        <div class="form-group">
+                                            <label for="first-name">Tên người nhận</label>
+                                            <input type="text" name="name" class="form-control" id="first-name" value="{{ Auth::check() ? $user->name : old('first-name') }}" required>
+                                            @error('first_name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" value="{{ old('email') }}" required>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{ Auth::check() ? $user->email : old('email') }}" required>
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="phone">Số điện thoại</label>
-                                        <input type="tel" class="form-control" name="phone" id="phone" placeholder="Your Phone Number" value="{{ old('phone') }}" required>
+                                        <input type="tel" class="form-control" name="phone" id="phone" value="{{ Auth::check() ? $user->phone : old('phone') }}" required>
                                         @error('phone')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -62,20 +62,21 @@
                             <div class="checkout-section" id="shipping-address">
                                 <div class="section-header">
                                     <div class="section-number">2</div>
-                                    <h3>Shipping Address</h3>
+                                    <h3>Địa chỉ giao hàng</h3>
                                 </div>
                                 <div class="section-content">
                                     <div class="form-group">
                                         <label for="address">Địa chỉ</label>
-                                        <input type="text" class="form-control" name="address" id="address" placeholder="Street Address" value="{{ old('address') }}" required>
+                                        <input type="text" class="form-control" name="address" id="address" value="{{ Auth::check() ? $user->phone : old('address') }}" required>
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="note">Ghi chú</label>
-                                        <input type="text" class="form-control" name="note" id="note" placeholder="Apartment, Suite, Unit, etc." value="{{ old('note') }}">
+                                        <label for="apartment">Ghi chú</label>
+                                        <input type="text" class="form-control" name="note" id="apartment" value="{{ old('apartment') }}">
                                     </div>
+                                    
                                 </div>
                             </div>
 
@@ -88,23 +89,75 @@
                                 <div class="section-content">
                                     <div class="payment-options">
                                         <div class="payment-option active">
-                                            <input type="radio" name="payment_method" id="cash" value="cash" {{ old('payment_method', 'cash') == 'cash' ? 'checked' : '' }} required>
-                                            <label for="cash">
+                                            <input type="radio" name="payment_method" id="credit-card" value="cash" {{ old('payment_method', 'cash') == 'cash' ? 'checked' : '' }} required>
+                                            <label for="credit-card">
                                                 <span class="payment-icon"><i class="bi bi-truck"></i></span>
                                                 <span class="payment-label">Thanh toán khi nhận hàng</span>
                                             </label>
                                         </div>
                                         <div class="payment-option">
-                                            <input type="radio" name="payment_method" id="transfer" value="transfer" {{ old('payment_method') == 'transfer' ? 'checked' : '' }}>
-                                            <label for="transfer">
+                                            <input type="radio" name="payment_method" id="paypal" value="transfer" {{ old('payment_method') == 'transfe' ? 'checked' : '' }}>
+                                            <label for="paypal">
                                                 <span class="payment-icon"><i class="bi bi-credit-card-2-front"></i></span>
                                                 <span class="payment-label">Thanh toán Online</span>
                                             </label>
                                         </div>
                                     </div>
+
+                                    {{-- <div class="payment-details" id="credit-card-details" style="{{ old('payment_method', 'credit_card') == 'credit_card' ? '' : 'display: none;' }}">
+                                        <div class="form-group">
+                                            <label for="card-number">Card Number</label>
+                                            <div class="card-number-wrapper">
+                                                <input type="text" class="form-control" name="card_number" id="card-number" placeholder="1234 5678 9012 3456" value="{{ old('card_number') }}" {{ old('payment_method', 'credit_card') == 'credit_card' ? 'required' : '' }}>
+                                                <div class="card-icons">
+                                                    <i class="bi bi-credit-card-2-front"></i>
+                                                    <i class="bi bi-credit-card"></i>
+                                                </div>
+                                            </div>
+                                            @error('card_number')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label for="expiry">Expiration Date</label>
+                                                <input type="text" class="form-control" name="expiry" id="expiry" placeholder="MM/YY" value="{{ old('expiry') }}" {{ old('payment_method', 'credit_card') == 'credit_card' ? 'required' : '' }}>
+                                                @error('expiry')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="cvv">Security Code (CVV)</label>
+                                                <div class="cvv-wrapper">
+                                                    <input type="text" class="form-control" name="cvv" id="cvv" placeholder="123" value="{{ old('cvv') }}" {{ old('payment_method', 'credit_card') == 'credit_card' ? 'required' : '' }}>
+                                                    <span class="cvv-hint" data-bs-toggle="tooltip" data-bs-placement="top" title="3-digit code on the back of your card">
+                                                        <i class="bi bi-question-circle"></i>
+                                                    </span>
+                                                </div>
+                                                @error('cvv')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="card-name">Name on Card</label>
+                                            <input type="text" class="form-control" name="card_name" id="card-name" placeholder="John Doe" value="{{ old('card_name') }}" {{ old('payment_method', 'credit_card') == 'credit_card' ? 'required' : '' }}>
+                                            @error('card_name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="payment-details" id="paypal-details" style="{{ old('payment_method') == 'paypal' ? '' : 'display: none;' }}">
+                                        <p class="payment-info">You will be redirected to PayPal to complete your purchase securely.</p>
+                                    </div>
+
+                                    <div class="payment-details" id="apple-pay-details" style="{{ old('payment_method') == 'apple_pay' ? '' : 'display: none;' }}">
+                                        <p class="payment-info">You will be prompted to authorize payment with Apple Pay.</p>
+                                    </div> --}}
                                 </div>
                             </div>
-
+                            
                             <!-- Order Review -->
                             <div class="checkout-section" id="order-review">
                                 <div class="section-header">
@@ -112,7 +165,7 @@
                                     <h3>Xác nhận thanh toán</h3>
                                 </div>
                                 <div class="section-content">
-                                    <div class="form-check terms-check">
+                                    {{-- <div class="form-check terms-check">
                                         <input class="form-check-input" type="checkbox" id="terms" name="terms" {{ old('terms') ? 'checked' : '' }} required>
                                         <label class="form-check-label" for="terms">
                                             Tôi đồng ý <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">các điều khoản</a> và <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">chính sách</a>
@@ -121,12 +174,12 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="success-message d-none">Your order has been placed successfully! Thank you for your purchase.</div>
+                                    <div class="success-message d-none">Your order has been placed successfully! Thank you for your purchase.</div> --}}
                                     <div class="place-order-container">
-                                        <input type="hidden" name="total" value="{{ $total }}">
+                                        <input type="hidden" name="total" value="{{$total}}">
                                         <button type="submit" class="btn btn-primary place-order-btn">
-                                            <span class="btn-text">Place Order</span>
-                                            <span class="btn-price">{{ number_format($total) }} vnđ</span>
+                                            <span class="btn-text">Thanh toán</span>
+                                            <span class="btn-price">{{ number_format($total,0,',','.')}} vnđ</span>
                                         </button>
                                     </div>
                                 </div>
@@ -140,32 +193,60 @@
                     <div class="order-summary" data-aos="fade-left" data-aos-delay="200">
                         <div class="order-summary-header">
                             <h3>Order Summary</h3>
-                            <span class="item-count">{{ count($cartItems) }} Items</span>
+                            <span class="item-count">2 Items</span>
                         </div>
                         <div class="order-summary-content">
                             <div class="order-items">
-                                @foreach ($cartItems as $item)
-                                    <div class="order-item">
-                                        <!-- Checkbox để chọn sản phẩm thanh toán -->
-                                        <input type="checkbox" name="selected_items[]" value="{{ $item->id ?? $item['id'] ?? '' }}" id="item-{{ $item->id ?? $item['id'] ?? '' }}" class="form-check-input" checked style="margin-right: 10px;">
-                                        <label for="item-{{ $item->id ?? $item['id'] ?? '' }}" style="display: inline-block; width: calc(100% - 30px);">
-                                            <div class="order-item-image" style="display: inline-block; vertical-align: middle; width: 60px;">
-                                                <img src="{{ asset('storage/' . ($item->image_path ?? $item['image_path'])) }}" alt="Product" class="img-fluid">
+                                @if (is_array($cartItems))
+                                     @forEach($cartItems as $item)
+                                        <div class="order-item">
+                                            <div class="order-item-image">
+                                                <img src="{{ asset('storage/'.$item['image_path']) }}" alt="Product" class="img-fluid">
                                             </div>
-                                            <div class="order-item-details" style="display: inline-block; vertical-align: middle; width: calc(100% - 60px);">
-                                                <h4 style="margin: 0;">{{ $item->product_name ?? $item['product_name'] }}</h4>
-                                                <p class="order-item-variant" style="margin: 0;">Số lượng: {{ $item->quantity ?? $item['quantity'] }}</p>
-                                                <div class="order-item-price" style="margin-top: 5px;">
-                                                    <span class="quantity">{{ $item->quantity ?? $item['quantity'] }} ×</span>
-                                                    <span class="price">{{ number_format($item->variant_price ?? $item['price']) }} vnđ</span>
+                                            <div class="order-item-details">
+                                                <h4>{{$item['product_name']}}</h4>
+                                                <p class="order-item-variant">1</p>
+                                                <div class="order-item-price">
+                                                    <span class="quantity">{{$item['quantity']}} ×</span>
+                                                    <span class="price">{{ number_format($item['price'],0,',','.')}}</span>
                                                 </div>
                                             </div>
-                                        </label>
+                                        </div>
+                                    @endforeach
+                                @else
+                                     @forEach($cartItems as $item)
+                                        <div class="order-item">
+                                            <div class="order-item-image">
+                                                <img src="{{ asset('storage/'.$item->image_path) }}" alt="Product" class="img-fluid">
+                                            </div>
+                                            <div class="order-item-details">
+                                                <h4>{{$item->product_name}}</h4>
+                                                <p class="order-item-variant"></p>
+                                                <div class="order-item-price">
+                                                    <span class="quantity">{{$item->quantity}} ×</span>
+                                                    <span class="price">{{ number_format($item->variant_price,0,',','.')}} vnđ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            
+                                {{-- <div class="order-item">
+                                    <div class="order-item-image">
+                                        <img src="{{ asset('estore/img/product/product-2.webp') }}" alt="Product" class="img-fluid">
                                     </div>
-                                @endforeach
+                                    <div class="order-item-details">
+                                        <h4>Sit Amet Consectetur</h4>
+                                        <p class="order-item-variant">Color: White | Size: L</p>
+                                        <div class="order-item-price">
+                                            <span class="quantity">2 ×</span>
+                                            <span class="price">$59.99</span>
+                                        </div>
+                                    </div>
+                                </div> --}}
                             </div>
 
-                            <div class="promo-code mt-3">
+                            <div class="promo-code">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="promo_code" placeholder="Promo Code" aria-label="Promo Code" value="{{ old('promo_code') }}">
                                     <button class="btn btn-outline-primary" type="button">Apply</button>
@@ -175,30 +256,30 @@
                                 @enderror
                             </div>
 
-                            <div class="order-totals mt-3">
+                            <div class="order-totals">
                                 <div class="order-subtotal d-flex justify-content-between">
-                                    <span>Subtotal</span>
-                                    <span>{{ number_format($subtotal) }} vnđ</span>
+                                    <span>Thành tiền</span>
+                                    <span>{{number_format($subtotal,0,',','.')}} vnđ</span>
                                 </div>
                                 <div class="order-shipping d-flex justify-content-between">
-                                    <span>Shipping</span>
-                                    <span>{{ number_format($shipping) }} vnđ</span>
+                                    <span>Phí vận chuyển</span>
+                                    <span>{{number_format($shipping,0,',','.')}} vnđ</span>
                                 </div>
-                                <div class="order-total d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
-                                    <span>{{ number_format($total) }} vnđ</span>
+                                <div class="order-total d-flex justify-content-between">
+                                    <span>Tổng tiền</span>
+                                    <span>{{number_format($total,0,',','.')}} vnđ</span>
                                 </div>
                             </div>
 
-                            <div class="secure-checkout mt-3">
-                                <div class="secure-checkout-header d-flex align-items-center">
-                                    <i class="bi bi-shield-lock me-2"></i>
+                            <div class="secure-checkout">
+                                <div class="secure-checkout-header">
+                                    <i class="bi bi-shield-lock"></i>
                                     <span>Secure Checkout</span>
                                 </div>
-                                <div class="payment-icons mt-2">
-                                    <i class="bi bi-credit-card-2-front me-2"></i>
-                                    <i class="bi bi-credit-card me-2"></i>
-                                    <i class="bi bi-paypal me-2"></i>
+                                <div class="payment-icons">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <i class="bi bi-credit-card"></i>
+                                    <i class="bi bi-paypal"></i>
                                     <i class="bi bi-apple"></i>
                                 </div>
                             </div>
@@ -261,8 +342,7 @@
                     option.classList.remove('active');
                 });
                 const detailsId = this.id + '-details';
-                const detailsEl = document.getElementById(detailsId);
-                if (detailsEl) detailsEl.style.display = 'block';
+                document.getElementById(detailsId).style.display = 'block';
                 this.closest('.payment-option').classList.add('active');
 
                 // Update required attributes based on payment method

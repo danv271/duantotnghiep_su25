@@ -45,7 +45,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Product listings and details
 Route::get('/products/{category_id?}', [ProductController::class, 'indexClient'])->name('products.index');
 Route::get('/products-show/{id}', [ProductController::class, 'showClient'])->name('products.show');
-
 Route::view('/category', 'category')->name('category');
 
 // Search page

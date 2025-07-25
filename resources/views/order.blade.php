@@ -302,7 +302,6 @@
 
 @section('content')
     <main class="main">
-
         <!-- Page Title -->
         <div class="page-title light-background">
             <div class="container d-lg-flex justify-content-between align-items-center">
@@ -423,7 +422,7 @@
                                     </div>
                                     <div class="orders-grid">
                                         <!-- Order Card 1 -->
-                                        @foreach ($orders as $order)
+                                        @foreach ($orders as $index=>$order)
                                             <div class="order-card aos-init aos-animate" data-aos="fade-up"
                                                 data-aos-delay="100">
                                                 <div class="order-header">
@@ -436,11 +435,7 @@
                                                     <div class="order-info">
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
-                                                            <span class="status processing">
-                                                                @if($order->status_order == 'pending')
-                                                                    chưa xác nhận
-                                                                @endif
-                                                            </span>
+                                                            <span class="status processing">{{$order->status_order}}</span>
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Sản phẩm</span>
@@ -454,15 +449,15 @@
                                                 </div>
                                                 <div class="order-footer">
                                                     <button type="button" class="btn-track" data-bs-toggle="collapse"
-                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn
+                                                        data-bs-target="#tracking{{$index}}" aria-expanded="false">Theo dõi đơn
                                                         hàng</button>
                                                     <button type="button" class="btn-details" data-bs-toggle="collapse"
-                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn
+                                                        data-bs-target="#details{{$index}}" aria-expanded="false">Chi tiết đơn
                                                         hàng</button>
                                                 </div>
 
                                                 <!-- Order Tracking -->
-                                                <div class="collapse tracking-info" id="tracking1">
+                                                <div class="collapse tracking-info" id="tracking{{$index}}">
                                                     <div class="tracking-timeline">
                                                         <div class="timeline-item completed">
                                                             <div class="timeline-icon">
@@ -520,7 +515,7 @@
                                                 </div>
 
                                                 <!-- Order Details -->
-                                                <div class="collapse order-details" id="details1">
+                                                <div class="collapse order-details" id="details{{$index}}">
                                                     <div class="details-content">
                                                         <div class="detail-section">
                                                             <h5>Thông tin đơn hàng</h5>
@@ -569,34 +564,34 @@
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Price Details</h5>
+                                                            <h5>Chi tiết giá</h5>
                                                             <div class="price-breakdown">
+                                                                @php
+                                                                    $subtotal = 0;
+                                                                    foreach ($order->OrderDetail as $item) {
+                                                                        $subtotal+=$item->total_price;
+                                                                    }
+                                                                @endphp
                                                                 <div class="price-row">
-                                                                    <span>Subtotal</span>
-                                                                    <span>$1,929.93</span>
+                                                                    <span>Tổng sản phẩm</span>
+                                                                    <span>{{ $subtotal }} vnđ</span>
                                                                 </div>
                                                                 <div class="price-row">
-                                                                    <span>Shipping</span>
-                                                                    <span>$15.99</span>
-                                                                </div>
-                                                                <div class="price-row">
-                                                                    <span>Tax</span>
-                                                                    <span>$159.98</span>
+                                                                    <span>Vận chuyển</span>
+                                                                    <span>30.000 vnđ</span>
                                                                 </div>
                                                                 <div class="price-row total">
-                                                                    <span>Total</span>
-                                                                    <span>$2,105.90</span>
+                                                                    <span>Tổng tiền</span>
+                                                                    <span>{{$subtotal + 30000}}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Shipping Address</h5>
+                                                            <h5>Thông tin giao hàng</h5>
                                                             <div class="address-info">
-                                                                <p>Sarah Anderson<br>123 Main Street<br>Apt 4B<br>New York,
-                                                                    NY
-                                                                    10001<br>United States</p>
-                                                                <p class="contact">+1 (555) 123-4567</p>
+                                                                <p>{{$order->user_email}}<br>{{$order->user_address}}<br>
+                                                                <p class="contact">{{$order->user_phone}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -604,7 +599,7 @@
                                             </div>
                                         @endforeach
                                         <!-- Order Card 4 -->
-                                        <div class="order-card aos-init aos-animate" data-aos="fade-up"
+                                        {{-- <div class="order-card aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="400">
                                             <div class="order-header">
                                                 <div class="order-id">
@@ -642,7 +637,7 @@
                                                 <button type="button" class="btn-reorder">Reorder</button>
                                                 <button type="button" class="btn-details">View Details</button>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
                                     <!-- Pagination -->
