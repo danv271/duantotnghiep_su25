@@ -283,7 +283,11 @@ class ProductController extends Controller
    public function showClient($id)
 {
     $product = Product::with(['variants.attributesValue.attribute', 'images'])->findOrFail($id);
-    return view('product-detail', compact('product'));
+    $totalProduct = 0;
+    foreach($product->variants as $variant){
+        $totalProduct += $variant->stock_quantity;
+    }
+    return view('product-detail', compact('product','totalProduct'));
 }
 
 }

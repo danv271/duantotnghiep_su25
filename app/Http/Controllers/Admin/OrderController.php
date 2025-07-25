@@ -119,6 +119,7 @@ class OrderController extends Controller
             if (is_array($order_code) && !empty($order_code)) {
                 $orders = Order::with(['orderDetail.variant'])
                     ->whereIn('id', $order_code) // Lấy tất cả đơn hàng có id trong mảng $order_code
+                    ->orderBy('id','desc')
                     ->get();
             }
             return view('order', compact('orders'));
