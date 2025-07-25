@@ -335,5 +335,6 @@
         var modal = new bootstrap.Modal(document.getElementById('statusModal'));
         modal.show();
     }
+    
 </script>
 @endsection
