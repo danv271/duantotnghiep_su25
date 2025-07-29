@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController; // Controller cho sản phẩm ở c
 use App\Http\Controllers\VariantController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,7 +46,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Product listings and details
 Route::get('/products/{category_id?}', [ProductController::class, 'indexClient'])->name('products.index');
 Route::get('/products-show/{id}', [ProductController::class, 'showClient'])->name('products.show');
-
 Route::view('/category', 'category')->name('category');
 
 // Search page
@@ -103,6 +103,11 @@ Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout')
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.process');
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
+
+// --- Voucher Routes ---
+Route::post('/voucher/apply', [VoucherController::class, 'applyVoucher'])->name('voucher.apply');
+Route::post('/voucher/remove', [VoucherController::class, 'removeVoucher'])->name('voucher.remove');
+Route::get('/voucher/list', [VoucherController::class, 'getVouchers'])->name('voucher.list');
 
 // admin
 Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {

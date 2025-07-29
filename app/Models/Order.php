@@ -18,7 +18,12 @@ class Order extends Model
         'status_order',
         'status_payment',
         'type_payment',
-        'total_price'
+        'total_price',
+        'shipping_cost',
+        'product_discount',
+        'shipping_discount',
+        'applied_vouchers',
+        'user_name'
     ];
 
     public function user()

@@ -6,6 +6,7 @@
     <title>@yield('title', 'eStore - Bootstrap Template')</title>
     <meta name="description" content="@yield('description', '')">
     <meta name="keywords" content="@yield('keywords', '')">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicons -->
     <link href="{{ asset('estore/assets/img/favicon.png') }}" rel="icon">

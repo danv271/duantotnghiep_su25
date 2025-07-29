@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    
+
     public function index(Request $request)
     {
         $query = DB::table('orders');
@@ -30,41 +32,44 @@ class OrderController extends Controller
 
     public function show($id)
     {
+        $order = Order::with(['user'])->find($id);
+        // dd($order);  
+        $OrderDetail = OrderDetail::with(['variant.product','variant.product.images', 'variant.attributesValue.attribute'])
+            ->where('order_id', $id)->get();
+        // dd($OrderDetail);
+        if (!$OrderDetail) {
+            return redirect()->route('admin.orders.index')->with('error', 'Không tìm thấy đơn hàng.');
+        }
+        // dd($OrderDetail);
+        return view('admin.orders.show', compact( 'OrderDetail','order'));
+    }
+
+    public function edit($id)
+    {
         $order = DB::table('orders')->where('id', $id)->first();
 
         if (!$order) {
             return redirect()->route('admin.orders.index')->with('error', 'Không tìm thấy đơn hàng.');
         }
 
-        return view('admin.orders.show', compact('order'));
+        return view('admin.orders.edit', compact('order'));
     }
 
-    public function edit($id)
-{
-    $order = DB::table('orders')->where('id', $id)->first();
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status_order' => 'required|string|max:255',
+            'status_payment' => 'required|string|max:255',
+        ]);
 
-    if (!$order) {
-        return redirect()->route('admin.orders.index')->with('error', 'Không tìm thấy đơn hàng.');
+        DB::table('orders')->where('id', $id)->update([
+            'status_order' => $request->status_order,
+            'status_payment' => $request->status_payment,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('admin.orders.index')->with('success', 'Đã cập nhật đơn hàng.');
     }
-
-    return view('admin.orders.edit', compact('order'));
-}
-
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'status_order' => 'required|string|max:255',
-        'status_payment' => 'required|string|max:255',
-    ]);
-
-    DB::table('orders')->where('id', $id)->update([
-        'status_order' => $request->status_order,
-        'status_payment' => $request->status_payment,
-        'updated_at' => now(),
-    ]);
-
-    return redirect()->route('admin.orders.index')->with('success', 'Đã cập nhật đơn hàng.');
-}
 
 
     public function destroy($id)
@@ -74,8 +79,8 @@ public function update(Request $request, $id)
     }
     public function indexClient(Request $request)
     {
-         // Lấy ID của khách hàng đang đăng nhập
-        if(Auth::check()){
+        // Lấy ID của khách hàng đang đăng nhập
+        if (Auth::check()) {
             $userId = Auth::id();
             $data = User::findOrFail($userId);
             // dd($data->order);
@@ -103,8 +108,8 @@ public function update(Request $request, $id)
 
             // Sắp xếp mới nhất và phân trang
             $orders = $query->orderBy('id', 'desc')->paginate(10);
-            return view('order', compact('orders','data'));
-        }else{
+            return view('order', compact('orders', 'data'));
+        } else {
             $order_code = session('order_code', []);
 
             // Khởi tạo biến $orders
@@ -114,11 +119,12 @@ public function update(Request $request, $id)
             if (is_array($order_code) && !empty($order_code)) {
                 $orders = Order::with(['orderDetail.variant'])
                     ->whereIn('id', $order_code) // Lấy tất cả đơn hàng có id trong mảng $order_code
+                    ->orderBy('id','desc')
                     ->get();
             }
             return view('order', compact('orders'));
         }
         // return view('account', compact('order_code'));
-        
+
     }
 }

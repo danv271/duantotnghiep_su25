@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status_payment')->default('unpaid');
             $table->string('type_payment')->nullable();
             $table->decimal('total_price', 15, 2)->default(0);
+            $table->decimal('total_discount', 15, 2)->default(0); // Tổng giảm giá của đơn hàng
             $table->timestamps();
 
             // Foreign key nếu bạn có bảng users

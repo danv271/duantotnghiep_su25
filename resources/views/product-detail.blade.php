@@ -103,11 +103,18 @@
                             @endif --}}
                         <div class="row mb-1">
                             <div class="product-price-container col-4">
-                                <span class="current-price">{{ number_format($product->base_price, 0) }}₫</span>
+                                <span id="variant-price" class="current-price fw-bold">{{ number_format($product->base_price, 0,',','.') }}₫</span>
                             </div>
-                            <div class="product-availability col-8">
+                            {{-- <div class="mb-3">
+                                <label class="form-label">Giá:</label>
+                                <div id="variant-price" class="fw-bold">—</div>
+                            </div> --}}
+                            <div class="product-availability col-6">
                                 <i class="bi bi-check-circle-fill text-success"></i>
                                 <span>Còn hàng</span>
+                            </div>
+                            <div class="col-2">
+                                <input type="hidden" id="quantityProduct" value="{{$totalProduct}}">
                             </div>
                         </div>
                         {{-- <div class="product-quantity mb-4">
@@ -119,13 +126,14 @@
                             </div>
                         </div> --}}
 
-                        <div class="product-actions">
+                        <div class="product-actions row">
                                 <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST" class="d-inline-flex flex-column gap-2">
                                 @csrf
                                 <div class="row">
                                     <div class="mb-3 col-6">
                                         <label for="variant_id" class="form-label mb-3">Chọn thuộc tính:</label>
                                         <select name="variant_id" id="variant_id" class="form-select">
+                                            <option value="">---chọn---</option>
                                             @foreach($product->variants as $variant)
                                                 <option value="{{ $variant->id }}"
                                                     data-price="{{ $variant->price }}"
@@ -141,21 +149,34 @@
                                         <label for="quantity" class="form-label mb-3">Số lượng:</label>
                                         <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1">
                                     </div>
-                                    <div class="additional-info mt-3 ">
-                                        <div class="info-item">
-                                            <i class="bi bi-truck"></i>
-                                            <span>Giao nhanh 30p trong nội thành</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <i class="bi bi-arrow-repeat"></i>
-                                            <span>Chính sách bảo hành</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <i class="bi bi-shield-check"></i>
-                                            <span>Khuyến mãi hấp dẫn</span>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>còn lại : <span id="variant-stock" class="fw-bold">{{$totalProduct}}</span></p>
                                     </div>
                                 </div>
+                                {{-- <div class="row">
+                                    <div class="mb-3">
+                                        <label class="form-label">Giá:</label>
+                                        <div id="variant-price" class="fw-bold">—</div>
+                                    </div>
+                                </div> --}}
+                                <div class="row">
+                                    <div class="additional-info mt-1 ">
+                                    <div class="info-item">
+                                        <i class="bi bi-truck"></i>
+                                        <span>Giao nhanh 30p trong nội thành</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                        <span>Chính sách bảo hành</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-shield-check"></i>
+                                        <span>Khuyến mãi hấp dẫn</span>
+                                    </div>
+                                </div>
+                                
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
                                 </button>
@@ -172,20 +193,49 @@
 </main>
 @endsection
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const variantSelect = document.getElementById('variant_id');
-    const priceDisplay = document.getElementById('variant-price');
-    const stockDisplay = document.getElementById('variant-stock');
+// document.addEventListener('DOMContentLoaded', function () {
+//     const variantSelect = document.getElementById('variant_id');
+//     const priceDisplay = document.getElementById('variant-price');
+//     const stockDisplay = document.getElementById('variant-stock');
 
-    variantSelect.addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const price = parseInt(selectedOption.dataset.price);
-        const stock = parseInt(selectedOption.dataset.stock);
+//     variantSelect.addEventListener('change', function () {
+//         const selectedOption = this.options[this.selectedIndex];
+//         const price = parseInt(selectedOption.dataset.price);
+//         const stock = parseInt(selectedOption.dataset.stock);
 
-        priceDisplay.textContent = price.toLocaleString('vi-VN') + '₫';
-        stockDisplay.textContent = stock;
-    });
-});
+//         priceDisplay.textContent = price.toLocaleString('vi-VN') + '₫';
+//         stockDisplay.textContent = stock;
+//     });
+// });
+// document.addEventListener('DOMContentLoaded', function () {
+//     const variantSelect = document.getElementById('variant_id');
+//     const priceDisplay = document.getElementById('variant-price');
+//     const stockDisplay = document.getElementById('variant-stock');
+//     const quantityInput = document.getElementById('quantity');
+//     const form = document.getElementById('add-to-cart-form');
+
+//     variantSelect.addEventListener('change', function () {
+//         const selectedOption = this.options[this.selectedIndex];
+//         const price = parseInt(selectedOption.dataset.price);
+//         const stock = parseInt(selectedOption.dataset.stock);
+
+//         priceDisplay.textContent = price.toLocaleString('vi-VN') + '₫';
+//         stockDisplay.textContent = stock;
+
+//         quantityInput.max = stock;
+//     });
+
+//     form.addEventListener('submit', function (e) {
+//         const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+//         const stock = parseInt(selectedOption.dataset.stock);
+//         const quantity = parseInt(quantityInput.value);
+
+//         if (quantity > stock) {
+//             e.preventDefault();
+//             alert('Số lượng vượt quá tồn kho! Vui lòng chọn số lượng nhỏ hơn hoặc bằng ' + stock);
+//         }
+//     });
+// });
 document.addEventListener('DOMContentLoaded', function () {
     const variantSelect = document.getElementById('variant_id');
     const priceDisplay = document.getElementById('variant-price');
@@ -195,19 +245,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     variantSelect.addEventListener('change', function () {
         const selectedOption = this.options[this.selectedIndex];
-        const price = parseInt(selectedOption.dataset.price);
-        const stock = parseInt(selectedOption.dataset.stock);
+        if(selectedOption.value !== ''){
+            const price = parseInt(selectedOption.dataset.price) || 0;
+            const stock = parseInt(selectedOption.dataset.stock) || 0;
 
-        priceDisplay.textContent = price.toLocaleString('vi-VN') + '₫';
-        stockDisplay.textContent = stock;
+            // Cập nhật giá và tồn kho
+            priceDisplay.textContent = price ? price.toLocaleString('vi-VN') + '₫' : '—';
+            stockDisplay.textContent = stock ? stock : '—';
 
-        quantityInput.max = stock;
+            // Giới hạn số lượng nhập
+            quantityInput.max = stock;
+        }else{
+            const totalProduct = document.getElementById('quantityProduct').value;
+            stockDisplay.textContent = totalProduct ? totalProduct : '—';
+            quantityInput.max = totalProduct;
+        }
+        
     });
 
     form.addEventListener('submit', function (e) {
         const selectedOption = variantSelect.options[variantSelect.selectedIndex];
-        const stock = parseInt(selectedOption.dataset.stock);
+        const stock = parseInt(selectedOption.dataset.stock) || 0;
         const quantity = parseInt(quantityInput.value);
+
+        if (!selectedOption.value) {
+            e.preventDefault();
+            alert('Vui lòng chọn biến thể sản phẩm!');
+            return;
+        }
 
         if (quantity > stock) {
             e.preventDefault();
@@ -215,5 +280,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
 </script>
