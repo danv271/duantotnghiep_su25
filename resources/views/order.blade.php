@@ -103,16 +103,16 @@
                                 <!-- Orders Tab -->
                                 <div class="tab-pane fade active show" id="orders" role="tabpanel">
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2>My Orders</h2>
+                                        <h2>Đơn hàng của tôi</h2>
                                         <div class="header-actions">
                                             <div class="search-box">
                                                 <i class="bi bi-search"></i>
-                                                <input type="text" placeholder="Search orders...">
+                                                <input type="text" placeholder="Tìm đơn hàng...">
                                             </div>
                                             <div class="dropdown">
                                                 <button class="filter-btn" data-bs-toggle="dropdown">
                                                     <i class="bi bi-funnel"></i>
-                                                    <span>Filter</span>
+                                                    <span>Lọc</span>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" href="#">All Orders</a></li>
@@ -147,7 +147,11 @@
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
+
                                                             <span class="price">{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
+
+                                                            <span class="price">{{ number_format($order->total_price,0,',','.')}} vnđ</span>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -226,14 +230,7 @@
                                                             <div class="info-grid">
                                                                 <div class="info-item">
                                                                     <span class="label">Phương thức thanh toán</span>
-                                                                    <span class="value">
-                                                                        @if ($order->type_payment=='transfer')
-                                                                            thanh toán online
-                                                                        @else
-                                                                            thanh toán khi nhận hàng
-                                                                        @endif
-                                                                        
-                                                                    </span>
+                                                                    <span class="value">{{$order->type_payment}}</span>
                                                                 </div>
                                                                 <div class="info-item">
                                                                     <span class="label">Giao hàng</span>
@@ -282,6 +279,9 @@
                                                                                 </div>
                                                                             @endif
                                                                         </div>
+
+                                                                        <div class="item-price">{{number_format($item->total_price,0,',','.')}} vnđ</div>
+
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -291,6 +291,7 @@
                                                             <h5>Chi tiết giá</h5>
                                                             <div class="price-breakdown">
                                                                 @php
+
                                                                     $subtotal_original = 0;
                                                                     $subtotal_final = 0;
                                                                     $total_discount = 0;
@@ -359,11 +360,14 @@
                                                                 @endif
                                                                 <div class="price-row total">
                                                                     <span>Tổng tiền</span>
+
                                                                     <span>{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
                                                                 </div>
                                                                 @if($calculated_total != $order->total_price)
                                                                 <div class="price-row text-warning">
                                                                     <span>Lưu ý: Tổng tính toán ({{ number_format($calculated_total, 0, ',', '.') }} vnđ) khác với tổng lưu ({{ number_format($order->total_price, 0, ',', '.') }} vnđ)</span>
+
+                                                                    <span>{{ number_format($subtotal + 30000,0,',','.') }} vnđ</span>
                                                                 </div>
                                                                 @endif
                                                             </div>

@@ -255,8 +255,8 @@
                     <!-- Order Summary -->
                     <div class="order-summary" data-aos="fade-left" data-aos-delay="200">
                         <div class="order-summary-header">
-                            <h3>Order Summary</h3>
-                            <span class="item-count">2 Items</span>
+                            <h3>Tóm tắt đơn hàng</h3>
+                            <span class="item-count">2 sản phẩm</span>
                         </div>
                         <div class="order-summary-content">
                             <div class="order-items">
