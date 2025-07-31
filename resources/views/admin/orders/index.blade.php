@@ -317,5 +317,6 @@
         var modal = new bootstrap.Modal(document.getElementById('statusModal'+index));
         modal.show();
     }
+    
 </script>
 @endsection

@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Create New Category</h4>
+                    <h4 class="card-title">Thêm danh mục mới</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.categories.store') }}" method="POST">
@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="category_name" class="form-label">Category Name</label>
+                                    <label for="category_name" class="form-label">Tên danh mục</label>
                                     <input type="text" class="form-control @error('category_name') is-invalid @enderror" 
                                            id="category_name" name="category_name" value="{{ old('category_name') }}" required>
                                     @error('category_name')
@@ -25,7 +25,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
+                                    <label for="description" class="form-label">Mô tả </label>
                                     <textarea class="form-control @error('description') is-invalid @enderror" 
                                               id="description" name="description" rows="3">{{ old('description') }}</textarea>
                                     @error('description')
@@ -36,7 +36,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="parent_category_id" class="form-label">Parent Category</label>
+                                    <label for="parent_category_id" class="form-label">Danh mục chính</label>
                                     <select class="form-select @error('parent_category_id') is-invalid @enderror" 
                                             id="parent_category_id" name="parent_category_id">
                                         <option value="">None</option>
@@ -52,10 +52,10 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
+                                    <label for="status" class="form-label">Trạng Thái</label>
                                     <select class="form-select @error('status') is-invalid @enderror" 
                                             id="status" name="status">
-                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}> Active</option>
                                         <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                     </select>
                                     @error('status')
@@ -67,8 +67,8 @@
 
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Create Category</button>
-                                <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Tạo danh mục</button>
+                                <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Hủy </a>
                             </div>
                         </div>
                     </form>

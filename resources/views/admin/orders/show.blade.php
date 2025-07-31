@@ -5,7 +5,6 @@
 
 @section('content')
 
-
     <div class="container p-0">
 
         <div class="row">
@@ -54,6 +53,8 @@
                                     </div>
                                     <div>
                                         {{-- Thay thế bằng route edit thực tế nếu có --}}
+                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh
+                                            sửa đơn hàng</a>
                                         {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary" style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}'>Sửa trạng thái</a> --}}
                                         <span class="btn btn-primary text-white px-2 py-1 fs-13"
                                             style="cursor: pointer;" onclick="showStatusForm()">
@@ -106,9 +107,11 @@
                                     {{-- Các cột tiến trình này đang dùng dữ liệu tĩnh, bạn có thể cần cập nhật chúng với dữ liệu động từ $order->status_order --}}
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
+
                                             <div class="progress-bar {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? 'bg-success' : 'bg-secondary' }}"
                                                 role="progressbar"
                                                 style="width: {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? '100%' : '0%' }}"
+
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
                                         <p class="mb-0 mt-2">Xác nhận đơn hàng</p>
@@ -160,14 +163,13 @@
                             </div>
                             {{-- <div
                                 class="card-footer d-flex flex-wrap align-items-center justify-content-between bg-light-subtle gap-2">
-                                
+                               
                                 <p class="border rounded mb-0 px-2 py-1 bg-body"><i
                                         class="bx bx-arrow-from-left align-middle fs-16"></i> Ngày giao hàng ước tính :
                                     <span class="text-dark fw-medium">{{ $order->created_at->addDays(3) }}</span>
                                 </p>
                                 <div>
                                     <a href="#!" class="btn btn-primary">Chuẩn bị giao hàng</a>
-                                   
                                 </div>
                             </div> --}}
                         </div>
@@ -265,7 +267,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    
+
                                     @if ($order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed')
                                         <div class="position-relative ps-4 mb-4">
                                             <span
@@ -279,7 +281,7 @@
                                                     </h5>
                                                     <p class="mb-0">Đơn hàng đang được chuẩn bị để đóng gói.</p>
                                                 </div>
-                                                
+
                                                 <p class="mb-0">
                                                     {{ \Carbon\Carbon::parse($order->updated_at)->format('d/m/Y, H:i') }}
                                                 </p>
@@ -309,6 +311,10 @@
                                         <td class="px-0">
                                             <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
                                                     icon="solar:clipboard-text-broken"></iconify-icon> Tổng phụ : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">
+                                            {{ number_format($order->total_price) }}
+                                            đ</td>
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
                                             @php
@@ -389,7 +395,8 @@
                                     @endif
                                 </p>
                                 <p class="mb-0 text-dark">{{ $order->card_number ?? 'N/A' }}</p>
-                               
+
+
                             </div>
                             <div class="ms-auto">
                                 @if ($order->status_payment == 'paid')
@@ -414,6 +421,7 @@
                         <h4 class="card-title">Thông tin khách hàng</h4>
                     </div>
                     <div class="card-body">
+
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Tên người nhận</h5>
                             <div>
@@ -478,6 +486,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function showStatusForm() {
         // gán giá trị cho phần tử có id 'orderId'

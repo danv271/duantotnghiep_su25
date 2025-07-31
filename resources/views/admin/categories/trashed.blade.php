@@ -9,12 +9,12 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Trashed Categories</h4>
+                <h4 class="mb-0">Danh mục bị xóa</h4>
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Categories</a></li>
-                        <li class="breadcrumb-item active">Trashed</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Danh mục</a></li>
+                        <li class="breadcrumb-item active">Đã chuyển vào thùng rác</li>
                     </ol>
                 </div>
             </div>
@@ -27,7 +27,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Trashed Categories</h4>
+                    <h4 class="card-title mb-0">Danh mục bị xóa</h4>
                     <div class="d-flex gap-2">
                         <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
                             <iconify-icon icon="solar:arrow-left-broken" class="align-middle me-1"></iconify-icon>
@@ -42,8 +42,8 @@
                                     <form action="{{ route('admin.categories.restore-all') }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to restore all categories?')">
-                                            <iconify-icon icon="solar:refresh-broken" class="align-middle me-1"></iconify-icon> Restore All
+                                        <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc muốn khôi phục tất cả các danh mục không')">
+                                            <iconify-icon icon="solar:refresh-broken" class="align-middle me-1"></iconify-icon> Khôi phục tất cả
                                         </button>
                                     </form>
                                 </li>
@@ -52,8 +52,8 @@
                                     <form action="{{ route('admin.categories.force-delete-all') }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to permanently delete all categories? This action cannot be undone!')">
-                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle me-1"></iconify-icon> Delete All Permanently
+                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả danh mục không? Thao tác này không thể hoàn tác!')">
+                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle me-1"></iconify-icon> Xóa tất cả vĩnh viễn
                                         </button>
                                     </form>
                                 </li>
@@ -73,11 +73,11 @@
                                                 <label class="form-check-label" for="selectAll"></label>
                                             </div>
                                         </th>
-                                        <th>Category</th>
+                                        <th>Danh mục</th>
                                         <th>ID</th>
-                                        <th>Description</th>
-                                        <th>Deleted At</th>
-                                        <th>Action</th>
+                                        <th>Mô tả</th>
+                                        <th>Đã xóa tại</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -106,7 +106,7 @@
                                                         @if($category->children->count() > 0)
                                                             <span class="badge bg-info-subtle text-info">
                                                                 <iconify-icon icon="solar:folder-broken" class="align-middle"></iconify-icon>
-                                                                {{ $category->children->count() }} subcategories
+                                                                {{ $category->children->count() }} Danh mục con
                                                             </span>
                                                         @endif
                                                     </div>
@@ -129,14 +129,14 @@
                                                 <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-soft-success btn-sm" data-bs-toggle="tooltip" title="Restore">
+                                                    <button type="submit" class="btn btn-soft-success btn-sm" data-bs-toggle="tooltip" title="Khôi phục">
                                                         <iconify-icon icon="solar:refresh-broken" class="align-middle fs-18"></iconify-icon>
                                                     </button>
                                                 </form>
                                                 <form action="{{ route('admin.categories.force-delete', $category->id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-soft-danger btn-sm" onclick="return confirm('Are you sure you want to permanently delete this category? This action cannot be undone!')" data-bs-toggle="tooltip" title="Delete Permanently">
+                                                    <button type="submit" class="btn btn-soft-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn danh mục này không? Thao tác này không thể hoàn tác!')" data-bs-toggle="tooltip" title="Xóa vĩnh viễn">
                                                         <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
                                                     </button>
                                                 </form>
@@ -159,11 +159,11 @@
                                     <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="text-muted fs-48"></iconify-icon>
                                 </span>
                             </div>
-                            <h4 class="text-muted mb-3">No Trashed Categories</h4>
-                            <p class="text-muted mb-4">There are no categories in the trash. Deleted categories will appear here.</p>
+                            <h4 class="text-muted mb-3">Không có danh mục nào bị xóa</h4>
+                            <p class="text-muted mb-4">Không có danh mục nào trong thùng rác. Các danh mục đã xóa sẽ xuất hiện ở đây.</p>
                             <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">
                                 <iconify-icon icon="solar:arrow-left-broken" class="align-middle me-1"></iconify-icon>
-                                Back to Categories
+                                Quay lại danh mục
                             </a>
                         </div>
                     @endif

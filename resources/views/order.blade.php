@@ -1,299 +1,3 @@
-{{-- @extends('layouts.app')
-
-@section('title', 'Account - eStore')
-
-@section('body-class', 'account-page')
-
-@section('content')
-    <main class="main">
-
-        <!-- Page Title -->
-        <div class="page-title light-background">
-            <div class="container d-lg-flex justify-content-between align-items-center">
-                <h1 class="mb-2 mb-lg-0">Đơn hàng</h1>
-                <nav class="breadcrumbs">
-                    <ol>
-                        <li><a href="index.html">Home</a></li>
-                        <li class="current">Account</li>
-                    </ol>
-                </nav>
-            </div>
-        </div><!-- End Page Title -->
-
-        <!-- Account Section -->
-        <section id="account" class="account section">
-
-            <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                <div class="row g-4">
-                    <!-- Content Area -->
-                    <div class="col-lg-12">
-                        <div class="content-area">
-                            <div class="tab-content">
-                                <!-- Orders Tab -->
-                                    <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                                        <h2></h2>
-                                        <div class="header-actions">
-                                            <div class="search-box">
-                                                <i class="bi bi-search"></i>
-                                                <input type="text" placeholder="Search orders...">
-                                            </div>
-                                            <div class="dropdown">
-                                                <button class="filter-btn" data-bs-toggle="dropdown">
-                                                    <i class="bi bi-funnel"></i>
-                                                    <span>Filter</span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#">All Orders</a></li>
-                                                    <li><a class="dropdown-item" href="#">Processing</a></li>
-                                                    <li><a class="dropdown-item" href="#">Shipped</a></li>
-                                                    <li><a class="dropdown-item" href="#">Delivered</a></li>
-                                                    <li><a class="dropdown-item" href="#">Cancelled</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="orders-grid">
-                                        <!-- Order Card 1 -->
-                                        @foreach ($orders as $order)
-                                            <div class="order-card aos-init aos-animate" data-aos="fade-up"
-                                                data-aos-delay="100">
-                                                <div class="order-header">
-                                                    <div class="order-id">
-                                                        <span class="label">Mã đơn hàng:{{ $order->id }}</span>
-                                                    </div>
-                                                    <div class="order-date">{{ $order->created_at }}</div>
-                                                </div>
-                                                <div class="order-content">
-                                                    <div class="order-info">
-                                                        <div class="info-row">
-                                                            <span>Trạng thái</span>
-                                                            <span class="status processing">
-                                                                @if($order->status_order == 'pending')
-                                                                    chưa xác nhận
-                                                                @endif
-                                                            </span>
-                                                        </div>
-                                                        <div class="info-row">
-                                                            <span>Sản phẩm</span>
-                                                            <span>{{ count($order->OrderDetail) }} sản phẩm</span>
-                                                        </div>
-                                                        <div class="info-row">
-                                                            <span>Tổng tiền</span>
-                                                            <span class="price">{{ $order->total_price }} vnđ</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="order-footer">
-                                                    <button type="button" class="btn-track" data-bs-toggle="collapse"
-                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn
-                                                        hàng</button>
-                                                    <button type="button" class="btn-details" data-bs-toggle="collapse"
-                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn
-                                                        hàng</button>
-                                                </div>
-
-                                                <!-- Order Tracking -->
-                                                <div class="collapse tracking-info" id="tracking1">
-                                                    <div class="tracking-timeline">
-                                                        <div class="timeline-item completed">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-check-circle-fill"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>Order Confirmed</h5>
-                                                                <p>Your order has been received and confirmed</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 10:30 AM</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="timeline-item completed">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-check-circle-fill"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>Processing</h5>
-                                                                <p>Your order is being prepared for shipment</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 2:45 PM</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="timeline-item active">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-box-seam"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>Packaging</h5>
-                                                                <p>Your items are being packaged for shipping</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 4:15 PM</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="timeline-item">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-truck"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>In Transit</h5>
-                                                                <p>Expected to ship within 24 hours</p>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="timeline-item">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-house-door"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>Delivery</h5>
-                                                                <p>Estimated delivery: Feb 22, 2025</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Order Details -->
-                                                <div class="collapse order-details" id="details1">
-                                                    <div class="details-content">
-                                                        <div class="detail-section">
-                                                            <h5>Thông tin đơn hàng</h5>
-                                                            <div class="info-grid">
-                                                                <div class="info-item">
-                                                                    <span class="label">Phương thức thanh toán</span>
-                                                                    <span class="value">
-                                                                        @if ($order->type_payment=='transfer')
-                                                                            thanh toán online
-                                                                        @else
-                                                                            thanh toán khi nhận hàng
-                                                                        @endif
-                                                                        
-                                                                    </span>
-                                                                </div>
-                                                                <div class="info-item">
-                                                                    <span class="label">Giao hàng</span>
-                                                                    <span class="value">2-3 ngày</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="detail-section">
-                                                            <h5>Sản phẩm {{ count($order->OrderDetail) }}</h5>
-                                                            <div class="order-items">
-
-                                                                @foreach ($order->OrderDetail as $item)
-                                                                    <div class="item">
-                                                                        @foreach ($item->variant->product->images as $image)
-                                                                            @if ($image->is_featured == 1)
-                                                                                <img src="{{ asset('storage/' . $image->path) }}"
-                                                                                    alt="Product" loading="lazy">
-                                                                            @endif
-                                                                        @endforeach
-                                                                        <div class="item-info">
-                                                                            <h6>{{ $item->variant->product->name }}</h6>
-                                                                            <div class="item-meta">
-                                                                                <span class="sku">Thuộc tính : {{$item->variant->attributesValue[0]->value }}</span>
-                                                                                <span class="qty">Số lượng: {{$item->quantity}}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="item-price">{{$item->total_price}} vnđ</div>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="detail-section">
-                                                            <h5>Price Details</h5>
-                                                            <div class="price-breakdown">
-                                                                <div class="price-row">
-                                                                    <span>Subtotal</span>
-                                                                    <span>$1,929.93</span>
-                                                                </div>
-                                                                <div class="price-row">
-                                                                    <span>Shipping</span>
-                                                                    <span>$15.99</span>
-                                                                </div>
-                                                                <div class="price-row">
-                                                                    <span>Tax</span>
-                                                                    <span>$159.98</span>
-                                                                </div>
-                                                                <div class="price-row total">
-                                                                    <span>Total</span>
-                                                                    <span>$2,105.90</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="detail-section">
-                                                            <h5>Shipping Address</h5>
-                                                            <div class="address-info">
-                                                                <p>Sarah Anderson<br>123 Main Street<br>Apt 4B<br>New York,
-                                                                    NY
-                                                                    10001<br>United States</p>
-                                                                <p class="contact">+1 (555) 123-4567</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    <!-- Pagination -->
-                                    <div class="pagination-wrapper aos-init aos-animate" data-aos="fade-up">
-                                        <button type="button" class="btn-prev" disabled="">
-                                            <i class="bi bi-chevron-left"></i>
-                                        </button>
-                                        <div class="page-numbers">
-                                            <button type="button" class="active">1</button>
-                                            <button type="button">2</button>
-                                            <button type="button">3</button>
-                                            <span>...</span>
-                                            <button type="button">12</button>
-                                        </div>
-                                        <button type="button" class="btn-next">
-                                            <i class="bi bi-chevron-right"></i>
-                                        </button>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </section><!-- /Account Section -->
-
-    </main>
-@endsection
-@push('scripts')
-    <script>
-        // JavaScript to toggle payment details based on payment method selection
-        document.querySelectorAll('input[name="payment_method"]').forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                document.querySelectorAll('.payment-details').forEach(function(details) {
-                    details.style.display = 'none';
-                });
-                document.querySelectorAll('.payment-option').forEach(function(option) {
-                    option.classList.remove('active');
-                });
-                const detailsId = this.id + '-details';
-                document.getElementById(detailsId).style.display = 'block';
-                this.closest('.payment-option').classList.add('active');
-
-                // Update required attributes based on payment method
-                const creditCardFields = ['card_number', 'expiry', 'cvv', 'card_name'];
-                creditCardFields.forEach(function(field) {
-                    const input = document.getElementById(field);
-                    if (input) {
-                        input.required = (radio.value === 'credit_card');
-                    }
-                });
-            });
-        });
-
-        // Initialize tooltips
-        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(element) {
-            new bootstrap.Tooltip(element);
-        });
-    </script>
-@endpush --}}
-
 @extends('layouts.app')
 
 @section('title', 'Account - eStore')
@@ -443,7 +147,11 @@
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
+
+                                                            <span class="price">{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
+
                                                             <span class="price">{{ number_format($order->total_price,0,',','.')}} vnđ</span>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -550,7 +258,30 @@
                                                                                 <span class="qty">Số lượng: {{$item->quantity}}</span>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="item-price">
+                                                                            @php
+                                                                                $original_price = $item->variant_price * $item->quantity;
+                                                                                $final_price = $item->total_price;
+                                                                            @endphp
+                                                                            @if(isset($item->discount) && $item->discount > 0)
+                                                                                <div class="original-price text-muted text-decoration-line-through">
+                                                                                    {{ number_format($original_price, 0, ',', '.') }} vnđ
+                                                                                </div>
+                                                                                <div class="final-price text-success">
+                                                                                    {{ number_format($final_price, 0, ',', '.') }} vnđ
+                                                                                </div>
+                                                                                <div class="item-discount text-success">
+                                                                                    Đã giảm: -{{ number_format($item->discount, 0, ',', '.') }} vnđ
+                                                                                </div>
+                                                                            @else
+                                                                                <div class="final-price">
+                                                                                    {{ number_format($final_price, 0, ',', '.') }} vnđ
+                                                                                </div>
+                                                                            @endif
+                                                                        </div>
+
                                                                         <div class="item-price">{{number_format($item->total_price,0,',','.')}} vnđ</div>
+
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -560,23 +291,85 @@
                                                             <h5>Chi tiết giá</h5>
                                                             <div class="price-breakdown">
                                                                 @php
-                                                                    $subtotal = 0;
+
+                                                                    $subtotal_original = 0;
+                                                                    $subtotal_final = 0;
+                                                                    $total_discount = 0;
+                                                                    $shipping_discount = 0;
+                                                                    $has_shipping_voucher = false;
+                                                                    
                                                                     foreach ($order->OrderDetail as $item) {
-                                                                        $subtotal+=$item->total_price;
+                                                                        // Tính giá gốc (trước khi giảm giá)
+                                                                        $item_original_price = $item->variant_price * $item->quantity;
+                                                                        $subtotal_original += $item_original_price;
+                                                                        
+                                                                        // Tính giá sau giảm giá
+                                                                        $subtotal_final += $item->total_price;
+                                                                        
+                                                                        // Tính tổng giảm giá sản phẩm
+                                                                        $total_discount += $item->discount ?? 0;
                                                                     }
+                                                                    
+                                                                    // Sử dụng thông tin đã lưu trong database
+                                                                    $original_shipping = 30000;
+                                                                    $final_shipping = $order->shipping_cost ?? $original_shipping;
+                                                                    $shipping_discount = $order->shipping_discount ?? 0;
+                                                                    $product_discount = $order->product_discount ?? 0;
+                                                                    
+                                                                    // Kiểm tra voucher vận chuyển
+                                                                    if (isset($order->applied_vouchers) && $order->applied_vouchers) {
+                                                                        $applied_vouchers = json_decode($order->applied_vouchers, true);
+                                                                        foreach ($applied_vouchers as $voucher) {
+                                                                            if (isset($voucher['type']) && $voucher['type'] === 'shipping') {
+                                                                                $has_shipping_voucher = true;
+                                                                                break;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    
+                                                                    // Tính tổng tiền cuối cùng: Giá sản phẩm sau giảm + Phí ship cuối
+                                                                    $calculated_total = $subtotal_final + $final_shipping;
                                                                 @endphp
                                                                 <div class="price-row">
-                                                                    <span>Tổng sản phẩm</span>
-                                                                    <span>{{ number_format($subtotal,0,',','.') }} vnđ</span>
+                                                                    <span>Tổng sản phẩm (gốc)</span>
+                                                                    <span>{{ number_format($subtotal_original, 0, ',', '.') }} vnđ</span>
+                                                                </div>
+                                                                @if($product_discount > 0)
+                                                                <div class="price-row">
+                                                                    <span>Giảm giá sản phẩm</span>
+                                                                    <span class="text-success">-{{ number_format($product_discount, 0, ',', '.') }} vnđ</span>
                                                                 </div>
                                                                 <div class="price-row">
-                                                                    <span>Vận chuyển</span>
-                                                                    <span>30.000 vnđ</span>
+                                                                    <span>Tổng sản phẩm (sau giảm)</span>
+                                                                    <span>{{ number_format($subtotal_final, 0, ',', '.') }} vnđ</span>
                                                                 </div>
+                                                                @endif
+                                                                <div class="price-row">
+                                                                    <span>Vận chuyển</span>
+                                                                    @if($has_shipping_voucher)
+                                                                        <span class="text-success">{{ number_format($final_shipping, 0, ',', '.') }} vnđ (Miễn phí)</span>
+                                                                    @else
+                                                                        <span>{{ number_format($final_shipping, 0, ',', '.') }} vnđ</span>
+                                                                    @endif
+                                                                </div>
+                                                                @if($shipping_discount > 0)
+                                                                <div class="price-row">
+                                                                    <span>Giảm phí vận chuyển</span>
+                                                                    <span class="text-success">-{{ number_format($shipping_discount, 0, ',', '.') }} vnđ</span>
+                                                                </div>
+                                                                @endif
                                                                 <div class="price-row total">
                                                                     <span>Tổng tiền</span>
+
+                                                                    <span>{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
+                                                                </div>
+                                                                @if($calculated_total != $order->total_price)
+                                                                <div class="price-row text-warning">
+                                                                    <span>Lưu ý: Tổng tính toán ({{ number_format($calculated_total, 0, ',', '.') }} vnđ) khác với tổng lưu ({{ number_format($order->total_price, 0, ',', '.') }} vnđ)</span>
+
                                                                     <span>{{ number_format($subtotal + 30000,0,',','.') }} vnđ</span>
                                                                 </div>
+                                                                @endif
                                                             </div>
                                                         </div>
 
