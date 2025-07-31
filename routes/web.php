@@ -97,12 +97,12 @@ Route::prefix('cart')->name('cart.')->group(function () {
 });
 
 // --- Checkout Routes ---
-// Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.process');
 Route::get('/checkout/success/{id}', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay-return');
-
+Route::get('/checkout/continue-payment', [CheckoutController::class, 'continuePayment'])->name('checkout.continue');
 // admin
 Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {
     // Dashboard
@@ -161,6 +161,7 @@ Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(functio
         Route::get('/{id}', 'show')->name('show');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
+        Route::put('/{id}/update-status', 'update_status')->name('update-status');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 

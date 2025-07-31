@@ -31,7 +31,7 @@ class Variant extends Model
      */
     public function cartItem()
     {
-        return $this->hasOne(Variant::class);
+        return $this->hasOne(Variant::class,'variant_id','id');
     }
     public function OrderDetail()
     {
