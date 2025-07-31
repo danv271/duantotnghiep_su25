@@ -77,6 +77,12 @@ class OrderController extends Controller
         DB::table('orders')->where('id', $id)->delete();
         return redirect()->route('admin.orders.index')->with('success', 'Đã xóa đơn hàng.');
     }
+    public function update_status($id,Request $request){
+        Order::where('id',$id)->update([
+            'status_order' => $request->status
+        ]);
+        return back()->with('success', 'Cập nhật thành công.');
+    }
     public function indexClient(Request $request)
     {
         // Lấy ID của khách hàng đang đăng nhập

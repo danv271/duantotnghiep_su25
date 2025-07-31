@@ -6,10 +6,10 @@
 @section('content')
 <div class="page-content" style="margin: 0px">
 
-    <div class="container-xxl">
-
+    <div class="container">
+        
         {{-- Phần Dashboard Thống Kê Đơn Hàng --}}
-        <div class="row">
+        <div class="row p-0">
             <div class="col-md-6 col-xl-3">
                 <div class="card">
                     <div class="card-body">
@@ -159,7 +159,7 @@
 
         {{-- Phần Bảng Danh Sách Đơn Hàng Động --}}
         <div class="row mt-4">
-            <div class="col-xl-12">
+            <div class="col-xl-12 p-0">
                 <div class="card">
                     <div class="d-flex card-header justify-content-between align-items-center">
                         <div>
@@ -179,84 +179,111 @@
                     </div>
                     <div class="card-body p-0">
                         {{-- Form Tìm Kiếm --}}
-                        <form method="GET" class="mb-4 d-flex justify-content-center p-3">
-                            <input type="text" name="search" placeholder="Tìm theo email hoặc SĐT" value="{{ request('search') }}"
-                                class="form-control me-2 w-50" aria-label="Search">
-                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                        <form action="" method="POST">
+                            <div class="row  mt-2">
+                                <div class="col-11">
+                                    <input type="text" name="search" placeholder="Tìm theo email hoặc SĐT" value="{{ request('search') }}"
+                                    class="form-control ms-2" aria-label="Search">
+                                </div>
+                                <div class="col-1">
+                                    <button type="submit" class="btn btn-primary">Tìm</button>
+                                </div>
+                            </div>
                         </form>
 
                         <div class="table-responsive">
                             <table class="table align-middle mb-0 table-hover table-centered">
                                 <thead class="bg-light-subtle">
                                     <tr>
-                                        <th>Mã Đơn Hàng</th>
+                                        <th>Mã</th>
                                         <th>Ngày đặt</th>
-                                        <th>Khách hàng / Email</th>
-                                        <th>SĐT</th>
+                                        <th>Khách hàng</th>
                                         <th>Tổng tiền</th>
-                                        <th>Trạng thái thanh toán</th>
-                                        <th>Trạng thái đơn hàng</th>
+                                        <th>Thanh toán</th>
+                                        <th>Mặt hàng</th>
+                                        <th>Số giao hàng</th>
+                                        <th>Trạng thái</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($orders as $order)
-                                    <tr>
-                                        <td>#{{ $order->id }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</td>
-                                        <td>
-                                            <a href="javascript:void(0);" class="link-primary fw-medium">{{ $order->user_email }}</a>
-                                        </td>
-                                        <td>{{ $order->user_phone }}</td>
-                                        <td>{{ number_format($order->total_price) }} đ</td>
-                                        <td>
-                                            @if($order->status_payment == 'unpaid')
-                                                <span class="badge bg-danger">Chưa thanh toán</span>
-                                            @elseif($order->status_payment == 'paid')
-                                                <span class="badge bg-success">Đã thanh toán</span>
-                                            @elseif($order->status_payment == 'refunded')
-                                                <span class="badge bg-secondary">Đã hoàn tiền</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{-- Sử dụng hàm JS để mở modal cập nhật trạng thái --}}
-                                            <span class="badge border border-secondary text-secondary px-2 py-1 fs-13"
-                                                style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}')">
-                                                @if($order->status_order == 'pending')
-                                                    Chờ xử lý
-                                                @elseif($order->status_order == 'processing')
-                                                    Đang xử lý
-                                                @elseif($order->status_order == 'shipped')
-                                                    Đã giao hàng
-                                                @elseif($order->status_order == 'completed')
-                                                    Hoàn thành
-                                                @elseif($order->status_order == 'cancelled')
-                                                    Đã hủy
-                                                @else
-                                                    {{ ucfirst($order->status_order) }} {{-- Trường hợp trạng thái khác --}}
-                                                @endif
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-light btn-sm">
-                                                    <iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
-                                                {{-- Nếu có route edit, giữ lại --}}
-                                                {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-light btn-sm text-warning">
-                                                    <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a> --}}
-                                                {{-- Form xóa --}}
-                                                <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" class="mb-0">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')">
-                                                        <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="fs-5"></iconify-icon>
-                                                    </button>
-                                                </form>
+                                    @forelse($orders as $index=>$order)
+                                        <tr>
+                                            <td>#{{ $order->id }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</td>
+                                            <td>
+                                                {{ $order->user_name }}
+                                            </td>
+                                            <td>{{ number_format($order->total_price,0,',','.') }} vnđ</td>
+                                            <td>
+                                                {{$order->status_payment}}
+                                            </td>
+                                            <td>1</td>
+                                            <td>{{$order->user_phone}}</td>
+                                            <td>
+                                                {{-- Sử dụng hàm JS để mở modal cập nhật trạng thái --}}
+                                                <span class="badge border border-secondary text-secondary px-2 py-1 fs-13"
+                                                    style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}',{{$index}})">
+                                                    {{$order->status_order}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-light btn-sm">
+                                                        Xem chi tiết
+                                                    </a>
+                                                    {{-- Nếu có route edit, giữ lại --}}
+                                                    {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-light btn-sm text-warning">
+                                                        <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                    </a> --}}
+                                                    {{-- Form xóa --}}
+                                                    {{-- <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" class="mb-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')">
+                                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="fs-5"></iconify-icon>
+                                                        </button>
+                                                    </form> --}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{-- Modal để cập nhật trạng thái đơn hàng --}}
+                                        <div class="modal fade" id="statusModal{{$index}}" tabindex="-1" aria-labelledby="statusModalLabel{{$index}}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="statusModalLabel{{$index}}">Cập nhật trạng thái đơn hàng</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                        <div class="modal-body">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="order_id" id="orderId">
+                                                            <div class="mb-3">
+                                                                <label for="status" class="form-label">Trạng thái</label>
+                                                                <select name="status" id="status" class="form-select">
+                                                                    <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                    <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                    <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                    <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                    <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                    <option {{$order->status_order == 'đang giao' ? 'selected':''}} value="đang giao">đã giao</option>
+                                                                    <option {{$order->status_order == 'giao hàng thành công' ? 'selected':''}} value="giao hàng thành công">đã giao</option>
+                                                                    {{-- Thêm các trạng thái khác nếu có --}}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
                                     @empty
                                         <tr>
                                             <td colspan="8" class="text-center">Không có đơn hàng nào.</td>
@@ -278,63 +305,17 @@
         {{-- Kết thúc phần Bảng Danh Sách Đơn Hàng --}}
 
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>2025 © Larkon. Crafted by <iconify-icon icon="iconamoon:heart-duotone"
-                        class="fs-18 align-middle text-danger"></iconify-icon> <a
-                        href="https://1.envato.market/techzaa" class="fw-bold footer-text"
-                        target="_blank">Techzaa</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    {{-- Modal để cập nhật trạng thái đơn hàng --}}
-    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="statusModalLabel">Cập nhật trạng thái đơn hàng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <form id="statusForm" action="/update-status" method="POST"> {{-- Đảm bảo route này chính xác --}}
-                    <div class="modal-body">
-                        @csrf
-                        <input type="hidden" name="order_id" id="orderId">
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Trạng thái</label>
-                            <select name="status" id="status" class="form-select">
-                                <option value="pending">Chờ xử lý</option>
-                                <option value="processing">Đang xử lý</option>
-                                <option value="shipped">Đã giao hàng</option>
-                                <option value="completed">Hoàn thành</option>
-                                <option value="cancelled">Đã hủy</option>
-                                {{-- Thêm các trạng thái khác nếu có --}}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
-    function showStatusForm(orderId, currentStatus) {
-        document.getElementById('orderId').value = orderId;
-        document.getElementById('status').value = currentStatus; // Chọn trạng thái hiện tại
-        var modal = new bootstrap.Modal(document.getElementById('statusModal'));
+    // hàm hiển thị biểu mẫu trạng thái đơn hàng
+    function showStatusForm(orderId, currentStatus,index) {
+        // gán giá trị cho phần tử có id 'orderId'
+        // document.getElementById('orderId').value = orderId;
+        // // 
+        // document.getElementById('status').value = currentStatus; // Chọn trạng thái hiện tại
+        var modal = new bootstrap.Modal(document.getElementById('statusModal'+index));
         modal.show();
     }
-    
 </script>
 @endsection

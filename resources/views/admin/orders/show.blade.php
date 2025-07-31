@@ -6,7 +6,7 @@
 @section('content')
 
 
-    <div class="container-xxl">
+    <div class="container p-0">
 
         <div class="row">
             <div class="col-xl-9 col-lg-8">
@@ -18,34 +18,28 @@
                                     <div>
                                         <h4 class="fw-medium text-dark d-flex align-items-center gap-2">
                                             #{{ $order->id }}
-                                            @if ($order->status_payment == 'paid')
-                                                <span class="badge bg-success-subtle text-success px-2 py-1 fs-13">Đã
-                                                    Thanh Toán</span>
-                                            @elseif($order->status_payment == 'unpaid')
-                                                <span class="badge bg-danger-subtle text-danger px-2 py-1 fs-13">Chưa
-                                                    Thanh Toán</span>
+                                            @if ($order->status_payment == 'đã thanh toán')
+                                                <span class="badge bg-success-subtle text-success px-2 py-1 fs-13">{{$order->status_payment}}</span>
                                             @else
-                                                <span
-                                                    class="badge bg-secondary-subtle text-secondary px-2 py-1 fs-13">{{ ucfirst($order->status_payment) }}</span>
+                                                <span class="badge bg-danger-subtle text-danger px-2 py-1 fs-13">{{$order->status_payment}}</span>
                                             @endif
-
-                                            @if ($order->status_order == 'pending')
+                                            @if ($order->status_order == 'chưa xác nhận')
                                                 <span
                                                     class="badge border border-warning text-warning fs-13 px-2 py-1 rounded">Chờ
                                                     xử lý</span>
-                                            @elseif($order->status_order == 'processing')
+                                            @elseif($order->status_order == 'đang xử lý')
                                                 <span
                                                     class="badge border border-info text-info fs-13 px-2 py-1 rounded">Đang
                                                     xử lý</span>
-                                            @elseif($order->status_order == 'shipped')
+                                            @elseif($order->status_order == 'đang giao')
                                                 <span
                                                     class="badge border border-primary text-primary fs-13 px-2 py-1 rounded">Đã
                                                     giao hàng</span>
-                                            @elseif($order->status_order == 'completed')
+                                            @elseif($order->status_order == 'đã giao')
                                                 <span
                                                     class="badge border border-success text-success fs-13 px-2 py-1 rounded">Hoàn
                                                     thành</span>
-                                            @elseif($order->status_order == 'cancelled')
+                                            @elseif($order->status_order == 'hủy')
                                                 <span
                                                     class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">Đã
                                                     hủy</span>
@@ -59,11 +53,48 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <a href="#!" class="btn btn-outline-secondary">Hoàn tiền</a>
-                                        <a href="#!" class="btn btn-outline-secondary">Trả hàng</a>
                                         {{-- Thay thế bằng route edit thực tế nếu có --}}
-                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh
-                                            sửa đơn hàng</a>
+                                        {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary" style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}'>Sửa trạng thái</a> --}}
+                                        <span class="btn btn-primary text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;" onclick="showStatusForm()">
+                                            Thay đổi trạng thái đơn hàng
+                                        </span>
+                                        {{-- Modal để cập nhật trạng thái đơn hàng --}}
+                                        <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="statusModalLabel">Cập nhật trạng thái đơn hàng</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                        <div class="modal-body">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="order_id" id="orderId">
+                                                            <div class="mb-3">
+                                                                <label for="status" class="form-label">Trạng thái</label>
+                                                                <select name="status" id="status" class="form-select">
+                                                                    <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                    <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                    <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                    <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                    <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                    <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                    {{-- Thêm các trạng thái khác nếu có --}}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -75,9 +106,9 @@
                                     {{-- Các cột tiến trình này đang dùng dữ liệu tĩnh, bạn có thể cần cập nhật chúng với dữ liệu động từ $order->status_order --}}
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_order == 'pending' || $order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-secondary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? 'bg-success' : 'bg-secondary' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'pending' || $order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}"
+                                                style="width: {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? '100%' : '0%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
                                         <p class="mb-0 mt-2">Xác nhận đơn hàng</p>
@@ -127,18 +158,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
+                            {{-- <div
                                 class="card-footer d-flex flex-wrap align-items-center justify-content-between bg-light-subtle gap-2">
-                                {{-- Bạn có thể thay thế bằng ngày giao hàng ước tính thực tế từ $OrderDetail --}}
+                                
                                 <p class="border rounded mb-0 px-2 py-1 bg-body"><i
                                         class="bx bx-arrow-from-left align-middle fs-16"></i> Ngày giao hàng ước tính :
                                     <span class="text-dark fw-medium">{{ $order->created_at->addDays(3) }}</span>
                                 </p>
                                 <div>
                                     <a href="#!" class="btn btn-primary">Chuẩn bị giao hàng</a>
-                                    {{-- Nút này cần xử lý logic backend --}}
+                                   
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                         {{-- Phần Sản Phẩm trong Đơn Hàng --}}
@@ -151,12 +182,11 @@
                                     <table class="table align-middle mb-0 table-hover table-centered">
                                         <thead class="bg-light-subtle border-bottom">
                                             <tr>
-                                                <th>Tên sản phẩm & Kích thước</th>
+                                                <th>Tên sản phẩm & Loại</th>
                                                 <th>Trạng thái</th>
                                                 <th>Số lượng</th>
-                                                <th>Giá</th>
-                                                <th>Thuế</th>
-                                                <th>Thành tiền</th>
+                                                <th>Giá(vnđ)</th>
+                                                <th>Tổng(vnđ)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -195,10 +225,8 @@
                                                             sàng</span>
                                                     </td>
                                                     <td>{{ $orderItem->quantity }}</td>
-                                                    <td>{{ number_format($orderItem->variant_price) }} đ</td>
-                                                    <td>{{ number_format($orderItem->tax ?? 1) }} đ</td>
-                                                    <td>{{ number_format($orderItem->quantity * $orderItem->price + ($orderItem->tax ?? 1)) }}
-                                                        đ</td>
+                                                    <td>{{ number_format($orderItem->variant_price,0,',','.') }}</td>
+                                                    <td>{{ number_format($orderItem->quantity * $orderItem->variant_price,0,',','.') }}</td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -213,14 +241,14 @@
                         </div>
 
                         {{-- Phần Dòng Thời Gian Đơn Hàng (Order Timeline) --}}
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Dòng thời gian đơn hàng</h4>
                             </div>
                             <div class="card-body">
                                 <div class="position-relative ms-2">
                                     <span class="position-absolute start-0 top-0 border border-dashed h-100"></span>
-                                    {{-- Mỗi div này là một mốc thời gian --}}
+                                    
                                     <div class="position-relative ps-4 mb-4">
                                         <span
                                             class="position-absolute start-0 avatar-sm translate-middle-x bg-light d-inline-flex align-items-center justify-content-center rounded-circle text-success fs-20">
@@ -237,8 +265,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    {{-- Các mốc thời gian khác có thể được thêm vào đây dựa trên lịch sử trạng thái của $OrderDetail --}}
-                                    {{-- Ví dụ: --}}
+                                    
                                     @if ($order->status_order == 'processing' || $order->status_order == 'shipped' || $order->status_order == 'completed')
                                         <div class="position-relative ps-4 mb-4">
                                             <span
@@ -252,17 +279,17 @@
                                                     </h5>
                                                     <p class="mb-0">Đơn hàng đang được chuẩn bị để đóng gói.</p>
                                                 </div>
-                                                {{-- Bạn cần lưu lại thời gian chuyển trạng thái trong DB để hiển thị chính xác --}}
+                                                
                                                 <p class="mb-0">
                                                     {{ \Carbon\Carbon::parse($order->updated_at)->format('d/m/Y, H:i') }}
                                                 </p>
                                             </div>
                                         </div>
                                     @endif
-                                    {{-- Tương tự cho shipped, delivered, v.v. --}}
+                                    
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -284,8 +311,14 @@
                                                     icon="solar:clipboard-text-broken"></iconify-icon> Tổng phụ : </p>
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
-                                            {{ number_format($order->total_price) }}
-                                            đ</td>
+                                            @php
+                                                $subTotal = 0;
+                                                foreach ($OrderDetail as $item) {
+                                                    $subTotal+=$item->variant_price;
+                                                }    
+                                            @endphp
+                                            {{ number_format($subTotal,0,',','.') }} vnđ
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="px-0">
@@ -304,7 +337,7 @@
                                                 Phí giao hàng : </p>
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
-                                            {{ number_format($order->shipping_fee ?? 0) }} đ</td>
+                                            {{ number_format($order->shipping_fee ?? 30000,0,',','.') }} vnđ</td>
                                     </tr>
                                     {{-- Nếu có thuế, bạn có thể thêm dòng này --}}
                                     {{-- <tr>
@@ -322,27 +355,27 @@
                             <p class="fw-medium text-dark mb-0">Tổng cộng</p>
                         </div>
                         <div>
-                            <p class="fw-medium text-dark mb-0">{{ number_format($order->total_price) }} đ</p>
+                            <p class="fw-medium text-dark mb-0">{{ number_format($order->total_price) }} vnđ</p>
                         </div>
                     </div>
                 </div>
 
                 {{-- Thông tin thanh toán (Payment Information) --}}
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Thông tin thanh toán</h4>
                     </div>
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            {{-- Bạn có thể hiển thị icon dựa trên $order->type_payment --}}
+                            
                             <div class="rounded-3 bg-light avatar d-flex align-items-center justify-content-center">
                                 @if ($order->type_payment == 'cod')
-                                    <i class="bx bx-money fs-3"></i> {{-- Icon tiền mặt --}}
+                                    <i class="bx bx-money fs-3"></i> 
                                 @elseif($order->type_payment == 'bank_transfer')
-                                    <i class="bx bx-bank fs-3"></i> {{-- Icon ngân hàng --}}
+                                    <i class="bx bx-bank fs-3"></i> 
                                 @else
                                     <img src="{{ asset('assets/images/card/mastercard.svg') }}" alt=""
-                                        class="avatar-sm"> {{-- Icon thẻ --}}
+                                        class="avatar-sm"> 
                                 @endif
                             </div>
                             <div>
@@ -352,11 +385,11 @@
                                     @elseif($order->type_payment == 'bank_transfer')
                                         Chuyển khoản ngân hàng
                                     @else
-                                        Thẻ tín dụng (Master Card) {{-- Giả sử là Master Card nếu không phải COD/Bank --}}
+                                        Thẻ tín dụng (Master Card) 
                                     @endif
                                 </p>
                                 <p class="mb-0 text-dark">{{ $order->card_number ?? 'N/A' }}</p>
-                                {{-- Hiển thị 4 số cuối thẻ nếu có --}}
+                               
                             </div>
                             <div class="ms-auto">
                                 @if ($order->status_payment == 'paid')
@@ -373,7 +406,7 @@
                         <p class="text-dark mb-0 fw-medium">Tên chủ thẻ/Người thanh toán : <span
                                 class="text-muted fw-normal fs-13"> </span></p>
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- Thông tin khách hàng (Customer Details) --}}
                 <div class="card">
@@ -381,54 +414,59 @@
                         <h4 class="card-title">Thông tin khách hàng</h4>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="{{ asset('storage/' . $order->user->avatar) }}" alt=""
-                                class="avatar rounded-3 border border-light border-3"> {{-- Ảnh đại diện --}}
-                            <div>
-                                <p class="mb-1">{{ $order->name }}</p>
-                                <a href="mailto:{{ $order->username_email }}"
-                                    class="link-primary fw-medium">{{ $order->user_email }}</a>
-                            </div>
-                        </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <h5 class="">Số điện thoại liên hệ</h5>
+                            <h5 class="">Tên người nhận</h5>
                             <div>
-                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
-                            </div>
-                        </div>
-                        <p class="mb-1">{{ $order->user_phone }}</p>
-
-                        <div class="d-flex justify-content-between mt-3">
-                            <h5 class="">Địa chỉ giao hàng</h5>
-                            <div>
-                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
                             </div>
                         </div>
                         <div>
-                            <p class="mb-1">{{ $order->user_name ?? 'N/A' }}</p>
-                            <p class="mb-1">{{ $order->user_address ?? 'N/A' }}</p>
-                            <p class="mb-1">{{ $order->user_city ?? 'N/A' }},
-                                {{ $order->user_zip ?? 'N/A' }}</p>
-                            <p class="mb-1">{{ $order->user_country ?? 'N/A' }}</p>
-                            <p class="">{{ $order->user_phone ?? 'N/A' }}</p>
+                            <p class="mb-1">{{ $order->user_name }}</p>
                         </div>
-
                         <div class="d-flex justify-content-between mt-3">
-                            <h5 class="">Địa chỉ thanh toán</h5>
+                            <h5 class="">Email</h5>
                             <div>
-                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> {{-- Nút chỉnh sửa --}}
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
                             </div>
                         </div>
-                        <p class="mb-1">{{ $order->user_address ?? 'Giống địa chỉ giao hàng' }}</p>
-                        {{-- Nếu có địa chỉ thanh toán riêng --}}
+                        <div>
+                            <a href="mailto:{{ $order->username_email }}"
+                                    class="link-primary fw-medium">{{ $order->user_email }}</a>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Số điện thoại liên lạc</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1">{{ $order->user_phone }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Địa chỉ giao hàng</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> 
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1">{{ $order->user_address ?? 'N/A' }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5 class="">Ghi chú</h5>
+                            <div>
+                                <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> 
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-1">{{ $order->user_note ?? 'N/A' }}</p>
+                        </div>
                     </div>
                 </div>
 
                 {{-- Bản đồ (Map) - Nếu bạn muốn hiển thị vị trí trên bản đồ --}}
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-body">
                         <div class="mapouter">
-                            {{-- Bạn cần thay đổi src của iframe để hiển thị địa chỉ của đơn hàng --}}
                             <div class="gmap_canvas">
                                 <iframe class="gmap_iframe rounded" width="100%" style="height: 418px;"
                                     frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
@@ -436,8 +474,18 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
+    <script>
+        function showStatusForm() {
+        // gán giá trị cho phần tử có id 'orderId'
+        // document.getElementById('orderId').value = orderId;
+        // // 
+        // document.getElementById('status').value = currentStatus; // Chọn trạng thái hiện tại
+        var modal = new bootstrap.Modal(document.getElementById('statusModal'));
+        modal.show();
+    }
+    </script>
 @endsection
