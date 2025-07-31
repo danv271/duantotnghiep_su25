@@ -64,20 +64,20 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text">Category</span>
+                    <span class="nav-text">Danh mục </span>
                 </a>
                 <div class="collapse" id="sidebarCategory">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.categories.index') }}">List</a>
+                            <a class="sub-nav-link" href="{{ route('admin.categories.index') }}">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.categories.create') }}">Create</a>
+                            <a class="sub-nav-link" href="{{ route('admin.categories.create') }}">Thêm mới</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link menu-arrow" href="#sidebarCategoryEdit" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarCategoryEdit">
-                                <span>Edit</span>
+                                <span>Sửa</span>
                             </a>
                             <div class="collapse" id="sidebarCategoryEdit">
                                 <ul class="nav sub-navbar-nav">
@@ -92,7 +92,7 @@
                             </div>
                         </li>
                          <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ route('admin.categories.trashed') }}">Trashed</a>
+                            <a class="sub-nav-link" href="{{ route('admin.categories.trashed') }}">Thùng rác</a>
                         </li>
                     </ul>
                 </div>

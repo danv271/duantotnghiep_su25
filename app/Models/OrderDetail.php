@@ -16,6 +16,8 @@ class OrderDetail extends Model
         'variant_price',
         'quantity',
         'total_price',
+        'discount',
+        'price',
     ];
     public function order()
     {
