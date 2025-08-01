@@ -49,16 +49,55 @@ class CartController extends Controller
         try {
             $cartItems = $request->input('cart_items', []);
             
-            foreach ($cartItems as $itemId => $quantity) {
-                if ($quantity > 0) {
-                    CartItem::where('id', $itemId)->update(['quantity' => $quantity]);
+            // Xử lý cho user đã đăng nhập
+            if (Auth::check()) {
+                foreach ($cartItems as $itemId => $quantity) {
+                    if ($quantity > 0) {
+                        $cartItem = CartItem::with('variant')->find($itemId);
+                        
+                        if (!$cartItem) {
+                            continue;
+                        }
+                        
+                        // Kiểm tra số lượng tồn kho
+                        if ($quantity > $cartItem->variant->stock_quantity) {
+                            return redirect()->route('cart.index')->with('error', 
+                                "Số lượng sản phẩm {$cartItem->variant->product->name} vượt quá tồn kho! Tồn kho: {$cartItem->variant->stock_quantity}");
+                        }
+                        
+                        $cartItem->update(['quantity' => $quantity]);
+                    }
                 }
+            } 
+            // Xử lý cho user chưa đăng nhập (session cart)
+            else {
+                $cart = session()->get('cart', []);
+                
+                foreach ($cartItems as $variantId => $quantity) {
+                    if ($quantity > 0 && isset($cart[$variantId])) {
+                        $variant = \App\Models\Variant::find($variantId);
+                        
+                        if (!$variant) {
+                            continue;
+                        }
+                        
+                        // Kiểm tra số lượng tồn kho
+                        if ($quantity > $variant->stock_quantity) {
+                            return redirect()->route('cart.index')->with('error', 
+                                "Số lượng sản phẩm {$variant->product->name} vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}");
+                        }
+                        
+                        $cart[$variantId]['quantity'] = $quantity;
+                    }
+                }
+                
+                session()->put('cart', $cart);
             }
 
-            return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
+            return redirect()->route('cart.index')->with('success', 'Cập nhật giỏ hàng thành công!');
 
         } catch (\Exception $e) {
-            return redirect()->route('cart.index')->with('error', 'Error updating cart: ' . $e->getMessage());
+            return redirect()->route('cart.index')->with('error', 'Lỗi cập nhật giỏ hàng: ' . $e->getMessage());
         }
     }
 

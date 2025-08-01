@@ -239,6 +239,7 @@
                                     <div class="success-message d-none">Your order has been placed successfully! Thank you for your purchase.</div> --}}
                                     <div class="place-order-container">
                                         <input type="hidden" name="total" id="total-input" value="{{$total}}">
+                                        <input type="hidden" name="selected_items" id="selected-items-checkout" value="{{ request('selected_items') }}">
                                         <div id="voucher-codes-container"></div>
                                         <button type="submit" class="btn btn-primary place-order-btn">
                                             <span class="btn-text">Thanh toán</span>
@@ -268,7 +269,7 @@
                                             </div>
                                             <div class="order-item-details">
                                                 <h4>{{$item['product_name']}}</h4>
-                                                <p class="order-item-variant">1</p>
+                                                <p class="order-item-variant">Số lượng: {{$item['quantity']}}</p>
                                                 <div class="order-item-price">
                                                     <span class="quantity">{{$item['quantity']}} ×</span>
                                                     <span class="price">{{ number_format($item['price'],0,',','.')}}</span>
@@ -284,7 +285,7 @@
                                             </div>
                                             <div class="order-item-details">
                                                 <h4>{{$item->product_name}}</h4>
-                                                <p class="order-item-variant"></p>
+                                                <p class="order-item-variant">Số lượng: {{$item->quantity}}</p>
                                                 <div class="order-item-price">
                                                     <span class="quantity">{{$item->quantity}} ×</span>
                                                     <span class="price">{{ number_format($item->variant_price,0,',','.')}} vnđ</span>
@@ -544,14 +545,31 @@
         // Remove all vouchers
         document.getElementById('remove-all-vouchers').addEventListener('click', function() {
             appliedVouchers = [];
-            updateOrderSummary({
-                product_discount: 0,
-                shipping_discount: 0,
-                new_shipping_cost: currentShipping,
-                final_total: currentSubtotal + currentShipping
+            fetch('{{ route("voucher.remove") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    order_amount: currentSubtotal,
+                    shipping_cost: 30000 // Luôn gửi giá trị gốc
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateOrderSummary(data.data);
+                    hideAppliedVouchers();
+                    showVoucherMessage('Đã xóa tất cả voucher!', 'success');
+                } else {
+                    showVoucherMessage(data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showVoucherMessage('Có lỗi xảy ra khi xóa voucher!', 'danger');
             });
-            hideAppliedVouchers();
-            showVoucherMessage('Đã xóa tất cả voucher!', 'success');
         });
 
         // Enter key to apply voucher
@@ -560,18 +578,6 @@
                 e.preventDefault();
                 document.getElementById('apply-voucher').click();
             }
-        });
-
-        document.getElementById('remove-all-vouchers').addEventListener('click', function() {
-            appliedVouchers = [];
-            updateOrderSummary({
-                product_discount: 0,
-                shipping_discount: 0,
-                new_shipping_cost: currentShipping,
-                final_total: currentSubtotal + currentShipping
-            });
-            hideAppliedVouchers();
-            showVoucherMessage('Đã xóa tất cả voucher!', 'success');
         });
 
         function applyVouchers() {
@@ -643,6 +649,12 @@
             document.getElementById('total-input').value = data.final_total;
             document.getElementById('btn-total-price').textContent = formatCurrency(data.final_total) + ' vnđ';
             
+            // Cập nhật giá trị hiện tại
+            currentShipping = data.new_shipping_cost;
+            currentTotal = data.final_total;
+            if (typeof data.product_amount !== 'undefined') {
+                currentSubtotal = data.product_amount;
+            }
             // Update voucher codes for form submission
             updateVoucherCodes();
         }
@@ -685,7 +697,38 @@
 
         function removeVoucher(code) {
             appliedVouchers = appliedVouchers.filter(v => v.code !== code);
-            applyVouchers();
+            
+            // Nếu không còn voucher nào, gọi API để reset về giá gốc
+            if (appliedVouchers.length === 0) {
+                fetch('{{ route("voucher.remove") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        order_amount: currentSubtotal,
+                        shipping_cost: 30000 // Luôn gửi giá trị gốc
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateOrderSummary(data.data);
+                        hideAppliedVouchers();
+                        showVoucherMessage('Đã xóa voucher!', 'success');
+                    } else {
+                        showVoucherMessage(data.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showVoucherMessage('Có lỗi xảy ra khi xóa voucher!', 'danger');
+                });
+            } else {
+                // Nếu còn voucher khác, gọi lại applyVouchers để tính toán lại
+                applyVouchers();
+            }
         }
 
         function formatCurrency(amount) {
