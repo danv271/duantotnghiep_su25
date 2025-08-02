@@ -833,7 +833,7 @@ if ($userId) {
             }
         }
 
-        return redirect()->route('checkout.index')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
+        return redirect()->route('checkout')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
     }
 //      public function vnpayReturn(Request $request)
 // {
