@@ -148,7 +148,7 @@
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
 
-                                                            <span class="price">{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
+                                                    
 
                                                             <span class="price">{{ number_format($order->total_price,0,',','.')}} vnđ</span>
 
@@ -280,7 +280,7 @@
                                                                             @endif
                                                                         </div>
 
-                                                                        <div class="item-price">{{number_format($item->total_price,0,',','.')}} vnđ</div>
+                                                                        {{-- <div class="item-price">{{number_format($item->total_price,0,',','.')}} vnđ</div> --}}
 
                                                                     </div>
                                                                 @endforeach
@@ -376,8 +376,9 @@
                                                         <div class="detail-section">
                                                             <h5>Thông tin giao hàng</h5>
                                                             <div class="address-info">
-                                                                <p>{{$order->user_email}}<br>{{$order->user_address}}<br>
+                                                                <p>{{$order->user_name}}<br>{{$order->user_address}}<br>
                                                                 <p class="contact">{{$order->user_phone}}</p>
+                                                                <p>{{$order->user_address}}</p>
                                                             </div>
                                                         </div>
                                                     </div>

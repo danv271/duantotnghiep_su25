@@ -512,6 +512,7 @@ if ($userId) {
 
     public function vnpayReturn(Request $request)
 {
+    // giống
     $vnp_HashSecret = env('VNPAY_HASH_SECRET');
 
     // Loại bỏ hash khỏi dữ liệu
@@ -580,7 +581,7 @@ if ($userId) {
 
         $order = Order::create([
             'user_id' => $userId,
-            'name' => $checkoutData['name'],
+            'user_name' => $checkoutData['name'],
             'user_email' => $checkoutData['email'],
             'user_phone' => $checkoutData['phone'],
             'user_address' => $checkoutData['address'],
@@ -671,76 +672,77 @@ if ($userId) {
     return redirect()->route('checkout')->with('error', 'Thanh toán không thành công hoặc dữ liệu không hợp lệ.');
 }
 
-     public function vnpayReturn(Request $request)
-{
-    $vnp_HashSecret = env('VNPAY_HASH_SECRET');
+//      public function vnpayReturn(Request $request)
+// {
+//     // để la
+//     $vnp_HashSecret = env('VNPAY_HASH_SECRET');
 
-    $vnpData = $request->all();
-    $vnp_SecureHash = $vnpData['vnp_SecureHash'] ?? '';
+//     $vnpData = $request->all();
+//     $vnp_SecureHash = $vnpData['vnp_SecureHash'] ?? '';
 
-    unset($vnpData['vnp_SecureHash']);
-    unset($vnpData['vnp_SecureHashType']);
+//     unset($vnpData['vnp_SecureHash']);
+//     unset($vnpData['vnp_SecureHashType']);
 
-    ksort($vnpData);
-    $hashData = http_build_query($vnpData, '', '&');
-    $secureHashCheck = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+//     ksort($vnpData);
+//     $hashData = http_build_query($vnpData, '', '&');
+//     $secureHashCheck = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
-    if ($secureHashCheck !== $vnp_SecureHash) {
-        return redirect()->route('checkout.index')->with('error', 'Chữ ký không hợp lệ.');
-    }
+//     if ($secureHashCheck !== $vnp_SecureHash) {
+//         return redirect()->route('checkout.index')->with('error', 'Chữ ký không hợp lệ.');
+//     }
 
-    if ($vnpData['vnp_ResponseCode'] === '00') {
-        $txnRef = $vnpData['vnp_TxnRef'];
+//     if ($vnpData['vnp_ResponseCode'] === '00') {
+//         $txnRef = $vnpData['vnp_TxnRef'];
 
-        $pending = PendingTransaction::where('vnp_txn_ref', $txnRef)->first();
+//         $pending = PendingTransaction::where('vnp_txn_ref', $txnRef)->first();
 
-        if (!$pending) {
-            return redirect()->route('checkout')->with('error', 'Không tìm thấy giao dịch.');
-        }
+//         if (!$pending) {
+//             return redirect()->route('checkout')->with('error', 'Không tìm thấy giao dịch.');
+//         }
 
-        // Tạo đơn hàng từ dữ liệu đã lưu
-        $checkoutData = json_decode($pending->checkout_data, true);
+//         // Tạo đơn hàng từ dữ liệu đã lưu
+//         $checkoutData = json_decode($pending->checkout_data, true);
 
-        $order = Order::create([
-            'user_id' => $pending->user_id,
-            'user_email' => $checkoutData['email'],
-            'user_name' => $checkoutData['name'],
-            'user_phone' => $checkoutData['phone'],
-            'user_address' => $checkoutData['address'],
-            'user_note' => $checkoutData['note'] ?? null,
-            'total_price' => $pending->amount,
-            'status_order' => 'đang xử lý',
-            'status_payment' => 'đã thanh toán',
-            'type_payment' => 'vnpay',
-        ]);
-        // Thêm các sản phẩm trong đơn hàng
-        foreach ($checkoutData['items'] as $item) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'variant_id' => $item['variant_id'],
-                'variant_price' => $item['price'],
-                'quantity' => $item['quantity'],
-                'total_price' => $item['price']*$item['quantity']
-            ]);
-        }
+//         $order = Order::create([
+//             'user_id' => $pending->user_id,
+//             'user_email' => $checkoutData['email'],
+//             'user_name' => $checkoutData['name'],
+//             'user_phone' => $checkoutData['phone'],
+//             'user_address' => $checkoutData['address'],
+//             'user_note' => $checkoutData['note'] ?? null,
+//             'total_price' => $pending->amount,
+//             'status_order' => 'đang xử lý',
+//             'status_payment' => 'đã thanh toán',
+//             'type_payment' => 'vnpay',
+//         ]);
+//         // Thêm các sản phẩm trong đơn hàng
+//         foreach ($checkoutData['items'] as $item) {
+//             OrderDetail::create([
+//                 'order_id' => $order->id,
+//                 'variant_id' => $item['variant_id'],
+//                 'variant_price' => $item['price'],
+//                 'quantity' => $item['quantity'],
+//                 'total_price' => $item['price']*$item['quantity']
+//             ]);
+//         }
 
-        // Xóa giỏ hàng
-        if (Auth::check()) {
-            Cart::where('user_id', Auth::id())->delete();
-        } else {
-            session()->forget('cart');
-        }
+//         // Xóa giỏ hàng
+//         if (Auth::check()) {
+//             Cart::where('user_id', Auth::id())->delete();
+//         } else {
+//             session()->forget('cart');
+//         }
 
-        // Xóa giao dịch tạm
-        $pending->delete();
-        session()->forget('checkout_data');
-        session()->forget('vnp_txn_ref');
-        Mail::to($order->user_email)->send(new OrderSuccessMail($order));
-        return redirect()->route('checkout.success',['id' => $order->id])->with('success', 'Thanh toán thành công và đơn hàng đã được tạo.');
-    }
+//         // Xóa giao dịch tạm
+//         $pending->delete();
+//         session()->forget('checkout_data');
+//         session()->forget('vnp_txn_ref');
+//         Mail::to($order->user_email)->send(new OrderSuccessMail($order));
+//         return redirect()->route('checkout.success',['id' => $order->id])->with('success', 'Thanh toán thành công và đơn hàng đã được tạo.');
+//     }
 
-    return redirect()->route('checkout')->with('error', 'Thanh toán thất bại hoặc bị hủy.');
-}
+//     return redirect()->route('checkout')->with('error', 'Thanh toán thất bại hoặc bị hủy.');
+// }
 
 
     public function success($orderId)

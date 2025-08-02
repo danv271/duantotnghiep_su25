@@ -1,14 +1,15 @@
 <div class="main-nav">
     <!-- Sidebar Logo -->
     <div class="logo-box">
-        <a href="{{ url('/') }}" class="logo-dark">
+        {{-- <a href="{{ url('/') }}" class="logo-dark">
             <img src="{{ asset('assets/images/logo-sm.png') }}" class="logo-sm" alt="logo sm">
             <img src="{{ asset('assets/images/logo-dark.png') }}" class="logo-lg" alt="logo dark">
         </a>
         <a href="{{ url('/') }}" class="logo-light">
             <img src="{{ asset('assets/images/logo-sm.png') }}" class="logo-sm" alt="logo sm">
             <img src="{{ asset('assets/images/logo-light.png') }}" class="logo-lg" alt="logo light">
-        </a>
+        </a> --}}
+        VISTAR
     </div>
 
     <!-- Menu Toggle Button (sm-hover) -->
@@ -18,14 +19,14 @@
 
     <div class="scrollbar" data-simplebar>
         <ul class="navbar-nav" id="navbar-nav">
-            <li class="menu-title">General</li>
+            <li class="menu-title">Tổng quan</li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url(route('admin.dashboard')) }}">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Dashboard </span>
+                    <span class="nav-text"> Bảng điều khiển </span>
                 </a>
             </li>
 
@@ -35,7 +36,7 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Products </span>
+                    <span class="nav-text"> Sản phẩm </span>
                 </a>
                 <div class="collapse" id="sidebarProducts">
                     <ul class="nav sub-navbar-nav">
@@ -43,9 +44,9 @@
                             <a class="sub-nav-link" href="{{route('admin.products.list')}}">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('/admin/products/grid') }}">Grid</a>
+                            <a class="sub-nav-link" href="{{ url('admin.products.create') }}">Thêm mới</a>
                         </li>
-                        <li class="sub-nav-item">
+                        {{-- <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/detail') }}">Details</a>
                         </li>
                         <li class="sub-nav-item">
@@ -53,7 +54,7 @@
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/add') }}">Create</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </li>
@@ -105,15 +106,15 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:box-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Inventory </span>
+                    <span class="nav-text"> Hàng tồn kho </span>
                 </a>
                 <div class="collapse" id="sidebarInventory">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="inventory-warehouse.html">Warehouse</a>
+                            <a class="sub-nav-link" href="inventory-warehouse.html">Kho</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="inventory-received-orders.html">Received Orders</a>
+                            <a class="sub-nav-link" href="inventory-received-orders.html">Đơn hàng đã nhận</a>
                         </li>
                     </ul>
                 </div>
@@ -125,19 +126,19 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Orders </span>
+                    <span class="nav-text"> Đơn hàng </span>
                 </a>
                 <div class="collapse" id="sidebarOrders">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{route('admin.orders.index')}}">List</a>
+                            <a class="sub-nav-link" href="{{route('admin.orders.index')}}">Danh sách</a>
                         </li>
-                        <li class="sub-nav-item">
+                        {{-- <li class="sub-nav-item">
                             <a class="sub-nav-link" href="order-cart.html">Cart</a>
                         </li>
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="order-checkout.html">Check Out</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </li>
@@ -148,18 +149,18 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:card-send-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Purchases </span>
+                    <span class="nav-text"> Mua </span>
                 </a>
                 <div class="collapse" id="sidebarPurchases">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="purchase-list.html">List</a>
+                            <a class="sub-nav-link" href="purchase-list.html">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="purchase-order.html">Order</a>
+                            <a class="sub-nav-link" href="purchase-order.html">Đơn hàng</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="purchase-returns.html">Return</a>
+                            <a class="sub-nav-link" href="purchase-returns.html">Hoàn hàng</a>
                         </li>
                     </ul>
                 </div>
@@ -191,18 +192,18 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:bill-list-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Invoices </span>
+                    <span class="nav-text"> Hóa đơn </span>
                 </a>
                 <div class="collapse" id="sidebarInvoice">
                     <ul class="nav sub-navbar-nav">
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="invoice-list.html">List</a>
+                            <a class="sub-nav-link" href="invoice-list.html">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="invoice-details.html">Details</a>
+                            <a class="sub-nav-link" href="invoice-details.html">Chi tiết</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="invoice-add.html">Create</a>
+                            <a class="sub-nav-link" href="invoice-add.html">Thêm mới</a>
                         </li>
                     </ul>
                 </div>
@@ -213,18 +214,18 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Settings </span>
+                    <span class="nav-text"> Cài đặt </span>
                 </a>
             </li>
 
-            <li class="menu-title mt-2">Users</li>
+            <li class="menu-title mt-2">Người dùng</li>
 
             <li class="nav-item">
                 <a class="nav-link" href="pages-profile.html">
                     <span class="nav-icon">
                         <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Profile </span>
+                    <span class="nav-text"> Trang cá nhân </span>
                 </a>
             </li>
 
