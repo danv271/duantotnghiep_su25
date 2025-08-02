@@ -26,12 +26,13 @@
                     <div class="cart-items">
                         <div class="cart-header d-none d-lg-block">
                             <div class="row align-items-center gy-4">
-                                <div class="col-lg-1 text-center"><h5></h5></div>
+                                
                                 <div class="col-lg-2"><h5>Hình ảnh</h5></div>
-                                <div class="col-lg-2"><h5>Sản phẩm</h5></div>
+                                <div class="col-lg-3"><h5>Sản phẩm</h5></div>
                                 <div class="col-lg-2 text-center"><h5>Giá</h5></div>
                                 <div class="col-lg-2 text-center"><h5>Số lượng</h5></div>
-                                <div class="col-lg-2 text-center"><h5>Tổng</h5></div>
+                                <div class="col-lg-2 text-center"><h5>Thành tiền</h5></div>
+                                <div class="col-lg-1 text-center"><h5></h5></div>
                             </div>
                         </div>
 
@@ -46,15 +47,10 @@
 
                                 <div class="cart-item mb-3 border p-3">
                                     <div class="row align-items-center gy-4">
-                                        <div class="col-lg-1 col-2 text-center">
-                                            <input type="checkbox"
-                                                name="selected_items[]"
-                                                value="{{ $item->cart_item_id }}"
-                                                class="form-check-input">
-                                        </div>
+                                        
 
                                         <div class="col-lg-5 col-10 d-flex align-items-center">
-                                            <img src="{{ $item->image_path }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                            <img src="{{ asset('storage/'.$item->image_path)}}" alt="Product" class="img-fluid" style="max-width: 80px;">
                                             <div class="ms-3">
                                                 <h6 class="mb-0">{{ $item->product_name }}</h6>
                                             </div>
@@ -77,17 +73,24 @@
                                         <div class="col-lg-2 text-center">
                                             <span>{{ number_format($total, 0) }}vnđ</span>
                                         </div>
-                                    </div>
 
-                                    <div class="row mt-2">
-                                        <div class="col-12 text-end">
-                                            <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                        {{-- <div class="col-1 text-end">
+                                            
+                                        </div> --}}
+                                        <div class="col-lg-1 col-2 text-center">
+                                            {{-- <input type="checkbox"
+                                                name="selected_items[]"
+                                                value="{{ $item->cart_item_id }}"
+                                                class="form-check-input"> --}}
+                                                <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
                                             </form>
                                         </div>
                                     </div>
+
+                                    
                                 </div>
                             @endforeach
                         @else
@@ -99,16 +102,16 @@
 
                                 <div class="cart-item mb-3 border p-3">
                                     <div class="row align-items-center gy-4">
-                                        <div class="col-lg-1 col-2 text-center">
+                                        {{-- <div class="col-lg-1 col-2 text-center">
                                             <input type="checkbox"
                                                 name="selected_items[]"
                                                 value="{{ $variantId }}"
                                                 class="form-check-input">
-                                        </div>
+                                        </div> --}}
 
                                         <div class="col-lg-5 col-10 d-flex align-items-center">
                                             {{-- Không có ảnh trong session thì gán mặc định --}}
-                                            <img src="{{ asset('assets/img/product/default.webp') }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                            <img src="{{ asset('storage/'.$item['image_path']) }}" alt="Product" class="img-fluid" style="max-width: 80px;">
                                             <div class="ms-3">
                                                 <h6 class="mb-0">{{ $item['product_name'] }}</h6>
                                             </div>
@@ -131,10 +134,17 @@
                                         <div class="col-lg-2 text-center">
                                             <span>{{ number_format($total, 0) }}vnđ</span>
                                         </div>
+                                        <div class="col-1">
+                                            <form action="{{ route('cart.removeSession', $variantId) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                            </form>
+                                        </div>
                                     </div>
 
                                     {{-- Nút xóa sản phẩm trong session --}}
-                                    <div class="row mt-2">
+                                    {{-- <div class="row mt-2">
                                         <div class="col-12 text-end">
                                             <form action="{{ route('cart.removeSession', $variantId) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
                                                 @csrf
@@ -142,7 +152,7 @@
                                                 <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                                             </form>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             @endforeach
                         @endif
@@ -155,6 +165,10 @@
                                     <i class="bi bi-trash"></i> Xóa toàn bộ giỏ hàng
                                 </button>
                             </form>
+                            {{-- <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="select-all">
+                                <label for="select-all" class="form-check-label">Chọn tất cả</label>
+                            </div> --}}
                             <div class="d-flex gap-2">
                                 <form action="{{ route('cart.update') }}" method="POST" id="update-cart-form">
                                     @csrf
@@ -185,18 +199,18 @@
                     <div class="cart-summary border p-3">
                         <h4 class="summary-title mb-3">Tóm tắt đơn hàng</h4>
                         <div class="summary-item d-flex justify-content-between">
-                            <span class="summary-label">Tổng toàn bộ</span>
+                            <span class="summary-label">Tổng tiền</span>
                             <span class="summary-value">{{ number_format($subtotal, 0) }}vnđ</span>
                         </div>
 
                         <form id="checkout-form" action="{{ route('checkout') }}" method="POST">
                             @csrf
                             <input type="hidden" name="selected_items" id="selected_items_checkout">
-                            <div class="summary-item d-flex justify-content-between mt-2">
+                            {{-- <div class="summary-item d-flex justify-content-between mt-2">
                                 <span class="summary-label">Tổng tiền đã chọn</span>
                                 <span class="summary-value" id="selected-total">0vnđ</span>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3 w-100" id="checkout-button" disabled>Đặt hàng</button>
+                            </div> --}}
+                            <button type="submit" class="btn btn-primary mt-3 w-100" id="checkout-button">Đặt hàng</button>
                         </form>
                     </div>
                 </div>

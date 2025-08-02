@@ -8,7 +8,7 @@
 
     <div class="container">
         
-        {{-- Phần Dashboard Thống Kê Đơn Hàng --}}
+        {{-- Phần Dashboard Thống Kê Đơn Hàng
         <div class="row p-0">
             <div class="col-md-6 col-xl-3">
                 <div class="card">
@@ -154,7 +154,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- Kết thúc phần Dashboard Thống Kê --}}
 
         {{-- Phần Bảng Danh Sách Đơn Hàng Động --}}

@@ -53,8 +53,8 @@
                                     </div>
                                     <div>
                                         {{-- Thay thế bằng route edit thực tế nếu có --}}
-                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh
-                                            sửa đơn hàng</a>
+                                        {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh
+                                            sửa đơn hàng</a> --}}
                                         {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary" style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}'>Sửa trạng thái</a> --}}
                                         <span class="btn btn-primary text-white px-2 py-1 fs-13"
                                             style="cursor: pointer;" onclick="showStatusForm()">
@@ -113,17 +113,17 @@
                                                 style="width: {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? '100%' : '0%' }}"
 
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
-                                        </div>
-                                        <p class="mb-0 mt-2">Xác nhận đơn hàng</p>
+                                            </div>
+                                        <p class="mb-0 mt-2">Đặt hàng thành công</p>
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_payment == 'paid' ? 'bg-success' : 'bg-warning' }}"
+                                            <div class="progress-bar {{  $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' ? 'bg-success' : 'bg-warning' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_payment == 'paid' ? '100%' : '60%' }}"
+                                                style="width: {{ $order->status_order == 'đang xử lý' ? '100%' : '60%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <p class="mb-0 mt-2">Chờ thanh toán</p>
+                                        <p class="mb-0 mt-2">Đang xử lý</p>
                                         @if ($order->status_payment == 'unpaid')
                                             <div class="d-flex align-items-center gap-2 mt-2">
                                                 <div class="spinner-border spinner-border-sm text-warning" role="status">
@@ -134,12 +134,12 @@
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'chờ vận chuyển' || $order->status_order == '' ? 'bg-success' : 'bg-primary' }}"
                                                 role="progressbar"
                                                 style="width: {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <p class="mb-0 mt-2">Đang xử lý</p>
+                                        <p class="mb-0 mt-2">Chờ vận chuyển</p>
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
@@ -311,6 +311,10 @@
                                         <td class="px-0">
                                             <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
                                                     icon="solar:clipboard-text-broken"></iconify-icon> Tổng phụ : </p>
+                                        </td>
+                                        {{-- <td class="text-end text-dark fw-medium px-0">
+                                            {{ number_format($order->total_price) }}
+                                            đ</td> --}}
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
                                             @php

@@ -129,7 +129,7 @@
                                 <div class="section-content">
                                     <div class="form-group">
                                         <label for="address">Địa chỉ</label>
-                                        <input type="text" class="form-control" name="address" id="address" value="{{ Auth::check() ? $user->phone : old('address') }}" required>
+                                        <input type="text" class="form-control" name="address" id="address" value="{{ Auth::check() ? $user->address : old('address') }}" required>
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
