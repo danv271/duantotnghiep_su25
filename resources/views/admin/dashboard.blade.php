@@ -18,12 +18,13 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="avatar-md bg-soft-primary rounded">
-                                        <iconify-icon icon="solar:cart-5-bold-duotone" class="avatar-title fs-32 text-primary"></iconify-icon>
+                                        <iconify-icon icon="solar:cart-5-bold-duotone"
+                                            class="avatar-title fs-32 text-primary"></iconify-icon>
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Total Orders</p>
-                                    <h3 class="text-dark mt-1 mb-0">13,647</h3>
+                                    <p class="text-muted mb-0 text-truncate">Tổng Đơn Hàng</p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $tolTalOrders }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -103,8 +104,8 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Booked Revenue</p>
-                                    <h3 class="text-dark mt-1 mb-0">$123.6k</h3>
+                                    <p class="text-muted mb-0 text-truncate">Tổng Doanh Thu</p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $tolTalPrice }} vnđ</h3>
                                 </div>
                             </div>
                         </div>
@@ -126,17 +127,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Performance</h4>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-outline-light">ALL</button>
-                            <button type="button" class="btn btn-sm btn-outline-light">1M</button>
-                            <button type="button" class="btn btn-sm btn-outline-light">6M</button>
-                            <button type="button" class="btn btn-sm btn-outline-light active">1Y</button>
-                        </div>
+                        <h4 class="card-title">Doanh thu </h4>
                     </div>
                     <div dir="ltr">
                         <div id="dash-performance-chart" class="apex-charts"></div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -201,27 +197,32 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/ecommerce.html</a></td>
+                                <td class="ps-3"><a href="javascript:void(0);"
+                                        class="text-muted">larkon/ecommerce.html</a></td>
                                 <td>465</td>
                                 <td><span class="badge badge-soft-success">4.4%</span></td>
                             </tr>
                             <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/dashboard.html</a></td>
+                                <td class="ps-3"><a href="javascript:void(0);"
+                                        class="text-muted">larkon/dashboard.html</a></td>
                                 <td>426</td>
                                 <td><span class="badge badge-soft-danger">20.4%</span></td>
                             </tr>
                             <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/chat.html</a></td>
+                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/chat.html</a>
+                                </td>
                                 <td>254</td>
                                 <td><span class="badge badge-soft-warning">12.25%</span></td>
                             </tr>
                             <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/auth-login.html</a></td>
+                                <td class="ps-3"><a href="javascript:void(0);"
+                                        class="text-muted">larkon/auth-login.html</a></td>
                                 <td>3,369</td>
                                 <td><span class="badge badge-soft-success">5.2%</span></td>
                             </tr>
                             <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/email.html</a></td>
+                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/email.html</a>
+                                </td>
                                 <td>1,208</td>
                                 <td><span class="badge badge-soft-info">8.7%</span></td>
                             </tr>
@@ -237,138 +238,56 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between gap-2">
-                    <h4 class="card-title">Product List</h4>
-                    <a href="{{ url('product-add') }}" class="btn btn-sm btn-primary">Add New Product</a>
+                    <h4 class="card-title">Những Sản phẩm bán chạy </h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover table-nowrap table-centered m-0">
                             <thead class="bg-light bg-opacity-50">
                                 <tr>
-                                    <th class="text-muted ps-3">Image</th>
-                                    <th class="text-muted">Product Name</th>
-                                    <th class="text-muted">Price</th>
-                                    <th class="text-muted">Quantity</th>
-                                    <th class="text-muted">Status</th>
-                                    <th class="text-muted">Action</th>
+                                    <th class="text-muted ps-3">Ảnh</th>
+                                    <th class="text-muted">Tên Sản Phẩm </th>
+                                    <th class="text-muted">Giá </th>
+                                    <th class="text-muted">Đã Bán </th>
+                                    <th class="text-muted">Hàng Tồn </th>
+                                    <th class="text-muted">Hành Động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="ps-3">
-                                        <img src="{{ asset('assets/images/products/product-1.jpg') }}" alt="Product 1" class="img-fluid rounded" width="50">
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('product-details') }}" class="text-muted">Men's Casual Shirt</a>
-                                    </td>
-                                    <td>$45.00</td>
-                                    <td>120</td>
-                                    <td><span class="badge badge-soft-success">In Stock</span></td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="{{ url('product-details') }}">View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('product-edit') }}">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-3">
-                                        <img src="{{ asset('assets/images/products/product-2.jpg') }}" alt="Product 2" class="img-fluid rounded" width="50">
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('product-details') }}" class="text-muted">Women's Sneakers</a>
-                                    </td>
-                                    <td>$65.00</td>
-                                    <td>45</td>
-                                    <td><span class="badge badge-soft-warning">Low Stock</span></td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="{{ url('product-details') }}">View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('product-edit') }}">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-3">
-                                        <img src="{{ asset('assets/images/products/product-3.jpg') }}" alt="Product 3" class="img-fluid rounded" width="50">
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('product-details') }}" class="text-muted">Leather Jacket</a>
-                                    </td>
-                                    <td>$120.00</td>
-                                    <td>0</td>
-                                    <td><span class="badge badge-soft-danger">Out of Stock</span></td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="{{ url('product-details') }}">View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('product-edit') }}">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-3">
-                                        <img src="{{ asset('assets/images/products/product-4.jpg') }}" alt="Product 4" class="img-fluid rounded" width="50">
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('product-details') }}" class="text-muted">Smart Watch</a>
-                                    </td>
-                                    <td>$199.00</td>
-                                    <td>80</td>
-                                    <td><span class="badge badge-soft-success">In Stock</span></td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="{{ url('product-details') }}">View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('product-edit') }}">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-3">
-                                        <img src="{{ asset('assets/images/products/product-5.jpg') }}" alt="Product 5" class="img-fluid rounded" width="50">
-                                    </td>
-                                    <td>
-                                        <a href="{{ url('product-details') }}" class="text-muted">Bluetooth Headphones</a>
-                                    </td>
-                                    <td>$89.00</td>
-                                    <td>30</td>
-                                    <td><span class="badge badge-soft-warning">Low Stock</span></td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="{{ url('product-details') }}">View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('product-edit') }}">Edit</a></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach ($bestSellingProducts as $item)
+                                    <tr>
+                                        <td class="ps-3">
+                                            <img src="{{ asset('storage' . $item->variant->product->images->first()->path) }}"
+                                                alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
+                                                width="50">
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.products.detail', $item->variant->product->id) }}"
+                                                class="text-muted">{{ $item->variant->product->name }}</a>
+                                        </td>
+                                        <td>{{ $item->variant->product->base_price }}</td>
+                                        <td>{{ $item->total_quantity }}</td>
+                                        <td><span
+                                                class="{{ $item->variant->stock_quantity ? 'badge badge-soft-success' : 'badge badge-soft-danger' }}">{{ $item->variant->stock_quantity ? 'Còn Hàng ' : 'Hết Hàng ' }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item"
+                                                            href="{{ route('admin.products.detail', $item->variant->product->id) }}">View</a>
+                                                    </li>
+                                                    <li><a class="dropdown-item"
+                                                            href="{{ route('admin.products.edit', $item->variant->product->id) }}">Edit</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
