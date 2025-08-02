@@ -164,7 +164,7 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Sessions by Country</h5>
+                    <h5 class="card-title">Các cơ sở</h5>
                     <div id="world-map-markers" style="height: 316px"></div>
                     <div class="row text-center">
                         <div class="col-6">

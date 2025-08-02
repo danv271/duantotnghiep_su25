@@ -14,35 +14,45 @@ class ChartController extends Controller
     {
         $timeRange = $request->input('time', '12'); // Mặc định 12 tháng
         $now = now();
-        $listDataToChart = Order::select(
+
+        // Tạo query builder
+        $query = Order::select(
             DB::raw('DATE(created_at) as date'),
             DB::raw('SUM(total_price) as total_price')
-        )
-            // ->where('status_payment', '!=', 'Chưa thanh toán') // Lọc đơn hàng đã thanh toán
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'date' => $item->date,
-                    'total_price' => $item->total_price,
-                ];
-            });
-        // dd($listDataToChart);
-
+        );
+        
+        // Áp dụng filter TRƯỚC khi group by
         switch ($timeRange) {
             case '1':
-                $listDataToChart->where('created_at', '>=', $now->subMonths(1));
+                $query->where('created_at', '>=', $now->copy()->subMonth(1));
                 break;
             case '6':
-                $listDataToChart->where('created_at', '>=', $now->subMonths(6));
-                break;
-            case '12':
-                $listDataToChart->where('created_at', '>=', $now->subMonths(12));
+                $query->where('created_at', '>=', $now->copy()->subMonths(6));
                 break;
             case 'all':
             default:
+                // Không filter
                 break;
         }
+
+        // Thực hiện group by và get data
+       $listDataToChart = $query
+    // ->where('status_payment', '!=', 'Chưa thanh toán') // Nếu cần filter trạng thái
+    ->select(
+        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+        DB::raw('SUM(total_price) as total_price') // Tổng doanh thu theo tháng
+    )
+    ->where('status_payment','!=', 'chưa thanh toán')
+    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+    ->orderBy('month', 'asc') // Sắp xếp theo tháng tăng dần
+    ->get()
+    ->map(function ($item) {
+        return [
+            'date' => $item->month, // Format: YYYY-MM (ví dụ: 2024-01)
+            'total_price' => $item->total_price,
+        ];
+    });
+
         return response()->json($listDataToChart);
     }
 }

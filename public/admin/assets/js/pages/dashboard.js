@@ -378,49 +378,91 @@ class VectorMap {
             map: 'world',
             selector: '#world-map-markers',
             zoomOnScroll: true,
-            zoomButtons: false,
+            zoomButtons: true,
             markersSelectable: true,
+            // Zoom to và focus vào Việt Nam
+            focusOn: {
+                coords: [16.0, 106.0], // Tọa độ trung tâm Việt Nam
+                scale: 8 // Zoom level cao để phóng to
+            },
+            // Chỉ giữ lại 5 chi nhánh chính
             markers: [
-                { name: "Canada", coords: [56.1304, -106.3468] },
-                { name: "Brazil", coords: [-14.2350, -51.9253] },
-                { name: "Russia", coords: [61, 105] },
-                { name: "China", coords: [35.8617, 104.1954] },
-                { name: "United States", coords: [37.0902, -95.7129] }
+                { name: "Hà Nội", coords: [21.0285, 105.8542] },
+                { name: "Thành phố Hồ Chí Minh", coords: [10.8231, 106.6297] },
+                { name: "Đà Nẵng", coords: [16.0544, 108.2022] },
+                { name: "Hải Phòng", coords: [20.8449, 106.6881] },
+                { name: "Cần Thơ", coords: [10.0452, 105.7469] }
             ],
             markerStyle: {
-                initial: { fill: "#7f56da" },
-                selected: { fill: "#22c55e" }
+                initial: { 
+                    fill: "#7f56da",
+                    stroke: "#ffffff",
+                    strokeWidth: 2,
+                    r: 8 // Tăng kích thước marker
+                },
+                selected: { 
+                    fill: "#22c55e",
+                    stroke: "#ffffff",
+                    strokeWidth: 3,
+                    r: 10
+                }
             },
             labels: {
                 markers: {
-                    render: marker => marker.name
+                    render: marker => marker.name,
+                    offsets: function(index) {
+                        return [0, -20]; // Đẩy label lên trên marker
+                    }
                 }
             },
             regionStyle: {
                 initial: {
                     fill: 'rgba(169,183,197, 0.3)',
                     fillOpacity: 1,
+                    stroke: '#ffffff',
+                    strokeWidth: 1
                 },
+                hover: {
+                    fill: 'rgba(169,183,197, 0.5)'
+                }
             },
+            // Tùy chỉnh thêm để map focus vào Việt Nam
+            onLoaded: function(map) {
+                // Có thể thêm logic sau khi map load xong
+                console.log('Map loaded successfully');
+            }
         });
+        
+        return map;
     }
-
+    
     init() {
-        this.initWorldMapMarker();
+        this.map = this.initWorldMapMarker();
+        return this.map;
     }
 }
 
 // Khởi tạo khi DOM ready
 document.addEventListener('DOMContentLoaded', function (e) {
     // Khởi tạo charts với dữ liệu từ API
-    initializeCharts();
+    if (typeof initializeCharts === 'function') {
+        initializeCharts();
+    }
     
     // Khởi tạo map
-    new VectorMap().init();
+    const vectorMap = new VectorMap().init();
+    
+    // Lưu reference để có thể sử dụng sau này
+    window.vectorMapInstance = vectorMap;
 });
 
 // Hàm để refresh charts với time range khác (có thể gọi từ UI)
 async function refreshChartsWithTimeRange(timeRange) {
+    if (typeof callApiChart !== 'function') {
+        console.warn('callApiChart function not found');
+        return;
+    }
+    
     const res = await callApiChart(timeRange);
     if (res && res.length > 0) {
         const conversionRate = calculateConversionRate(res);
@@ -437,7 +479,25 @@ async function refreshChartsWithTimeRange(timeRange) {
         }
         
         // Render lại charts với dữ liệu mới
-        updateConversionsChart(conversionRate);
-        updatePerformanceChart(res);
+        if (typeof updateConversionsChart === 'function') {
+            updateConversionsChart(conversionRate);
+        }
+        if (typeof updatePerformanceChart === 'function') {
+            updatePerformanceChart(res);
+        }
+    }
+}
+
+// Hàm tiện ích để zoom đến một marker cụ thể
+function zoomToMarker(markerName) {
+    if (window.vectorMapInstance) {
+        const markers = window.vectorMapInstance.markers;
+        const marker = Object.values(markers).find(m => m.config.name === markerName);
+        if (marker) {
+            window.vectorMapInstance.setFocus({
+                coords: marker.config.coords,
+                scale: 12
+            });
+        }
     }
 }
