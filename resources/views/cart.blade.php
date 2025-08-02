@@ -169,6 +169,28 @@
                                 <input type="checkbox" class="form-check-input" id="select-all">
                                 <label for="select-all" class="form-check-label">Chọn tất cả</label>
                             </div> --}}
+                            <div class="d-flex gap-2">
+                                <form action="{{ route('cart.update') }}" method="POST" id="update-cart-form">
+                                    @csrf
+                                    <!-- Thêm các input fields cho số lượng -->
+                                    @if(Auth::check())
+                                        @foreach ($cartItems as $item)
+                                            <input type="hidden" name="cart_items[{{ $item->cart_item_id }}]" value="{{ $item->quantity }}" class="quantity-hidden-input" data-cart-item-id="{{ $item->cart_item_id }}">
+                                        @endforeach
+                                    @else
+                                        @foreach ($cartItems as $variantId => $item)
+                                            <input type="hidden" name="cart_items[{{ $variantId }}]" value="{{ $item['quantity'] }}" class="quantity-hidden-input" data-variant-id="{{ $variantId }}">
+                                        @endforeach
+                                    @endif
+                                    <button type="submit" class="btn btn-outline-primary" id="update-cart-btn">
+                                        <i class="bi bi-arrow-clockwise"></i> Cập nhật giỏ hàng
+                                    </button>
+                                </form>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="select-all">
+                                    <label for="select-all" class="form-check-label">Chọn tất cả</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const price = parseFloat(cleanedPriceText.replace(/,/g, ''));
 
                 const quantityInput = row.querySelector('input[type="number"]');
-                const quantity = parseInt(quantityInput.value);
+                const quantity = parseInt(quantityInput.value) || 0;
 
                 total += price * quantity;
                 selectedIds.push(chk.value);
@@ -229,6 +251,27 @@ document.addEventListener('DOMContentLoaded', function () {
         selectedItemsInput.value = selectedIds.join(',');
         selectedTotal.textContent = total.toLocaleString('vi-VN', { minimumFractionDigits: 0 }) + 'vnđ';
         checkoutButton.disabled = selectedIds.length === 0;
+    }
+
+    // Cập nhật tổng tiền khi thay đổi số lượng
+    function updateTotalPrice() {
+        let total = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const priceText = item.querySelector('div.col-lg-2.text-center span').innerText;
+            const cleanedPriceText = priceText.replace(/[^\d.,]/g, '');
+            const price = parseFloat(cleanedPriceText.replace(/,/g, ''));
+
+            const quantityInput = item.querySelector('input[type="number"]');
+            const quantity = parseInt(quantityInput.value) || 0;
+
+            total += price * quantity;
+        });
+
+        // Cập nhật hiển thị tổng tiền
+        const totalDisplay = document.querySelector('.summary-value');
+        if (totalDisplay) {
+            totalDisplay.textContent = total.toLocaleString('vi-VN', { minimumFractionDigits: 0 }) + 'vnđ';
+        }
     }
 
     // Sự kiện chọn từng checkbox
@@ -274,9 +317,58 @@ document.addEventListener('DOMContentLoaded', function () {
             this.setAttribute('data-prev', val);
         }
 
+        // Cập nhật hidden input tương ứng
+        updateHiddenInput(this);
+
         calculateSelectedTotal();
+        updateTotalPrice(); // Cập nhật tổng tiền khi thay đổi số lượng
+    });
+
+    // Tự động update cart khi thay đổi số lượng (với debounce)
+    let updateTimeout;
+    input.addEventListener('change', function() {
+        clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(() => {
+            // Chỉ update nếu giá trị thực sự thay đổi
+            if (this.value !== this.getAttribute('data-prev')) {
+                updateCart();
+            }
+        }, 1000); // Delay 1 giây sau khi user ngừng nhập
     });
 });
+
+    // Function để cập nhật hidden input
+    function updateHiddenInput(quantityInput) {
+        const cartItem = quantityInput.closest('.cart-item');
+        const checkbox = cartItem.querySelector('input[name="selected_items[]"]');
+        
+        if (checkbox) {
+            const itemId = checkbox.value;
+            const hiddenInput = document.querySelector(`.quantity-hidden-input[data-cart-item-id="${itemId}"], .quantity-hidden-input[data-variant-id="${itemId}"]`);
+            
+            if (hiddenInput) {
+                hiddenInput.value = quantityInput.value;
+            }
+        }
+    }
+
+    // Function để update cart
+    function updateCart() {
+        // Cập nhật tất cả hidden inputs trước khi submit
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            updateHiddenInput(input);
+        });
+
+        const form = document.getElementById('update-cart-form');
+        const submitBtn = document.getElementById('update-cart-btn');
+        
+        // Disable button để tránh spam
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Đang cập nhật...';
+        
+        // Submit form
+        form.submit();
+    }
 
 
     // Kiểm tra khi submit

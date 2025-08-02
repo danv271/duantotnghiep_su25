@@ -320,22 +320,75 @@
                                             @php
                                                 $subTotal = 0;
                                                 foreach ($OrderDetail as $item) {
-                                                    $subTotal+=$item->variant_price;
+                                                    $subTotal += $item->variant_price * $item->quantity;
                                                 }    
                                             @endphp
-                                            {{ number_format($subTotal,0,',','.') }} vnđ
+                                            {{ number_format($subTotal, 0, ',', '.') }} vnđ
                                         </td>
                                     </tr>
+                                    @php
+                                        $totalDiscount = 0;
+                                        $productDiscount = $order->product_discount ?? 0;
+                                        $shippingDiscount = $order->shipping_discount ?? 0;
+                                        $totalDiscount = $productDiscount + $shippingDiscount;
+                                        
+                                        // Lấy thông tin voucher đã áp dụng
+                                        $appliedVouchers = [];
+                                        if ($order->applied_vouchers) {
+                                            $appliedVouchers = json_decode($order->applied_vouchers, true);
+                                        }
+                                    @endphp
+                                    @if($totalDiscount > 0)
                                     <tr>
                                         <td class="px-0">
                                             <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
                                                     icon="solar:ticket-broken" class="align-middle"></iconify-icon>
-                                                Giảm giá : </p>
+                                                Tổng giảm : </p>
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
-                                            -0 {{-- {{ number_format($OrderDetail->discount_amount ?? 0) }} --}}
-                                            đ</td>
+                                            -{{ number_format($totalDiscount, 0, ',', '.') }} vnđ
+                                        </td>
                                     </tr>
+                                    @if($productDiscount > 0)
+                                    <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
+                                                    icon="solar:ticket-broken" class="align-middle"></iconify-icon>
+                                                Giảm giá sản phẩm : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">
+                                            -{{ number_format($productDiscount, 0, ',', '.') }} vnđ
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @if($shippingDiscount > 0)
+                                    <tr>
+                                        <td class="px-0">
+                                            <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
+                                                    icon="solar:kick-scooter-broken" class="align-middle"></iconify-icon>
+                                                Giảm phí vận chuyển : </p>
+                                        </td>
+                                        <td class="text-end text-dark fw-medium px-0">
+                                            -{{ number_format($shippingDiscount, 0, ',', '.') }} vnđ
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                    @if(!empty($appliedVouchers))
+                                    <tr>
+                                        <td class="px-0" colspan="2">
+                                            <div class="mt-2">
+                                                <p class="mb-1 fw-medium text-dark">Voucher đã áp dụng:</p>
+                                                @foreach($appliedVouchers as $voucher)
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <span class="text-muted fs-13">{{ $voucher['name'] ?? $voucher['code'] }}</span>
+                                                    <span class="badge bg-success-subtle text-success fs-11">{{ $voucher['type_label'] ?? $voucher['type'] }}</span>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endif
                                     <tr>
                                         <td class="px-0">
                                             <p class="d-flex mb-0 align-items-center gap-1"><iconify-icon
@@ -343,7 +396,13 @@
                                                 Phí giao hàng : </p>
                                         </td>
                                         <td class="text-end text-dark fw-medium px-0">
-                                            {{ number_format($order->shipping_fee ?? 30000,0,',','.') }} vnđ</td>
+                                            @if($shippingDiscount > 0)
+                                                <span class="text-decoration-line-through text-muted">{{ number_format(30000, 0, ',', '.') }} vnđ</span>
+                                                <span class="text-success">{{ number_format($order->shipping_cost ?? 0, 0, ',', '.') }} vnđ</span>
+                                            @else
+                                                {{ number_format($order->shipping_cost ?? 30000, 0, ',', '.') }} vnđ
+                                            @endif
+                                        </td>
                                     </tr>
                                     {{-- Nếu có thuế, bạn có thể thêm dòng này --}}
                                     {{-- <tr>
@@ -359,9 +418,15 @@
                     <div class="card-footer d-flex align-items-center justify-content-between bg-light-subtle">
                         <div>
                             <p class="fw-medium text-dark mb-0">Tổng cộng</p>
+                            @if($totalDiscount > 0)
+                            <small class="text-success">Đã tiết kiệm: {{ number_format($totalDiscount, 0, ',', '.') }} vnđ</small>
+                            @endif
                         </div>
                         <div>
                             <p class="fw-medium text-dark mb-0">{{ number_format($order->total_price) }} vnđ</p>
+                            @if($totalDiscount > 0)
+                            <small class="text-muted">Giá gốc + ship: {{ number_format($subTotal + 30000, 0, ',', '.') }} vnđ</small>
+                            @endif
                         </div>
                     </div>
                 </div>

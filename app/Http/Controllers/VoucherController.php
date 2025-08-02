@@ -160,18 +160,41 @@ class VoucherController extends Controller
             'shipping_cost' => 'required|numeric|min:0'
         ]);
 
-        $orderAmount = $request->input('order_amount');
-        $shippingCost = $request->input('shipping_cost');
-        $finalTotal = $orderAmount + $shippingCost;
+        // Lấy giá sản phẩm gốc từ cart (không bao gồm phí ship)
+        $userId = Auth::check() ? Auth::id() : null;
+        $productAmount = 0;
+        
+        if ($userId) {
+            $cart = Cart::where('user_id', $userId)
+                ->with('cartItem.variant.product')
+                ->first();
+            
+            if ($cart && $cart->cartItem) {
+                foreach ($cart->cartItem as $item) {
+                    $productAmount += $item->variant->price * $item->quantity;
+                }
+            }
+        } else {
+            $cartItems = session('cart', []);
+            foreach ($cartItems as $item) {
+                $productAmount += $item['price'] * $item['quantity'];
+            }
+        }
+
+        // Luôn sử dụng giá trị gốc cho shipping cost (30000)
+        $originalShippingCost = 30000;
+        $finalTotal = $productAmount + $originalShippingCost;
 
         return response()->json([
             'success' => true,
             'message' => 'Đã xóa voucher!',
             'data' => [
-                'discount_amount' => 0,
-                'new_shipping_cost' => $shippingCost,
+                'product_discount' => 0,
+                'shipping_discount' => 0,
+                'new_shipping_cost' => $originalShippingCost,
                 'final_total' => $finalTotal,
-                'original_total' => $finalTotal
+                'original_total' => $finalTotal,
+                'product_amount' => $productAmount
             ]
         ]);
     }
