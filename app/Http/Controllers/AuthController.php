@@ -203,7 +203,7 @@ class AuthController extends Controller
             $check = Hash::check($dataValidate['current_password'], $user->password);
             $user->password = Hash::make($dataValidate['password']);
             $user->save();
-            return redirect('account')->with('success', 'Your password has been updated successfully!');
+            return redirect('account')->with('success', 'Cập nhật mật khẩu thành công ');
         }
     }
 }

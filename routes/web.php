@@ -82,6 +82,7 @@ Route::put('/reset-password/process', [AuthController::class, 'handleResetPasswo
 // --- User Account & Profile (Yêu cầu đăng nhập) ---
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AdminAccountController::class, "index"])->name('account'); // Có vẻ là AccountController của Admin, cần đổi tên nếu có AccountController riêng cho user
+    Route::put('/update/account',[AdminAccountController::class,"updateUser"])->name('update.user');
     Route::put('/update_pass', [AuthController::class, 'updatePass'])->name('update_pass');
 
 

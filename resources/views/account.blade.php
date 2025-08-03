@@ -60,7 +60,7 @@
                                             role="tab" tabindex="-1">
                                             <i class="bi bi-box-seam"></i>
                                             <span>Đơn hàng của tôi </span>
-                                            <span class="badge">{{count($orders)}}</span>
+                                            <span class="badge">{{ count($orders) }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -159,9 +159,7 @@
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
                                                             <span class="status processing">
-                                                                @if ($order->status_order == 'pending')
-                                                                    chưa xác nhận
-                                                                @endif
+                                                                {{ $order->status_order }}
                                                             </span>
                                                         </div>
                                                         <div class="info-row">
@@ -170,21 +168,23 @@
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
-                                                            <span class="price">{{ $order->total_price }} vnđ</span>
+                                                            <span class="price">{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="order-footer">
                                                     <button type="button" class="btn-track" data-bs-toggle="collapse"
-                                                        data-bs-target="#tracking1" aria-expanded="false">Theo dõi đơn
+                                                        data-bs-target="#tracking-{{ $order->id }}"
+                                                        aria-expanded="false">Theo dõi đơn
                                                         hàng</button>
                                                     <button type="button" class="btn-details" data-bs-toggle="collapse"
-                                                        data-bs-target="#details1" aria-expanded="false">Chi tiết đơn
+                                                        data-bs-target="#details-{{ $order->id }}"
+                                                        aria-expanded="false">Chi tiết đơn
                                                         hàng</button>
                                                 </div>
 
                                                 <!-- Order Tracking -->
-                                                <div class="collapse tracking-info" id="tracking1">
+                                                <div class="collapse tracking-info" id="tracking-{{ $order->id }}">
                                                     <div class="tracking-timeline">
                                                         <div class="timeline-item completed">
                                                             <div class="timeline-icon">
@@ -242,7 +242,7 @@
                                                 </div>
 
                                                 <!-- Order Details -->
-                                                <div class="collapse order-details" id="details1">
+                                                <div class="collapse order-details" id="details-{{ $order->id }}">
                                                     <div class="details-content">
                                                         <div class="detail-section">
                                                             <h5>Thông tin đơn hàng</h5>
@@ -250,7 +250,7 @@
                                                                 <div class="info-item">
                                                                     <span class="label">Phương thức thanh toán</span>
                                                                     <span class="value">
-                                                                        @if ($order->type_payment == 'transfer')
+                                                                        @if ($order->type_payment == 'vnpay')
                                                                             thanh toán online
                                                                         @else
                                                                             thanh toán khi nhận hàng
@@ -286,7 +286,7 @@
                                                                                     {{ $item->quantity }}</span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="item-price">{{ $item->total_price }}
+                                                                        <div class="item-price">{{ number_format($item->total_price) }}
                                                                             vnđ</div>
                                                                     </div>
                                                                 @endforeach
@@ -294,34 +294,41 @@
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Price Details</h5>
+                                                            <h5>Chi tiết giá </h5>
                                                             <div class="price-breakdown">
                                                                 <div class="price-row">
-                                                                    <span>Subtotal</span>
-                                                                    <span>$1,929.93</span>
+                                                                    <span>Tổng tiền</span>
+                                                                    <span>
+                                                                        @php
+                                                                            $total = 0;
+                                                                            foreach ($order->OrderDetail as $item) {
+                                                                                $total += $item->total_price;
+                                                                            }
+                                                                        @endphp
+                                                                        {{ number_format($total, 0, ',', '.') }} VNĐ
+                                                                    </span>
                                                                 </div>
                                                                 <div class="price-row">
-                                                                    <span>Shipping</span>
-                                                                    <span>$15.99</span>
+                                                                    <span>Chi phí vận chuyển </span>
+                                                                    <span>{{ number_format($order->shipping_cost, 0, ',', '.') }} vnđ</span>
                                                                 </div>
                                                                 <div class="price-row">
-                                                                    <span>Tax</span>
-                                                                    <span>$159.98</span>
+                                                                    <span>Thuế </span>
+                                                                    <span>{{ ($total / 100) * 10 }}</span>
                                                                 </div>
                                                                 <div class="price-row total">
-                                                                    <span>Total</span>
-                                                                    <span>$2,105.90</span>
+                                                                    <span>Tổng tiền </span>
+                                                                    <span>{{ number_format($total + ($total / 100) * 10 + $order->shipping_cost , 0, ',', '.')}}
+                                                                        VNĐ</span>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="detail-section">
-                                                            <h5>Shipping Address</h5>
+                                                            <h5>Địa chỉ </h5>
                                                             <div class="address-info">
-                                                                <p>Sarah Anderson<br>123 Main Street<br>Apt 4B<br>New York,
-                                                                    NY
-                                                                    10001<br>United States</p>
-                                                                <p class="contact">+1 (555) 123-4567</p>
+                                                                <p>{{ $order->user_address }}</p>
+                                                                <p class="contact">{{ $order->user_phone }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -651,7 +658,7 @@
                                         <div class="header-actions">
                                             <button type="button" class="btn-add-new">
                                                 <i class="bi bi-plus-lg"></i>
-                                                Thêm mới địa chỉ 
+                                                Thêm mới địa chỉ
                                             </button>
                                         </div>
                                     </div>
@@ -664,10 +671,10 @@
                                                 <span class="default-badge">Mặc định</span>
                                             </div>
                                             <div class="card-body">
-                                                <p class="address-text"></p>
+                                                <p class="address-text">{{$data->address}}</p>
                                                 <div class="contact-info">
-                                                    <div><i class="bi bi-person"></i></div>
-                                                    <div><i class="bi bi-telephone"></i></div>
+                                                    <div><i class="bi bi-person"></i>{{$data->name}}</div>
+                                                    <div><i class="bi bi-telephone"></i>{{$data->phone}}</div>
                                                 </div>
                                             </div>
                                             <div class="card-actions">
@@ -677,7 +684,7 @@
                                                 </button>
                                                 <button type="button" class="btn-remove">
                                                     <i class="bi bi-trash"></i>
-                                                    Xóa 
+                                                    Xóa
                                                 </button>
                                             </div>
                                         </div>
@@ -720,41 +727,82 @@
                                     <div class="settings-content">
                                         <!-- Personal Information -->
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up">
-                                            <h3>Thông tin người dùng </h3>
-                                            <form class="php-email-form settings-form">
+                                            <h3>Thông tin người dùng</h3>
+
+                                            <!-- Hiển thị thông báo lỗi -->
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger">
+                                                    <ul class="mb-0">
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+
+                                            <!-- Hiển thị thông báo thành công -->
+                                            @if (session('success'))
+                                                <div class="alert alert-success">
+                                                    {{ session('success') }}
+                                                </div>
+                                            @endif
+                                            <form class="settings-form" method="post"
+                                                action="{{ route('update.user') }}">
+                                                @csrf
+                                                @method('PUT')
+
                                                 <div class="row g-3">
                                                     <div class="col-md-6">
                                                         <label for="firstName" class="form-label">Họ</label>
-                                                        <input type="text" class="form-control" id="firstName"
-                                                            value="" required="">
+                                                        <input type="text" name="firstName"
+                                                            class="form-control @error('firstName') is-invalid @enderror"
+                                                            id="firstName"
+                                                            value="{{ old('firstName', $data->first_name ?? '') }}"
+                                                            required>
+                                                        @error('firstName')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
+
                                                     <div class="col-md-6">
-                                                        <label for="lastName" class="form-label">Tên </label>
-                                                        <input type="text" class="form-control" id="lastName"
-                                                            value="" required="">
+                                                        <label for="lastName" class="form-label">Tên</label>
+                                                        <input type="text" name="lastName"
+                                                            class="form-control @error('lastName') is-invalid @enderror"
+                                                            id="lastName"
+                                                            value="{{ old('lastName', $data->last_name ?? '') }}"
+                                                            required>
+                                                        @error('lastName')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
+
                                                     <div class="col-md-6">
                                                         <label for="email" class="form-label">Email</label>
-                                                        <input type="email" class="form-control" id="email"
-                                                            value="" required="">
+                                                        <input type="email" name="email"
+                                                            class="form-control @error('email') is-invalid @enderror"
+                                                            id="email" value="{{ old('email', $data->email ?? '') }}"
+                                                            required>
+                                                        @error('email')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
+
                                                     <div class="col-md-6">
-                                                        <label for="phone" class="form-label">Số điên thoại</label>
-                                                        <input type="tel" class="form-control" id="phone"
-                                                            value="">
+                                                        <label for="phone" class="form-label">Số điện thoại</label>
+                                                        <input type="tel" name="phone"
+                                                            class="form-control @error('phone') is-invalid @enderror"
+                                                            value="{{ old('phone', $data->phone ?? '') }}">
+                                                        @error('phone')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
 
                                                 <div class="form-buttons">
-                                                    <button type="submit" class="btn-save">Lưu</button>
+                                                    <button type="submit" class="btn-save">Lưu thay đổi</button>
                                                 </div>
-
-                                                <div class="loading">Loading</div>
-                                                <div class="text-red-700"></div>
-                                                <div class="sent-message">Cập nhật thành công </div>
                                             </form>
                                         </div>
-
                                         <!-- Email Preferences -->
                                         <div class="settings-section aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="100">
