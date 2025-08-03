@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 | Định nghĩa tất cả route cho web.
 | Các route người dùng (client) và quản trị (admin) được tách riêng gọn gàng.
 */
+
 
 // --- Routes cho mục đích Test/Debug (Nên xóa khi deploy Production) ---
 Route::get('/test-cart', function() {
@@ -116,8 +119,8 @@ Route::get('/checkout/continue-payment', [CheckoutController::class, 'continuePa
 // admin
 Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(function () {
     // Dashboard
-    Route::view('/', 'admin.dashboard')->name('dashboard'); // Redirect admin/ to dashboard
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard'); // Explicit dashboard route
+    Route::get('/', DashboardController::class.'@index',)->name('dashboard'); // Redirect admin/ to dashboard
+    Route::get('/dashboard', DashboardController::class.'@index',)->name('dashboard'); // Explicit dashboard route
 
     // --- Quản lý Sản phẩm (Products) ---
     // Sử dụng Route::controller để nhóm gọn gàng các hành động CRUD
