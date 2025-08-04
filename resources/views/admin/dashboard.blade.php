@@ -257,7 +257,7 @@
                                 @foreach ($bestSellingProducts as $item)
                                     <tr>
                                         <td class="ps-3">
-                                            <img src="{{ asset('storage' . $item->variant->product->images->first()->path) }}"
+                                            <img src="{{ asset('storage/' . $item->variant->product->images->first()->path) }}"
                                                 alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
                                                 width="50">
                                         </td>
