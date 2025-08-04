@@ -78,6 +78,12 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')->with('success', 'Đã xóa đơn hàng.');
     }
     public function update_status($id,Request $request){
+        if($request->status == 'giao hàng thành công'){
+            Order::where('id',$id)->update([
+            'status_order' => $request->status,
+            'status_payment' => 'đã thanh toán'
+            ]);
+        }
         Order::where('id',$id)->update([
             'status_order' => $request->status
         ]);

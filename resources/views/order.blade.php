@@ -156,9 +156,33 @@
                                                     </div>
                                                 </div>
                                                 <div class="order-footer">
-                                                    <button type="button" class="btn-track" data-bs-toggle="collapse"
+                                                    @if ($order->status_order == 'chờ xử lý')
+                                                        <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                            <div class="modal-body">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="order_id" id="orderId">
+                                                                <input type="hidden" name="status" value="đã hủy">
+                                                                {{-- <div class="mb-3">
+                                                                    <label for="status" class="form-label">Trạng thái</label>
+                                                                    <select name="status" id="status" class="form-select">
+                                                                        <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                        <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                        <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                        <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                        
+                                                                    </select>
+                                                                </div> --}} 
+                                                                <button type="submit" style="width:430px" class="btn btn-danger">Hủy đơn hàng</button>
+                                                            </div>
+                                                        </form>
+                                                    @else
+                                                        <button type="button" class="btn-track" data-bs-toggle="collapse"
                                                         data-bs-target="#tracking{{$index}}" aria-expanded="false">Theo dõi đơn
                                                         hàng</button>
+                                                    @endif
                                                     <button type="button" class="btn-details" data-bs-toggle="collapse"
                                                         data-bs-target="#details{{$index}}" aria-expanded="false">Chi tiết đơn
                                                         hàng</button>
