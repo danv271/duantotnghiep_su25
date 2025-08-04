@@ -158,7 +158,8 @@
                                                     <div class="order-info">
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
-                                                            <span class="status processing">
+                                                            <span
+                                                                class="status {{ $order->status_order == 'đã giao' ? 'delivered' : processing }}">
                                                                 {{ $order->status_order }}
                                                             </span>
                                                         </div>
@@ -168,7 +169,9 @@
                                                         </div>
                                                         <div class="info-row">
                                                             <span>Tổng tiền</span>
-                                                            <span class="price">{{ number_format($order->total_price, 0, ',', '.') }} vnđ</span>
+                                                            <span
+                                                                class="price">{{ number_format($order->total_price, 0, ',', '.') }}
+                                                                vnđ</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -286,7 +289,8 @@
                                                                                     {{ $item->quantity }}</span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="item-price">{{ number_format($item->total_price) }}
+                                                                        <div class="item-price">
+                                                                            {{ number_format($item->total_price) }}
                                                                             vnđ</div>
                                                                     </div>
                                                                 @endforeach
@@ -310,7 +314,8 @@
                                                                 </div>
                                                                 <div class="price-row">
                                                                     <span>Chi phí vận chuyển </span>
-                                                                    <span>{{ number_format($order->shipping_cost, 0, ',', '.') }} vnđ</span>
+                                                                    <span>{{ number_format($order->shipping_cost, 0, ',', '.') }}
+                                                                        vnđ</span>
                                                                 </div>
                                                                 <div class="price-row">
                                                                     <span>Thuế </span>
@@ -318,7 +323,7 @@
                                                                 </div>
                                                                 <div class="price-row total">
                                                                     <span>Tổng tiền </span>
-                                                                    <span>{{ number_format($total + ($total / 100) * 10 + $order->shipping_cost , 0, ',', '.')}}
+                                                                    <span>{{ number_format($total + ($total / 100) * 10 + $order->shipping_cost, 0, ',', '.') }}
                                                                         VNĐ</span>
                                                                 </div>
                                                             </div>
@@ -656,7 +661,7 @@
                                     <div class="section-header aos-init aos-animate" data-aos="fade-up">
                                         <h2>Địa chỉ của tôi </h2>
                                         <div class="header-actions">
-                                            <button type="button" class="btn-add-new">
+                                            <button type="button" id="show_form_address" class="btn-add-new">
                                                 <i class="bi bi-plus-lg"></i>
                                                 Thêm mới địa chỉ
                                             </button>
@@ -671,10 +676,10 @@
                                                 <span class="default-badge">Mặc định</span>
                                             </div>
                                             <div class="card-body">
-                                                <p class="address-text">{{$data->address}}</p>
+                                                <p class="address-text">{{ $data->address }}</p>
                                                 <div class="contact-info">
-                                                    <div><i class="bi bi-person"></i>{{$data->name}}</div>
-                                                    <div><i class="bi bi-telephone"></i>{{$data->phone}}</div>
+                                                    <div><i class="bi bi-person"></i>{{ $data->name }}</div>
+                                                    <div><i class="bi bi-telephone"></i>{{ $data->phone }}</div>
                                                 </div>
                                             </div>
                                             <div class="card-actions">
@@ -911,8 +916,99 @@
 
             </div>
 
-        </section><!-- /Account Section -->
+        </section>
 
+        <section style="display: none ;" id="form-address" class="login-register section">
+            <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="login-register-wraper">
+                            <div class="tab-content">
+
+                                <!-- Registration Form -->
+                                <div class="tab-pane fade show active" id="login-register-registration-form"
+                                    role="tabpanel">
+                                    <form>
+                                        <div class="col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="login-register-reg-lastname" class="form-label">Tên Người Nhận
+                                                </label>
+                                                <input type="text" class="form-control"
+                                                    id="login-register-reg-lastname" required="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="login-register-reg-phone" class="form-label">Số điện
+                                                    thoại</label>
+                                                <input type="tel" class="form-control" id="login-register-reg-phone"
+                                                    required="">
+                                            </div>
+                                        </div>
+                                        <!-- Address Section -->
+                                        <div class="col-12">
+                                            <div class="address-section">
+                                                <h6><i class="bi bi-geo-alt me-2"></i>Thông tin địa chỉ</h6>
+
+                                                <div class="row g-3">
+                                                    <div class="col-12">
+                                                        <label for="login-register-reg-address" class="form-label">Địa chỉ
+                                                            chi tiết</label>
+                                                        <input type="text" class="form-control"
+                                                            id="login-register-reg-address"
+                                                            placeholder="Số nhà, tên đường..." required="">
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <label for="login-register-reg-province"
+                                                            class="form-label">Tỉnh/Thành phố</label>
+                                                        <select class="form-control" id="login-register-reg-province"
+                                                            required="">
+                                                            <option value="">Chọn tỉnh/thành</option>
+                                                            <option value="hanoi">Hà Nội</option>
+                                                            <option value="hcm">TP. Hồ Chí Minh</option>
+                                                            <option value="danang">Đà Nẵng</option>
+                                                            <option value="haiphong">Hải Phòng</option>
+                                                            <option value="cantho">Cần Thơ</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <label for="login-register-reg-district"
+                                                            class="form-label">Quận/Huyện</label>
+                                                        <select class="form-control" id="login-register-reg-district"
+                                                            required="">
+                                                            <option value="">Chọn quận/huyện</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <label for="login-register-reg-ward"
+                                                            class="form-label">Phường/Xã</label>
+                                                        <select class="form-control" id="login-register-reg-ward"
+                                                            required="">
+                                                            <option value="">Chọn phường/xã</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" style="margin-top: 30px">
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary btn-lg">Thêm địa
+                                                    chỉ</button>
+                                            </div>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
     </main>
 @endsection
 @push('scripts')
@@ -945,5 +1041,54 @@
         document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(element) {
             new bootstrap.Tooltip(element);
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const showFormAddress = document.getElementById('show_form_address');
+            const formAddress = document.getElementById('form-address');
+            const addressForm = formAddress.querySelector('form');
+
+            // Hiển thị form khi nhấn nút "show_form_address"
+            showFormAddress.addEventListener('click', function() {
+                formAddress.style.display = 'flex';
+            });
+
+            // Ẩn form khi nhấn nút submit
+            addressForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Ngăn gửi form thực sự (chỉ để demo, xóa nếu cần gửi dữ liệu)
+                formAddress.style.display = 'none';
+            });
+
+            // Ẩn form khi nhấp chuột ra ngoài
+            document.addEventListener('click', function(e) {
+                // Kiểm tra nếu nhấp chuột không nằm trong form và không phải nút "show_form_address"
+                if (!formAddress.contains(e.target) && e.target !== showFormAddress) {
+                    formAddress.style.display = 'none';
+                }
+            });
+        });
     </script>
+    <style>
+        #form-address {
+            display: none;
+            /* Mặc định ẩn */
+            position: fixed;
+            /* Định vị cố định so với viewport */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            /* Chiếm toàn bộ chiều rộng viewport */
+            height: 100vh;
+            /* Chiếm toàn bộ chiều cao viewport */
+            background: rgba(0, 0, 0, 0.5);
+            /* Nền mờ để làm nổi bật form */
+            z-index: 1000;
+            /* Đảm bảo form nằm trên các phần tử khác */
+            display: flex;
+            /* Sử dụng flex thay vì grid để đơn giản hơn */
+            justify-content: center;
+            /* Căn giữa ngang */
+            align-items: center;
+            /* Căn giữa dọc */
+        }
+    </style>
 @endpush
