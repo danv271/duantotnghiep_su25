@@ -159,18 +159,94 @@
                             @foreach ($data['inventory'] as $item)
                                 <tr>
                                     <td class="ps-3"><a href="javascript:void(0);"
-                                            class="text-muted">{{$item->product->name}}</a>
+                                            class="text-muted">{{ $item->product->name }}</a>
                                     </td>
-                                    <td>{{$item->total_stock}}</td>
-                                    <td><span class="badge badge-soft-{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'danger' : 'success'}}">{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'Gần Hết ' : 'Còn Hàng '}}</span></td>
+                                    <td>{{ $item->total_stock }}</td>
+                                    <td><span
+                                            class="badge badge-soft-{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'danger' : 'success' }}">{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'Gần Hết ' : 'Còn Hàng ' }}</span>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
 
                     </table>
-                    {{-- <div class="mt-3 pagination m-0">
+                    <div class="mt-3 pagination m-0">
                         {{ $data['inventory']->links() }}
-                    </div> --}}
+                    </div>
+                    <style>
+                        /* Apply pagination-rounded style cho Laravel pagination */
+                        .pagination {
+                            margin: 0;
+                        }
+
+                        .pagination .page-link {
+                            border: 1px solid #dee2e6;
+                            color: #6c757d;
+                            padding: 0.5rem 0.75rem;
+                            margin: 0 2px;
+                            border-radius: 50px;
+                            /* Làm tròn như pagination-rounded */
+                            transition: all 0.3s ease;
+                        }
+
+                        .pagination .page-link:hover {
+                            color: #495057;
+                            background-color: #e9ecef;
+                            border-color: #dee2e6;
+                        }
+
+                        /* Style cho nút Previous và Next với Boxicons */
+                        .pagination .page-item:first-child .page-link,
+                        .pagination .page-item:last-child .page-link {
+                            font-size: 0;
+                            /* Ẩn text Previous/Next */
+                            width: 40px;
+                            height: 40px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 50px;
+                        }
+
+                        /* Icon Previous */
+                        .pagination .page-item:first-child .page-link::before {
+                            font-family: 'boxicons';
+                            content: "<";
+                            /* bx-left-arrow-alt */
+                            font-size: 18px;
+                            font-weight: normal;
+                        }
+
+                        /* Icon Next */
+                        .pagination .page-item:last-child .page-link::before {
+                            font-family: 'boxicons';
+                            content: ">";
+                            /* bx-right-arrow-alt */
+                            font-size: 18px;
+                            font-weight: normal;
+                        }
+
+                        /* Active page style */
+                        .pagination .page-item.active .page-link {
+                            background-color: #ff6c2f;
+                            border-color: #ff6c2f;
+                            color: white;
+                            border-radius: 50px;
+                        }
+
+                        /* Disabled state */
+                        .pagination .page-item.disabled .page-link {
+                            color: #6c757d;
+                            background-color: #f8f9fa;
+                            border-color: #dee2e6;
+                            border-radius: 50px;
+                        }
+
+                        /* Alternative: Nếu muốn sử dụng class thay vì pseudo-element */
+                        .pagination-rounded .page-link {
+                            border-radius: 50px !important;
+                        }
+                    </style>
                 </div>
             </div>
         </div>
