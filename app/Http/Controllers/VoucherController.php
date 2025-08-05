@@ -62,34 +62,42 @@ class VoucherController extends Controller
             'shippingCost' => $shippingCost
         ]);
 
-        foreach ($voucherCodes as $voucherCode) {
-            $voucher = Voucher::where('code', $voucherCode)->first();
+        // Bắt đầu transaction để đảm bảo atomicity
+        DB::beginTransaction();
+        
+        try {
+            foreach ($voucherCodes as $voucherCode) {
+                // Sử dụng lockForUpdate để tránh race condition
+                $voucher = Voucher::lockForUpdate()->where('code', $voucherCode)->first();
 
-            if (!$voucher) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Mã voucher {$voucherCode} không tồn tại!"
-                ]);
-            }
-
-            if (!$voucher->isValid($productAmount)) {
-                $message = "Voucher {$voucherCode} không hợp lệ!";
-                
-                if (!$voucher->is_active) {
-                    $message = "Voucher {$voucherCode} đã bị vô hiệu hóa!";
-                } elseif (now() < $voucher->start_date || now() > $voucher->end_date) {
-                    $message = "Voucher {$voucherCode} chưa có hiệu lực hoặc đã hết hạn!";
-                } elseif ($voucher->used_count >= $voucher->max_usage) {
-                    $message = "Voucher {$voucherCode} đã hết lượt sử dụng!";
-                } elseif ($productAmount < $voucher->min_order_amount) {
-                    $message = "Đơn hàng chưa đạt giá trị tối thiểu để sử dụng voucher {$voucherCode}!";
+                if (!$voucher) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Mã voucher {$voucherCode} không tồn tại!"
+                    ]);
                 }
 
-                return response()->json([
-                    'success' => false,
-                    'message' => $message
-                ]);
-            }
+                // Kiểm tra lại validity với lock
+                if (!$voucher->isValid($productAmount)) {
+                    $message = "Voucher {$voucherCode} không hợp lệ!";
+                    
+                    if (!$voucher->is_active) {
+                        $message = " Voucher {$voucherCode} đã bị vô hiệu hóa!";
+                    } elseif (now() < $voucher->start_date || now() > $voucher->end_date) {
+                        $message = " Voucher {$voucherCode} chưa có hiệu lực hoặc đã hết hạn!";
+                    } elseif ($voucher->used_count >= $voucher->max_usage) {
+                        $message = " Voucher {$voucherCode} đã hết lượt sử dụng! (Đã dùng: {$voucher->used_count}/{$voucher->max_usage})";
+                    } elseif ($productAmount < $voucher->min_order_amount) {
+                        $message = " Đơn hàng chưa đạt giá trị tối thiểu để sử dụng voucher {$voucherCode}! (Cần: " . number_format($voucher->min_order_amount) . " VNĐ)";
+                    }
+
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => $message
+                    ]);
+                }
 
             // Kiểm tra xem đã có voucher shipping chưa
             if ($voucher->isShippingVoucher()) {
@@ -136,6 +144,9 @@ class VoucherController extends Controller
             'finalTotal' => $finalTotal
         ]);
 
+        // Commit transaction nếu tất cả voucher đều hợp lệ
+        DB::commit();
+
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công!',
@@ -148,6 +159,16 @@ class VoucherController extends Controller
                 'original_total' => $orderAmount
             ]
         ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Voucher application error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi áp dụng voucher: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
