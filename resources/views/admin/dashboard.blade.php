@@ -23,18 +23,9 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Tổng Đơn Hàng</p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $tolTalOrders }}</h3>
+                                    <p class="text-muted mb-0 text-truncate"> Đơn Hàng</p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalOrders'] }}</h3>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span class="text-success"><i class="bx bxs-up-arrow fs-12"></i> 2.3%</span>
-                                    <span class="text-muted ms-1 fs-12">Last Week</span>
-                                </div>
-                                <a href="javascript:void(0);" class="text-reset fw-semibold fs-12">View More</a>
                             </div>
                         </div>
                     </div>
@@ -50,18 +41,9 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">New Leads</p>
-                                    <h3 class="text-dark mt-1 mb-0">9,526</h3>
+                                    <p class="text-muted mb-0 text-truncate">Tài khoản mới </p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $data['listNewUser'] }}</h3>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span class="text-success"><i class="bx bxs-up-arrow fs-12"></i> 8.1%</span>
-                                    <span class="text-muted ms-1 fs-12">Last Month</span>
-                                </div>
-                                <a href="javascript:void(0);" class="text-reset fw-semibold fs-12">View More</a>
                             </div>
                         </div>
                     </div>
@@ -77,20 +59,12 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Deals</p>
-                                    <h3 class="text-dark mt-1 mb-0">976</h3>
+                                    <p class="text-muted mb-0 text-truncate">Mã giảm giá </p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $data['listCoupon'] }}</h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span class="text-danger"><i class="bx bxs-down-arrow fs-12"></i> 0.3%</span>
-                                    <span class="text-muted ms-1 fs-12">Last Month</span>
-                                </div>
-                                <a href="javascript:void(0);" class="text-reset fw-semibold fs-12">View More</a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
@@ -104,20 +78,12 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Tổng Doanh Thu</p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $tolTalPrice }} vnđ</h3>
+                                    <p class="text-muted mb-0 text-truncate"> Doanh Thu</p>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalPrice'] }} vnđ</h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span class="text-danger"><i class="bx bxs-down-arrow fs-12"></i> 10.6%</span>
-                                    <span class="text-muted ms-1 fs-12">Last Month</span>
-                                </div>
-                                <a href="javascript:void(0);" class="text-reset fw-semibold fs-12">View More</a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -142,16 +108,16 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Conversions</h5>
+                    <h5 class="card-title">Tỉ Lệ Hoàn Thành Đơn Hàng </h5>
                     <div id="conversions" class="apex-charts mb-2 mt-n2"></div>
                     <div class="row text-center">
                         <div class="col-6">
-                            <p class="text-muted mb-2">This Week</p>
-                            <h3 class="text-dark mb-3">23.5k</h3>
+                            <p class="text-muted mb-2">Đơn hàng đang xử lí </p>
+                            <h3 class="text-dark mb-3"id="handleOrder"></h3>
                         </div>
                         <div class="col-6">
-                            <p class="text-muted mb-2">Last Week</p>
-                            <h3 class="text-dark mb-3">41.05k</h3>
+                            <p class="text-muted mb-2">Đơn Hủy</p>
+                            <h3 class="text-dark mb-3"id="failOrder"></h3>
                         </div>
                     </div>
                     <div class="text-center">
@@ -183,25 +149,28 @@
         <div class="col-lg-4">
             <div class="card card-height-100">
                 <div class="card-header d-flex align-items-center justify-content-between gap-2">
-                    <h4 class="card-title">Top Pages</h4>
+                    <h4 class="card-title">Thống kê tồn Kho</h4>
                     <a href="javascript:void(0);" class="btn btn-sm btn-soft-primary">View All</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-nowrap table-centered m-0">
                         <thead class="bg-light bg-opacity-50">
                             <tr>
-                                <th class="text-muted ps-3">Page Path</th>
-                                <th class="text-muted">Page Views</th>
+                                <th class="text-muted ps-3">Tên Sản Phẩm </th>
+                                <th class="text-muted">Số lượng Hàng tồn </th>
                                 <th class="text-muted">Exit Rate</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-3"><a href="javascript:void(0);"
-                                        class="text-muted">larkon/ecommerce.html</a></td>
-                                <td>465</td>
-                                <td><span class="badge badge-soft-success">4.4%</span></td>
-                            </tr>
+                            {{-- @foreach ($data['inventory'] as $item)
+                                <tr>
+                                    <td class="ps-3"><a href="javascript:void(0);"
+                                            class="text-muted">{{ $inventory->where('product_id', $item['product_id'])->first()->product->name }}</a>
+                                    </td>
+                                    <td>465</td>
+                                    <td><span class="badge badge-soft-success">4.4%</span></td>
+                                </tr>
+                            @endforeach --}}
                             <tr>
                                 <td class="ps-3"><a href="javascript:void(0);"
                                         class="text-muted">larkon/dashboard.html</a></td>
@@ -227,7 +196,11 @@
                                 <td><span class="badge badge-soft-info">8.7%</span></td>
                             </tr>
                         </tbody>
+
                     </table>
+                    <div class="mt-3 pagination m-0">
+                        {{ $data['inventory']->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -254,7 +227,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($bestSellingProducts as $item)
+                                @foreach ($data['bestSellingProducts'] as $item)
                                     <tr>
                                         <td class="ps-3">
                                             <img src="{{ asset('storage/' . $item->variant->product->images->first()->path) }}"
@@ -290,28 +263,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Showing 1 to 5 of 50 entries</span>
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination pagination-sm mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>
