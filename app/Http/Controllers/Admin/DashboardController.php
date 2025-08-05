@@ -41,33 +41,12 @@ class DashboardController extends Controller
             ->get();
         $data['listCoupon'] = Voucher::where('max_usage', '>', 'used_count')->count();
         $data['listNewUser'] = User::where('created_at', '>=', date('Y-m-d H:i:s', strtotime('-1 month')))->where('role_id', '1')->count();
-        $inventory = Variant::with('product')
-            ->where('status', 'active')
-            ->whereNull('deleted_at')
-            ->get();
-
-        $data['inventory'] = $inventory->groupBy('product_id')
-            ->map(function ($items) {
-                return [
-                    'product_id' => $items->first()->product_id,
-                    'total_stock' => $items->sum('stock_quantity'),
-                    'count_variants' => $items->count(), // Số lượng biến thể
-                ];
-            })
-            ->sortBy('total_stock') // Sort by total_stock in ascending order
-            ->values();
-
-        $perPage = 10; // Number of items per page
-        $currentPage = request()->input('page', 1); // Get current page from request, default to 1
-        $paginatedInventory = new LengthAwarePaginator(
-            $data['inventory']->forPage($currentPage, $perPage), // Items for current page
-            $data['inventory']->count(), // Total items
-            $perPage, // Items per page
-            $currentPage, // Current page
-            ['path' => request()->url(), 'query' => request()->query()] // Preserve URL and query params
-        );
-
-        $data['inventory'] = $paginatedInventory;
+        $data['inventory'] = Variant::with('product')
+            ->select('product_id', DB::raw('SUM(stock_quantity) as total_stock'))
+            ->groupBy('product_id')
+            ->orderBy('total_stock','asc')
+            ->paginate(7);
+        // dd($data['inventory']);
 
         // dd($paginatedInventory);
         return view('admin.dashboard', compact('data')); // Return the view for the admin dashboard

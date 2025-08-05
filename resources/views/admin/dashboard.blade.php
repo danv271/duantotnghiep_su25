@@ -105,7 +105,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Tỉ Lệ Hoàn Thành Đơn Hàng </h5>
@@ -127,7 +127,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
+        {{-- <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Các cơ sở</h5>
@@ -144,9 +144,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="card card-height-100">
                 <div class="card-header d-flex align-items-center justify-content-between gap-2">
                     <h4 class="card-title">Thống kê tồn Kho</h4>
@@ -162,45 +162,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($data['inventory'] as $item)
+                            @foreach ($data['inventory'] as $item)
                                 <tr>
                                     <td class="ps-3"><a href="javascript:void(0);"
-                                            class="text-muted">{{ $inventory->where('product_id', $item['product_id'])->first()->product->name }}</a>
+                                            class="text-muted">{{$item->product->name}}</a>
                                     </td>
-                                    <td>465</td>
-                                    <td><span class="badge badge-soft-success">4.4%</span></td>
+                                    <td>{{$item->total_stock}}</td>
+                                    <td><span class="badge badge-soft-{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'danger' : 'success'}}">{{ 6 < $item->total_stock && $item->total_stock < 10 ? 'Gần Hết ' : 'Còn Hàng '}}</span></td>
                                 </tr>
-                            @endforeach --}}
-                            <tr>
-                                <td class="ps-3"><a href="javascript:void(0);"
-                                        class="text-muted">larkon/dashboard.html</a></td>
-                                <td>426</td>
-                                <td><span class="badge badge-soft-danger">20.4%</span></td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/chat.html</a>
-                                </td>
-                                <td>254</td>
-                                <td><span class="badge badge-soft-warning">12.25%</span></td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3"><a href="javascript:void(0);"
-                                        class="text-muted">larkon/auth-login.html</a></td>
-                                <td>3,369</td>
-                                <td><span class="badge badge-soft-success">5.2%</span></td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3"><a href="javascript:void(0);" class="text-muted">larkon/email.html</a>
-                                </td>
-                                <td>1,208</td>
-                                <td><span class="badge badge-soft-info">8.7%</span></td>
-                            </tr>
+                            @endforeach
                         </tbody>
 
                     </table>
-                    <div class="mt-3 pagination m-0">
+                    {{-- <div class="mt-3 pagination m-0">
                         {{ $data['inventory']->links() }}
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
