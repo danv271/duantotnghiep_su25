@@ -15,6 +15,7 @@ use App\Models\PaymentTransaction;
 use App\Models\PendingTransaction;
 use App\Models\User;
 use App\Models\Variant;
+use App\Models\Variants;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -360,6 +361,7 @@ class CheckoutController extends Controller
                         'discount' => $item_discount,
                         'price' => $item_total, // Giá gốc trước khi giảm
                     ]);
+                    Variant::where('id', $item->variant_id)->decrement('stock_quantity', $item->quantity);
                 }
 
                 // Xóa giỏ hàng
@@ -386,6 +388,7 @@ class CheckoutController extends Controller
                         'discount' => $item_discount,
                         'price' => $item_total, // Giá gốc trước khi giảm
                     ]);
+                    Variant::where('id', $item->variant_id)->decrement('stock_quantity', $item['quantity']);
                 }
 
                 session()->push('order_code', $order->id);
@@ -769,6 +772,7 @@ if ($userId) {
                             'discount' => $item_discount,
                             'price' => $item_total, // Giá gốc trước khi giảm
                         ]);
+                        Variant::where('id', $item->variant_id)->decrement('stock_quantity', $item->quantity);
                     }
 
                     // Xóa giỏ hàng DB
@@ -787,6 +791,7 @@ if ($userId) {
                             'discount' => $item_discount,
                             'price' => $item_total, // Giá gốc trước khi giảm
                         ]);
+                        Variant::where('id', $variantId)->decrement('stock_quantity', $item['quantity']);
                     }
                     session()->push('order_code', $order->id);
                     // Xóa giỏ hàng trong session

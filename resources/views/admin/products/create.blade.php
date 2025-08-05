@@ -478,6 +478,7 @@
                     </div>
                 `;
                 container.appendChild(row);
+                updateAttributeSelectOptions(variantIndex);
             }
         });
 
@@ -500,6 +501,7 @@
                 const attrIndex = e.target.getAttribute('data-attr-index');
                 const valueSelect = document.querySelector(`.variant-attribute-value-select[data-variant-index="${variantIndex}"][data-attr-index="${attrIndex}"]`);
                 updateAttributeValues(e.target, valueSelect);
+                updateAttributeSelectOptions(variantIndex); // 🆕 Bổ sung
             }
         });
 
@@ -509,6 +511,31 @@
             const attrIndex = select.getAttribute('data-attr-index');
             const valueSelect = document.querySelector(`.variant-attribute-value-select[data-variant-index="${variantIndex}"][data-attr-index="${attrIndex}"]`);
             if (select.value) updateAttributeValues(select, valueSelect);
+            updateAttributeSelectOptions(variantIndex);
         });
+
+        function updateAttributeSelectOptions(variantIndex) {
+            const selects = document.querySelectorAll(`.variant-row [data-variant-index="${variantIndex}"].variant-attribute-select`);
+
+            const selectedValues = Array.from(selects)
+                .map(select => select.value)
+                .filter(val => val !== '');
+
+            selects.forEach(currentSelect => {
+                const currentValue = currentSelect.value;
+                const options = currentSelect.querySelectorAll('option');
+
+                options.forEach(option => {
+                    if (!option.value) return;
+
+                    if (selectedValues.includes(option.value) && option.value !== currentValue) {
+                        option.style.display = 'none';
+                    } else {
+                        option.style.display = 'block';
+                    }
+                });
+            });
+        }
+
     </script>
 @endsection

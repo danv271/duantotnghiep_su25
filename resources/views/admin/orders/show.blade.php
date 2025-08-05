@@ -22,26 +22,30 @@
                                             @else
                                                 <span class="badge bg-danger-subtle text-danger px-2 py-1 fs-13">{{$order->status_payment}}</span>
                                             @endif
-                                            @if ($order->status_order == 'chưa xác nhận')
+                                            @if ($order->status_order == 'chờ xử lý')
                                                 <span
-                                                    class="badge border border-warning text-warning fs-13 px-2 py-1 rounded">Chờ
-                                                    xử lý</span>
+                                                    class="badge border border-warning text-warning fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
                                             @elseif($order->status_order == 'đang xử lý')
                                                 <span
-                                                    class="badge border border-info text-info fs-13 px-2 py-1 rounded">Đang
-                                                    xử lý</span>
+                                                    class="badge border border-info text-info fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
+                                            @elseif($order->status_order == 'đang vận chuyển')
+                                                <span
+                                                    class="badge border border-primary text-primary fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
                                             @elseif($order->status_order == 'đang giao')
                                                 <span
-                                                    class="badge border border-primary text-primary fs-13 px-2 py-1 rounded">Đã
-                                                    giao hàng</span>
-                                            @elseif($order->status_order == 'đã giao')
+                                                    class="badge border border-success text-success fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
+                                            @elseif($order->status_order == 'đã hủy')
                                                 <span
-                                                    class="badge border border-success text-success fs-13 px-2 py-1 rounded">Hoàn
-                                                    thành</span>
-                                            @elseif($order->status_order == 'hủy')
+                                                    class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
+                                            @elseif($order->status_order == 'giao hàng thanh công')
                                                 <span
-                                                    class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">Đã
-                                                    hủy</span>
+                                                    class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
+                                            @elseif($order->status_order == 'giao hàng thất bại')
+                                                <span
+                                                    class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
+                                            @elseif($order->status_order == 'hoàn thành')
+                                                <span
+                                                    class="badge border border-danger text-danger fs-13 px-2 py-1 rounded">{{$order->status_order}}</span>
                                             @else
                                                 <span
                                                     class="badge border border-secondary text-secondary fs-13 px-2 py-1 rounded">{{ ucfirst($order->status_order) }}</span>
@@ -51,17 +55,212 @@
                                             {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y \l\ú\c H:i') }}
                                         </p>
                                     </div>
-                                    <div>
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                        @if($order->status_order == 'chờ xử lý')
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="đang xử lý">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Xác nhận đơn hàng</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                        <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                            <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                <div class="modal-body">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="order_id" id="orderId">
+                                                    <input type="hidden" name="status" value="đã hủy">
+                                                    {{-- <div class="mb-3">
+                                                        <label for="status" class="form-label">Trạng thái</label>
+                                                        <select name="status" id="status" class="form-select">
+                                                            <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                            <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                            <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                            <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                            <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                            <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                            
+                                                        </select>
+                                                    </div> --}}
+                                                    <button type="submit" class="btn btn-primary">Hủy đơn hàng</button>
+                                                </div>
+                                                        {{-- <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                                        </div> --}}
+                                            </form>
+                                        </span>
+                                        @elseif($order->status_order == 'đang xử lý')
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="đang vận chuyển">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Đã giao cho đơn vị vận chuyển</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                        @elseif($order->status_order == 'đang vận chuyển')
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="đang giao">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Đang giao</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                        @elseif($order->status_order == 'đang giao')
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="giao hàng thành công">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Giao hàng thành công</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="giao hàng thất bại">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Giao hàng thất bại</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                        @elseif($order->status_order == 'giao hàng thất bại')
+                                            <span class="text-white px-2 py-1 fs-13"
+                                            style="cursor: pointer;">
+                                                <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="order_id" id="orderId">
+                                                        <input type="hidden" name="status" value="đang giao">
+                                                        {{-- <div class="mb-3">
+                                                            <label for="status" class="form-label">Trạng thái</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                
+                                                            </select>
+                                                        </div> --}}
+                                                        <button type="submit" class="btn btn-primary">Giao lại</button>
+                                                    </div>
+                                                            {{-- <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                            </div> --}}
+                                                </form>
+                                            </span>
+                                        @endif
                                         {{-- Thay thế bằng route edit thực tế nếu có --}}
                                         {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary">Chỉnh
                                             sửa đơn hàng</a> --}}
                                         {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary" style="cursor: pointer;" onclick="showStatusForm('{{ $order->id }}', '{{ $order->status_order }}'>Sửa trạng thái</a> --}}
-                                        <span class="btn btn-primary text-white px-2 py-1 fs-13"
+                                        {{-- <span class="btn btn-primary text-white px-2 py-1 fs-13"
                                             style="cursor: pointer;" onclick="showStatusForm()">
                                             Thay đổi trạng thái đơn hàng
-                                        </span>
+                                        </span> --}}
                                         {{-- Modal để cập nhật trạng thái đơn hàng --}}
-                                        <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel"
+                                        {{-- <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel"
                                             aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -70,7 +269,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                    <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST">
                                                         <div class="modal-body">
                                                             @csrf
                                                             @method('PUT')
@@ -84,7 +283,7 @@
                                                                     <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
                                                                     <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
                                                                     <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
-                                                                    {{-- Thêm các trạng thái khác nếu có --}}
+                                                                    
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -95,7 +294,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
 
@@ -243,7 +442,7 @@
                         </div>
 
                         {{-- Phần Dòng Thời Gian Đơn Hàng (Order Timeline) --}}
-                        {{-- <div class="card">
+                        <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Dòng thời gian đơn hàng</h4>
                             </div>
@@ -291,7 +490,7 @@
                                     
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -489,18 +688,18 @@
 
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Tên người nhận</h5>
-                            <div>
+                            {{-- <div>
                                 <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
                         <div>
                             <p class="mb-1">{{ $order->user_name }}</p>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Email</h5>
-                            <div>
+                            {{-- <div>
                                 <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
                         <div>
                             <a href="mailto:{{ $order->username_email }}"
@@ -508,27 +707,27 @@
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Số điện thoại liên lạc</h5>
-                            <div>
+                            {{-- <div>
                                 <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
                         <div>
                             <p class="mb-1">{{ $order->user_phone }}</p>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Địa chỉ giao hàng</h5>
-                            <div>
+                            {{-- <div>
                                 <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> 
-                            </div>
+                            </div> --}}
                         </div>
                         <div>
                             <p class="mb-1">{{ $order->user_address ?? 'N/A' }}</p>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <h5 class="">Ghi chú</h5>
-                            <div>
+                            {{-- <div>
                                 <a href="#!"><i class="bx bx-edit-alt fs-18"></i></a> 
-                            </div>
+                            </div> --}}
                         </div>
                         <div>
                             <p class="mb-1">{{ $order->user_note ?? 'N/A' }}</p>
