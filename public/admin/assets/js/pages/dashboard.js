@@ -23,30 +23,48 @@ async function callApiChart(timeRange) {
         }
 
         const result = await response.json();
-        
-        // Xử lý dữ liệu và cập nhật biểu đồ
-        // const chartData = processChartData(result);
-        // updateChart(chartData);
-        
         return result;
-        
+
+    } catch (error) {
+        console.error('Error calling API chart:', error);
+        return null;
+    }
+}
+async function callApiConversion() {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/order', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+
     } catch (error) {
         console.error('Error calling API chart:', error);
         return null;
     }
 }
 
+
 // Khởi tạo charts với dữ liệu từ API
 async function initializeCharts() {
     const res = await callApiChart('all');
-    console.log('API Response:', res);
-    
+    const resConversion = await callApiConversion();
+
     // Xử lý dữ liệu từ API
     if (res && res.length > 0) {
         // Tính toán conversion rate từ dữ liệu thực
         const conversionRate = calculateConversionRate(res);
-        updateConversionsChart(conversionRate);
-        
+        updateConversionsChart(resConversion);
+
         // Cập nhật Performance Chart với dữ liệu thực
         updatePerformanceChart(res);
     } else {
@@ -63,13 +81,13 @@ function calculateConversionRate(data) {
         const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
         const current = parseFloat(sortedData[0].total_price);
         const previous = parseFloat(sortedData[1].total_price);
-        
+
         if (previous > 0) {
             const rate = ((current - previous) / previous * 100);
             return Math.abs(rate); // Trả về giá trị tuyệt đối để hiển thị % dương
         }
     }
-    
+
     // Nếu chỉ có 1 record, tính % dựa trên target hoặc baseline
     if (data.length === 1) {
         const current = parseFloat(data[0].total_price);
@@ -77,7 +95,7 @@ function calculateConversionRate(data) {
         const target = 10000000;
         return ((current / target) * 100).toFixed(1);
     }
-    
+
     return 0; // Không có dữ liệu
 }
 
@@ -128,8 +146,8 @@ function updateConversionsChart(conversionRate) {
             dashArray: 4
         },
         colors: ["#ff6c2f", "#22c55e"],
-        series: [parseFloat(conversionRate)], // Sử dụng dữ liệu từ API
-        labels: ['Returning Customer'],
+        series: [parseFloat(conversionRate['chart']['series'][0])], // Sử dụng dữ liệu từ API
+        labels: ['Tỉ lệ thành công '],
         responsive: [{
             breakpoint: 380,
             options: {
@@ -148,7 +166,9 @@ function updateConversionsChart(conversionRate) {
         }
     }
 
-    var chart = new ApexCharts(
+    document.getElementById('handleOrder').textContent = conversionRate.chart.data[0];
+    document.getElementById('failOrder').textContent = conversionRate.chart.data[1];
+     var chart = new ApexCharts(
         document.querySelector("#conversions"),
         options
     );
@@ -160,7 +180,7 @@ function updateConversionsChart(conversionRate) {
 function updatePerformanceChart(apiData) {
     // Xử lý dữ liệu từ API thành format cho chart
     let chartData = processApiDataForChart(apiData);
-    
+
     var options = {
         series: [{
             name: "Doanh thu (M VND)",
@@ -170,7 +190,7 @@ function updatePerformanceChart(apiData) {
         },
         {
             name: "Tỷ lệ tăng trưởng (%)",
-            type: "line", 
+            type: "line",
             data: chartData.growthRates,
             yAxisIndex: 1,
         }],
@@ -339,21 +359,21 @@ function processApiDataForChart(apiData) {
 
     // Sắp xếp dữ liệu theo ngày
     const sortedData = apiData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    
+
     const categories = [];
     const revenues = [];
     const growthRates = [];
-    
+
     sortedData.forEach((item, index) => {
         // Format tháng từ date
         const date = new Date(item.date);
         const monthYear = `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
         categories.push(monthYear);
-        
+
         // Revenue - giữ nguyên giá trị VND, chỉ chia cho 1000 để dễ đọc (nghìn VND)
         const revenue = parseFloat(item.total_price) / 1000000;
         revenues.push(revenue);
-        
+
         // Tính growth rate so với tháng trước
         if (index > 0) {
             const currentRevenue = parseFloat(item.total_price);
@@ -364,7 +384,7 @@ function processApiDataForChart(apiData) {
             growthRates.push(0); // Tháng đầu tiên không có dữ liệu so sánh
         }
     });
-    
+
     return {
         categories,
         revenues,
@@ -394,13 +414,13 @@ class VectorMap {
                 { name: "Cần Thơ", coords: [10.0452, 105.7469] }
             ],
             markerStyle: {
-                initial: { 
+                initial: {
                     fill: "#7f56da",
                     stroke: "#ffffff",
                     strokeWidth: 2,
                     r: 8 // Tăng kích thước marker
                 },
-                selected: { 
+                selected: {
                     fill: "#22c55e",
                     stroke: "#ffffff",
                     strokeWidth: 3,
@@ -410,7 +430,7 @@ class VectorMap {
             labels: {
                 markers: {
                     render: marker => marker.name,
-                    offsets: function(index) {
+                    offsets: function (index) {
                         return [0, -20]; // Đẩy label lên trên marker
                     }
                 }
@@ -427,15 +447,15 @@ class VectorMap {
                 }
             },
             // Tùy chỉnh thêm để map focus vào Việt Nam
-            onLoaded: function(map) {
+            onLoaded: function (map) {
                 // Có thể thêm logic sau khi map load xong
                 console.log('Map loaded successfully');
             }
         });
-        
+
         return map;
     }
-    
+
     init() {
         this.map = this.initWorldMapMarker();
         return this.map;
@@ -448,10 +468,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
     if (typeof initializeCharts === 'function') {
         initializeCharts();
     }
-    
+
     // Khởi tạo map
     const vectorMap = new VectorMap().init();
-    
+
     // Lưu reference để có thể sử dụng sau này
     window.vectorMapInstance = vectorMap;
 });
@@ -462,22 +482,22 @@ async function refreshChartsWithTimeRange(timeRange) {
         console.warn('callApiChart function not found');
         return;
     }
-    
+
     const res = await callApiChart(timeRange);
     if (res && res.length > 0) {
         const conversionRate = calculateConversionRate(res);
-        
+
         // Xóa chart cũ trước khi render chart mới
         const conversionElement = document.querySelector("#conversions");
         const performanceElement = document.querySelector("#dash-performance-chart");
-        
+
         if (conversionElement) {
             conversionElement.innerHTML = '';
         }
         if (performanceElement) {
             performanceElement.innerHTML = '';
         }
-        
+
         // Render lại charts với dữ liệu mới
         if (typeof updateConversionsChart === 'function') {
             updateConversionsChart(conversionRate);

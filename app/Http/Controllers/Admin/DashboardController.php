@@ -6,8 +6,11 @@ use App\Http\Controllers\Api\ChartController;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\User;
 use App\Models\Variant;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -15,10 +18,7 @@ class DashboardController extends Controller
     //
     public function index()
     {
-        $tolTalOrders =  Order::count();
-        $chartController = new ChartController();
-        // $listDataForChart = $chartController->getDataToChart(new Request(['time' => 'all']));
-        // dd($listDataForChart);
+        $data = [];
         function formatToText($number)
         {
             if ($number >= 1000000000) {
@@ -31,16 +31,24 @@ class DashboardController extends Controller
                 return number_format($number, 0, ',', '.') . ' đồng';
             }
         }
-        $tolTalPrice = Order::where('status_payment', '!=', 'Chưa thanh toán')->sum('total_price');
-        $tolTalPrice = formatToText($tolTalPrice);
-        $bestSellingProducts = OrderDetail::with('variant.product.images')->select('variant_id', OrderDetail::raw('SUM(quantity) as total_quantity', Variant::raw('SUM(stock_quantity) as total_stock')))
+
+        $data['tolTalOrders'] = Order::count();
+        $data['tolTalPrice'] = formatToText(Order::where('status_payment', '!=', 'Chưa thanh toán')->sum('total_price'));
+        $data['bestSellingProducts'] = OrderDetail::with('variant.product.images')->select('variant_id', OrderDetail::raw('SUM(quantity) as total_quantity', Variant::raw('SUM(stock_quantity) as total_stock')))
             ->groupBy('variant_id')
             ->orderByDesc('total_quantity')
             ->limit(10)
             ->get();
-        // dd($bestSellingProducts);
+        $data['listCoupon'] = Voucher::where('max_usage', '>', 'used_count')->count();
+        $data['listNewUser'] = User::where('created_at', '>=', date('Y-m-d H:i:s', strtotime('-1 month')))->where('role_id', '1')->count();
+        $data['inventory'] = Variant::with('product')
+            ->select('product_id', DB::raw('SUM(stock_quantity) as total_stock'))
+            ->groupBy('product_id')
+            ->orderBy('total_stock','asc')
+            ->paginate(7);
+        // dd($data['inventory']);
 
-        return view('admin.dashboard', compact('tolTalOrders', 'tolTalPrice', 'bestSellingProducts')); // Return the view for the admin dashboard
+        // dd($paginatedInventory);
+        return view('admin.dashboard', compact('data')); // Return the view for the admin dashboard
     }
-
 }

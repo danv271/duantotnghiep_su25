@@ -12,7 +12,7 @@ class ChartController extends Controller
     //
     public function getDataToChart(Request $request)
     {
-        $timeRange = $request->input('time', '12'); // Mặc định 12 tháng
+        $timeRange = $request->input('time', 'all'); // Mặc định 12 tháng
         $now = now();
 
         // Tạo query builder

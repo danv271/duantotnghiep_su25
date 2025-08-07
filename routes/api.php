@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\OrderSuccessController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/chart', [\App\Http\Controllers\Api\ChartController::class, 'getDataToChart'])->name('api.chart'); // Route for chart data
-
+Route::get('/order',[OrderSuccessController::class,'getDataToConversionOptimized'])->name('api.conversion');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

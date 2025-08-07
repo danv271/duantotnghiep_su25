@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController; // Controller cho sản phẩm ở cả client và admin nếu dùng chung
@@ -82,6 +84,7 @@ Route::put('/reset-password/process', [AuthController::class, 'handleResetPasswo
 // --- User Account & Profile (Yêu cầu đăng nhập) ---
 Route::middleware('auth')->group(function () {
     Route::get('/account', [AdminAccountController::class, "index"])->name('account'); // Có vẻ là AccountController của Admin, cần đổi tên nếu có AccountController riêng cho user
+    Route::put('/update/account',[AdminAccountController::class,"updateUser"])->name('update.user');
     Route::put('/update_pass', [AuthController::class, 'updatePass'])->name('update_pass');
 
 
@@ -186,6 +189,20 @@ Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(functio
         Route::get('/{id}', 'show')->name('show');
         Route::get('/{id}/edit', 'edit')->name('edit');
         // Không có route update/delete? Có thể thêm vào nếu cần
+    });
+
+     // --- Quản lý Voucher ---
+    Route::controller(AdminVoucherController::class)->prefix('vouchers')->name('vouchers.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{voucher}', 'show')->name('show');
+        Route::get('/{voucher}/edit', 'edit')->name('edit');
+        Route::put('/{voucher}', 'update')->name('update');
+        Route::delete('/{voucher}', 'destroy')->name('destroy');
+        Route::patch('/{voucher}/toggle-status', 'toggleStatus')->name('toggle-status');
+        Route::patch('/{voucher}/reset-usage', 'resetUsage')->name('reset-usage');
+        Route::get('/generate-code', 'generateCode')->name('generate-code');
     });
 
     // --- Quản lý Tài khoản Admin (Accounts) ---
