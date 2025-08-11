@@ -480,6 +480,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                         <div class="mt-3 pagination m-0">
+                           {{ $data['listOrders']->links() }}
+                       </div>
                     </div>
                 </div>
             </div>
