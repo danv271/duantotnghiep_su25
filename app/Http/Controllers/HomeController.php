@@ -9,7 +9,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        
         // Lấy danh mục cha (parent_id là null) kèm danh mục con
         $parentCategories = Category::whereNull('parent_category_id')
             ->with(['children.products' => function ($query) {

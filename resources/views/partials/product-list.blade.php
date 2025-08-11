@@ -32,7 +32,7 @@
                                         <a href="{{ route('products.show' , $product->id) }}">{{ $product->name }}</a>
                                     </h5>
                                     <div class="product-price">
-                                        <span class="current-price">{{ number_format($product->base_price, 0) }}₫</span>
+                                        <span class="current-price">{{ number_format($product->base_price, 0,',','.') }}₫</span>
                                     </div>
                                     <div class="product-rating">
                                         <i class="bi bi-star-fill"></i>

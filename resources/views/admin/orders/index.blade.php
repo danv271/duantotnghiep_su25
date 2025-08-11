@@ -218,7 +218,16 @@
                                             <td>
                                                 {{$order->status_payment}}
                                             </td>
-                                            <td>1</td>
+                                            <td>
+                                                @php
+                                                    $totalItem = 0;
+                                                    foreach ($order->OrderDetail as $item) {
+                                                        $totalItem+=1;
+                                                    }
+                                                @endphp
+                                                {{$totalItem}}
+                                                {{-- {{dd($orders)}} --}}
+                                            </td>
                                             <td>{{$order->user_phone}}</td>
                                             <td>
                                                 {{-- Sử dụng hàm JS để mở modal cập nhật trạng thái --}}
@@ -270,7 +279,7 @@
                                                                     <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
                                                                     <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
                                                                     <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
-                                                                    <option {{$order->status_order == 'đang giao' ? 'selected':''}} value="đang giao">đã giao</option>
+                                                                    <option {{$order->status_order == 'đang giao' ? 'selected':''}} value="đang giao">đang giao</option>
                                                                     <option {{$order->status_order == 'giao hàng thành công' ? 'selected':''}} value="giao hàng thành công">đã giao</option>
                                                                     {{-- Thêm các trạng thái khác nếu có --}}
                                                                 </select>

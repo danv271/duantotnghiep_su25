@@ -177,8 +177,8 @@
                                     </div>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                                <button id="btnSubmit" type="submit" class="btn btn-primary" {{$totalProduct==0 ? 'disabled':''}}>
+                                    <i class="bi bi-cart-plus"></i> {{$totalProduct==0 ? 'Tạm hết hàng':'Thêm vào giỏ hàng'}}
                                 </button>
                             </form>
                         </div>
@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const stockDisplay = document.getElementById('variant-stock');
     const quantityInput = document.getElementById('quantity');
     const form = document.getElementById('add-to-cart-form');
+    const btnSubmit = document.getElementById('btnSubmit');
 
     variantSelect.addEventListener('change', function () {
         const selectedOption = this.options[this.selectedIndex];
@@ -249,9 +250,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const price = parseInt(selectedOption.dataset.price) || 0;
             const stock = parseInt(selectedOption.dataset.stock) || 0;
 
+            if(stock==0){
+                btnSubmit.innerHTML =  `<i class="bi bi-cart-plus"></i> Tạm hết hàng`
+                btnSubmit.disabled = true;
+            }else{
+                btnSubmit.innerHTML = `<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng`
+                btnSubmit.disabled = false;
+            }
             // Cập nhật giá và tồn kho
             priceDisplay.textContent = price ? price.toLocaleString('vi-VN') + '₫' : '—';
-            stockDisplay.textContent = stock ? stock : '—';
+            stockDisplay.textContent = stock ? stock : 'hết hàng';
 
             // Giới hạn số lượng nhập
             quantityInput.max = stock;

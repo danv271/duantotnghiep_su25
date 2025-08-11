@@ -80,7 +80,7 @@
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="login-register-remember-me"
                                                 name="remember">
-                                            <label class="form-check-label" for="login-register-remember-me">Nhớ tôi
+                                            <label class="form-check-label" for="login-register-remember-me">Lưu mật khẩu
                                                 </label>
                                         </div>
                                         <a href="{{route('forgot-password')}}" class="forgot-password">Quên mật khẩu ?</a>

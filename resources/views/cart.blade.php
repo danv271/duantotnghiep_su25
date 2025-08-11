@@ -26,9 +26,9 @@
                     <div class="cart-items">
                         <div class="cart-header d-none d-lg-block">
                             <div class="row align-items-center gy-4">
-                                <div class="col-lg-1 text-center"><h5></h5></div>
-                                <div class="col-lg-2"><h5>Hình ảnh</h5></div>
-                                <div class="col-lg-2"><h5>Sản phẩm</h5></div>
+                                <div class="col-lg-2 text-center"><h5></h5></div>
+                                {{-- <div class="col-lg-2"><h5>Hình ảnh</h5></div> --}}
+                                <div class="col-lg-3"><h5>Sản phẩm</h5></div>
                                 <div class="col-lg-2 text-center"><h5>Giá</h5></div>
                                 <div class="col-lg-2 text-center"><h5>Số lượng</h5></div>
                                 <div class="col-lg-2 text-center"><h5>Tổng</h5></div>
@@ -53,15 +53,15 @@
                                                 class="form-check-input">
                                         </div>
 
-                                        <div class="col-lg-5 col-10 d-flex align-items-center">
-                                            <img src="{{ $item->image_path }}" alt="Product" class="img-fluid" style="max-width: 80px;">
+                                        <div class="col-lg-4 col-10 d-flex align-items-center">
+                                            <img src="{{asset('storage/'.$item->image_path )}}" alt="Product" class="img-fluid" style="max-width: 80px;">
                                             <div class="ms-3">
-                                                <h6 class="mb-0">{{ $item->product_name }}</h6>
+                                                <h6 class="mb-0" style="font-size: 0.8rem;">{{ $item->product_name }}</h6>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-2 text-center">
-                                            <span>{{ number_format($item->variant_price, 0) }}vnđ</span>
+                                            <span style="font-size: 0.8rem;">{{ number_format($item->variant_price, 0) }}vnđ</span>
                                         </div>
 
                                         <div class="col-lg-2 text-center">
@@ -75,17 +75,20 @@
                                         </div>
 
                                         <div class="col-lg-2 text-center">
-                                            <span>{{ number_format($total, 0) }}vnđ</span>
+                                            <span style="font-size: 0.8rem;">{{ number_format($total, 0) }}vnđ</span>
+                                        </div>
+                                        <div class="col-lg-1 text-center">
+                                            <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" style="background-color: transparent; border: none;"><i class="bi bi-trash3"></i></button>
+                                            </form>
                                         </div>
                                     </div>
 
                                     <div class="row mt-2">
                                         <div class="col-12 text-end">
-                                            <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" onsubmit="return confirm('Xóa sản phẩm này?');" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                                            </form>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -148,13 +151,10 @@
                         @endif
 
                         <div class="cart-actions mt-4 d-flex justify-content-between">
-                            <form action="{{ route('cart.clear') }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Xóa toàn bộ giỏ hàng?');">
-                                    <i class="bi bi-trash"></i> Xóa toàn bộ giỏ hàng
-                                </button>
-                            </form>
+                            <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="select-all">
+                                    <label for="select-all" class="form-check-label">Chọn tất cả</label>
+                            </div>
                             <div class="d-flex gap-2">
                                 <form action="{{ route('cart.update') }}" method="POST" id="update-cart-form">
                                     @csrf
@@ -172,10 +172,14 @@
                                         <i class="bi bi-arrow-clockwise"></i> Cập nhật giỏ hàng
                                     </button>
                                 </form>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="select-all">
-                                    <label for="select-all" class="form-check-label">Chọn tất cả</label>
-                                </div>
+                                
+                                <form action="{{ route('cart.clear') }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Xóa toàn bộ giỏ hàng?');">
+                                    <i class="bi bi-trash"></i> Xóa toàn bộ giỏ hàng
+                                </button>
+                            </form>
                             </div>
                         </div>
                     </div>

@@ -32,7 +32,7 @@
                         <div class="product-info">
                             <h3 class="product-title"><a href="{{ route('products.show',$product->id) }}">{{ $product->name }}</a></h3>
                             <div class="product-price">
-                                <span class="current-price">{{ $product->base_price }}</span>
+                                <span class="current-price">{{ number_format($product->base_price, 0,',','.')}}₫</span>
                                 @if(isset($product->base_price))
                                     <span class="original-price">{{ $product->base_price + $product->base_price/100 * 20}}</span>
                                 @endif

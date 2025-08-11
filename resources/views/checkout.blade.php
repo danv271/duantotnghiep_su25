@@ -134,11 +134,39 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="form-group">
-                                        <label for="apartment">Ghi chú</label>
-                                        <input type="text" class="form-control" name="note" id="apartment" value="{{ old('apartment') }}">
+                                    <div class="row form-group">
+                                        <div class="col">
+                                            <label for="thanhPho">Tỉnh/Thành phố</label>
+                                            <select class="form-control" name="thanhPho" id="thanhPho" required>
+                                                <option value="">Chọn Tỉnh/Thành phố</option>
+                                            </select>
+                                            @error('thanhPho')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="col">
+                                            <label for="quanHuyen">Quận/Huyện</label>
+                                            <select class="form-control" name="quanHuyen" id="quanHuyen" required disabled>
+                                                <option value="">Chọn Quận/Huyện</option>
+                                            </select>
+                                            @error('quanHuyen')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="col">
+                                            <label for="xaPhuong">Phường/Xã</label>
+                                            <select class="form-control" name="xaPhuong" id="xaPhuong" required disabled>
+                                                <option value="">Chọn Phường/Xã</option>
+                                            </select>
+                                            @error('xaPhuong')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    
+                                    <div class="form-group">
+                                        <label for="note">Ghi chú</label>
+                                        <input type="text" class="form-control" name="note" id="note" value="{{ old('note') }}">
+                                    </div>
                                 </div>
                             </div>
 
@@ -903,5 +931,128 @@
                 };
             }
         });
+
+        // Address API Integration
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = document.getElementById('thanhPho');
+            const districtSelect = document.getElementById('quanHuyen');
+            const wardSelect = document.getElementById('xaPhuong');
+
+            // Load provinces on page load
+            fetch('/provinces.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showVoucherMessage('Không thể tải danh sách tỉnh/thành', 'danger');
+                        return;
+                    }
+                    provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+                    data.forEach(province => {
+                        const option = document.createElement('option');
+                        option.value = province.name;
+                        option.textContent = province.name;
+                        provinceSelect.appendChild(option);
+                    });
+                    provinceSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error loading provinces:', error);
+                    showVoucherMessage('Lỗi khi tải tỉnh/thành', 'danger');
+                });
+
+            // Load districts when province changes
+            provinceSelect.addEventListener('change', function() {
+                const provinceCode = this.value;
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+                districtSelect.disabled = true;
+                wardSelect.disabled = true;
+
+                if (provinceCode) {
+                    fetch(`/districts.php?province_code=${provinceCode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                showVoucherMessage('Không thể tải danh sách quận/huyện', 'danger');
+                                return;
+                            }
+                            data.forEach(district => {
+                                const option = document.createElement('option');
+                                option.value = district.name;
+                                option.textContent = district.name;
+                                districtSelect.appendChild(option);
+                            });
+                            districtSelect.disabled = false;
+                        })
+                        .catch(error => {
+                            console.error('Error loading districts:', error);
+                            showVoucherMessage('Lỗi khi tải quận/huyện', 'danger');
+                        });
+                }
+            });
+
+            // Load wards when district changes
+            districtSelect.addEventListener('change', function() {
+                const districtCode = this.value;
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+                wardSelect.disabled = true;
+
+                if (districtCode) {
+                    fetch(`/wards.php?district_code=${districtCode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                showVoucherMessage('Không thể tải danh sách phường/xã', 'danger');
+                                return;
+                            }
+                            data.forEach(ward => {
+                                const option = document.createElement('option');
+                                option.value = ward.name ;
+                                option.textContent = ward.name;
+                                wardSelect.appendChild(option);
+                            });
+                            wardSelect.disabled = false;
+                        })
+                        .catch(error => {
+                            console.error('Error loading wards:', error);
+                            showVoucherMessage('Lỗi khi tải phường/xã', 'danger');
+                        });
+                }
+            });
+        });
     </script>
 @endpush
+<style>
+    /* Giới hạn chiều cao dropdown */
+    .form-control[multiple], .form-control[size], select.form-control {
+        max-height: 150px; /* Chiều cao tối đa của dropdown */
+        overflow-y: auto; /* Thêm thanh cuộn dọc */
+        -webkit-appearance: none; /* Loại bỏ style mặc định trên một số trình duyệt */
+        -moz-appearance: none;
+        appearance: none;
+        padding-right: 1.5rem; /* Đảm bảo không che icon dropdown */
+    }
+
+    /* Tùy chỉnh thanh cuộn cho đẹp hơn */
+    .form-control::-webkit-scrollbar {
+        width: 8px;
+    }
+    .form-control::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .form-control::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+    .form-control::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    /* Đảm bảo dropdown vẫn hiển thị tốt trên mobile */
+    @media (max-width: 576px) {
+        .form-control[multiple], .form-control[size], select.form-control {
+            max-height: 100px; /* Giảm chiều cao trên mobile */
+        }
+    }
+</style>

@@ -307,53 +307,53 @@
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
 
-                                            <div class="progress-bar {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? 'bg-success' : 'bg-secondary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại'? 'bg-success' : 'bg-secondary' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' || $order->status_order == 'đang giao' ? '100%' : '0%' }}"
+                                                style="width: {{ $order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? '100%' : '0%' }}"
 
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                             </div>
-                                        <p class="mb-0 mt-2">Đặt hàng thành công</p>
+                                        <p class="mb-0 mt-2">Chờ xử lý</p>
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{  $order->status_order == 'đang xử lý' || $order->status_order == 'chờ vận chuyển' ? 'bg-success' : 'bg-warning' }}"
+                                            <div class="progress-bar {{  $order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? 'bg-success' : 'bg-warning' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'đang xử lý' ? '100%' : '60%' }}"
+                                                style="width: {{ $order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? '100%' : '60%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
                                         <p class="mb-0 mt-2">Đang xử lý</p>
-                                        @if ($order->status_payment == 'unpaid')
+                                        {{-- @if ($order->status_payment == 'unpaid')
                                             <div class="d-flex align-items-center gap-2 mt-2">
                                                 <div class="spinner-border spinner-border-sm text-warning" role="status">
                                                     <span class="visually-hidden">Loading...</span>
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_order == 'chờ vận chuyển' || $order->status_order == '' ? 'bg-success' : 'bg-primary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? 'bg-success' : 'bg-primary' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}"
+                                                style="width: {{ $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? '100%' : '0%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
-                                        <p class="mb-0 mt-2">Chờ vận chuyển</p>
+                                        <p class="mb-0 mt-2">Đang vận chuyển</p>
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? 'bg-success' : 'bg-primary' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'shipped' || $order->status_order == 'completed' ? '100%' : '0%' }}"
+                                                style="width: {{ $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? '100%' : '0%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
                                         <p class="mb-0 mt-2">Đang giao hàng</p>
                                     </div>
                                     <div class="col">
                                         <div class="progress mt-3" style="height: 10px;">
-                                            <div class="progress-bar {{ $order->status_order == 'completed' ? 'bg-success' : 'bg-primary' }}"
+                                            <div class="progress-bar {{ $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? 'bg-success' : 'bg-primary' }}"
                                                 role="progressbar"
-                                                style="width: {{ $order->status_order == 'completed' ? '100%' : '0%' }}"
+                                                style="width: {{ $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? '100%' : '0%' }}"
                                                 aria-valuenow="70" aria-valuemin="0" aria-valuemax="70"></div>
                                         </div>
                                         <p class="mb-0 mt-2">Đã giao</p>

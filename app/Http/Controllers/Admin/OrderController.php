@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\User;
+use App\Models\Variant;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -15,7 +16,7 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $query = DB::table('orders');
+        $query = Order::with('OrderDetail');
 
         if ($request->has('search')) {
             $search = $request->search;
@@ -84,6 +85,17 @@ class OrderController extends Controller
             'status_payment' => 'đã thanh toán'
             ]);
         }
+        if($request->status == 'đã hủy'){
+            $order = Order::with('OrderDetail')->where('id',$id)->first();
+           
+            foreach($order->OrderDetail as $item){
+                //  dd($item);
+                Variant::where('id', $item->variant_id)->increment('stock_quantity', $item->quantity);
+            }
+            Order::where('id',$id)->update([
+            'status_order' => $request->status,
+            ]);
+        }
         Order::where('id',$id)->update([
             'status_order' => $request->status
         ]);
@@ -119,7 +131,7 @@ class OrderController extends Controller
             }
 
             // Sắp xếp mới nhất và phân trang
-            $orders = $query->orderBy('id', 'desc')->paginate(10);
+            $orders = $query->orderBy('id', 'desc')->paginate(5);
             return view('order', compact('orders', 'data'));
         } else {
             $order_code = session('order_code', []);

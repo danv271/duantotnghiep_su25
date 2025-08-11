@@ -41,7 +41,7 @@
                             <div class="user-info aos-init aos-animate" data-aos="fade-right">
                                 <div class="user-avatar">
 
-                                    <img src="" alt="Profile" loading="lazy">
+                                    <img src="https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI=" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
                                 <h4>Sarah Anderson</h4>
@@ -115,11 +115,11 @@
                                                     <span>Lọc</span>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#">All Orders</a></li>
-                                                    <li><a class="dropdown-item" href="#">Processing</a></li>
-                                                    <li><a class="dropdown-item" href="#">Shipped</a></li>
-                                                    <li><a class="dropdown-item" href="#">Delivered</a></li>
-                                                    <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                                                    <li><a class="dropdown-item" href="#">Tất cả đơn hàng</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đang xử lý</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đang vận chuyển</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đã giao</a></li>
+                                                    <li><a class="dropdown-item" href="#">Đã hủy</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -157,7 +157,7 @@
                                                 </div>
                                                 <div class="order-footer">
                                                     @if ($order->status_order == 'chờ xử lý')
-                                                        <form id="statusForm" action="{{route('admin.orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                        <form id="statusForm" action="{{route('orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
                                                             <div class="modal-body">
                                                                 @csrf
                                                                 @method('PUT')
@@ -178,6 +178,29 @@
                                                                 <button type="submit" style="width:430px" class="btn btn-danger">Hủy đơn hàng</button>
                                                             </div>
                                                         </form>
+                                                    @elseif($order->status_order == 'đã hủy')
+                                                    <form id="statusForm" action="{{route('cart.add',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                            <div class="modal-body">
+                                                                @csrf
+                                                                @foreach ($order->OrderDetail as $index => $item)
+                                                                    <input type="hidden" name="item[{{$index}}][variant_id]" value="{{$item->variant_id}}">
+                                                                    <input type="hidden" name="item[{{$index}}][quantity]" value="{{$item->quantity}}">
+                                                                @endforeach
+                                                                {{-- <div class="mb-3">
+                                                                    <label for="status" class="form-label">Trạng thái</label>
+                                                                    <select name="status" id="status" class="form-select">
+                                                                        <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                        <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                        <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                        <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                        
+                                                                    </select>
+                                                                </div> --}} 
+                                                                <button type="submit" style="width:430px" class="btn btn-secondary">Mua lại</button>
+                                                            </div>
+                                                        </form>
                                                     @else
                                                         <button type="button" class="btn-track" data-bs-toggle="collapse"
                                                         data-bs-target="#tracking{{$index}}" aria-expanded="false">Theo dõi đơn
@@ -187,7 +210,6 @@
                                                         data-bs-target="#details{{$index}}" aria-expanded="false">Chi tiết đơn
                                                         hàng</button>
                                                 </div>
-
                                                 <!-- Order Tracking -->
                                                 <div class="collapse tracking-info" id="tracking{{$index}}">
                                                     <div class="tracking-timeline">
@@ -450,23 +472,15 @@
                                             </div>
                                         </div> --}}
                                     </div>
-
+                                    
                                     <!-- Pagination -->
-                                    <div class="pagination-wrapper aos-init aos-animate" data-aos="fade-up">
-                                        <button type="button" class="btn-prev" disabled="">
-                                            <i class="bi bi-chevron-left"></i>
-                                        </button>
-                                        <div class="page-numbers">
-                                            <button type="button" class="active">1</button>
-                                            <button type="button">2</button>
-                                            <button type="button">3</button>
-                                            <span>...</span>
-                                            <button type="button">12</button>
-                                        </div>
-                                        <button type="button" class="btn-next">
-                                            <i class="bi bi-chevron-right"></i>
-                                        </button>
+                                    <section id="category-pagination" class="category-pagination section">
+                                        <div class="container">
+                                        <nav class="d-flex justify-content-center" aria-label="Page navigation">
+                                            {{ $orders->links() }}
+                                        </nav>
                                     </div>
+          </section><!-- /Category Pagination Section -->
                                 </div>
 
                                 <!-- Wishlist Tab -->

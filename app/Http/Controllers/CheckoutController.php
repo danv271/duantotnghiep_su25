@@ -122,6 +122,9 @@ class CheckoutController extends Controller
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:255',
+            'thanhPho' => 'required|string|max:255',
+            'quanHuyen' => 'required|string|max:255',
+            'xaPhuong' => 'required|string|max:255',
             'note' => 'nullable|string|max:255',
             'payment_method' => 'required|in:cash,transfer',
 
@@ -272,7 +275,7 @@ class CheckoutController extends Controller
                 'user_name' => $request->name,
                 'user_email' => $request->email,
                 'user_phone' => $request->phone,
-                'user_address' => $request->address,
+                'user_address' => $request->address.'<br>'.$request->xaPhuong.','.$request->quanHuyen.','.$request->thanhPho,
                 'user_note' => $request->note,
                 'type_payment' => $request->payment_method,
                 'total_price' => $finalTotal,
@@ -619,13 +622,13 @@ if ($userId) {
                             "Số lượng sản phẩm {$variant->product->name} vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã chọn: {$item->quantity}");
                     }
                 }
-
+                //$request->address.'<br>'.$request->xaPhuong.','.$request->quanHuyen.','.$request->thanhPho
                 $order = Order::create([
                     'user_id' => $userId,
                     'user_name' => $checkoutData['name'],
                     'user_email' => $checkoutData['email'],
                     'user_phone' => $checkoutData['phone'],
-                    'user_address' => $checkoutData['address'],
+                    'user_address' => $checkoutData['address'].'<br>'.$checkoutData['xaPhuong'].','.$checkoutData['quanHuyen'].','.$checkoutData['thanhPho'],
                     'user_note' => $checkoutData['note'] ?? '',
                     'type_payment' => 'VNPAY',
                     'status_order' => 'đang xử lý',
@@ -798,7 +801,6 @@ if ($userId) {
         // Tạo lại URL VNPAY
         return $this->redirectToVNPAY();
     }
-
     public function show(string $id) {}
     public function create() {}
     public function edit(string $id) {}
