@@ -4,9 +4,76 @@
 * Module/App: Dashboard
 */
 
-//
-// Conversions
-// 
+// Global chart instances to manage re-rendering
+let conversionsChart = null;
+let performanceChart = null;
+
+// Event listeners for time range buttons
+document.querySelectorAll('.btnHandleData').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Remove active class from all buttons
+        document.querySelectorAll('.btnHandleData').forEach(btn => btn.classList.remove('active'));
+
+        // Add active class to clicked button
+        this.classList.add('active');
+
+        // Get time range from data attribute or button text
+        const timeRange = this.getAttribute('data-time') || getTimeRangeFromText(this.textContent.trim());
+        handleDataToChart(timeRange, event);
+    });
+});
+
+function getTimeRangeFromText(text) {
+    switch (text) {
+        case '1M': return 1;
+        case '6M': return 6;
+        case '1Y': return 12;
+        case 'All': return 'all';
+        default: return 'all';
+    }
+}
+
+const handleDataToChart = async (timeRange, event) => {
+    if (event) {
+        event.preventDefault();
+    }
+
+    try {
+        // Show loading state
+        showLoadingState();
+
+        // Fetch chart and conversion data
+        const [chartRes, conversionRes] = await Promise.allSettled([
+            callApiChart(timeRange),
+            callApiConversion()
+        ]);
+
+        // Handle chart data
+        if (chartRes.status === 'fulfilled' && chartRes.value && chartRes.value.length > 0) {
+            updatePerformanceChart(chartRes.value, timeRange); // Pass timeRange
+        } else {
+            console.warn('No chart data available for time range:', timeRange);
+            updatePerformanceChart([], timeRange);
+        }
+
+        // Handle conversion data
+        if (conversionRes.status === 'fulfilled' && conversionRes.value) {
+            updateConversionsChart(conversionRes.value);
+        } else {
+            console.warn('Conversion data not available, using fallback');
+            // You may want to use a fallback value or show an error
+        }
+
+    } catch (error) {
+        console.error('Error handling data to chart:', error);
+        showErrorMessage('Failed to load chart data. Please try again.');
+    } finally {
+        hideLoadingState();
+    }
+};
+
 async function callApiChart(timeRange) {
     try {
         const response = await fetch('http://127.0.0.1:8000/api/chart', {
@@ -27,9 +94,10 @@ async function callApiChart(timeRange) {
 
     } catch (error) {
         console.error('Error calling API chart:', error);
-        return null;
+        throw error; // Re-throw to handle in calling function
     }
 }
+
 async function callApiConversion() {
     try {
         const response = await fetch('http://127.0.0.1:8000/api/order', {
@@ -48,59 +116,96 @@ async function callApiConversion() {
         return result;
 
     } catch (error) {
-        console.error('Error calling API chart:', error);
-        return null;
+        console.error('Error calling API conversion:', error);
+        throw error;
     }
 }
 
-
-// Khởi tạo charts với dữ liệu từ API
+// Initialize charts with data from API
 async function initializeCharts() {
-    const res = await callApiChart('all');
-    const resConversion = await callApiConversion();
+    try {
+        showLoadingState();
 
-    // Xử lý dữ liệu từ API
-    if (res && res.length > 0) {
-        // Tính toán conversion rate từ dữ liệu thực
-        const conversionRate = calculateConversionRate(res);
-        updateConversionsChart(resConversion);
+        const [chartRes, conversionRes] = await Promise.allSettled([
+            callApiChart('all'),
+            callApiConversion()
+        ]);
 
-        // Cập nhật Performance Chart với dữ liệu thực
-        updatePerformanceChart(res);
-    } else {
-        // Fallback với dữ liệu mặc định nếu API không trả về data
-        updateConversionsChart(65.2);
-        renderPerformanceChart([]);
+        // Handle chart data
+        if (chartRes.status === 'fulfilled' && chartRes.value && chartRes.value.length > 0) {
+            updatePerformanceChart(chartRes.value);
+        } else {
+            console.warn('Chart data not available, using empty data');
+            updatePerformanceChart([]);
+        }
+
+        // Handle conversion data
+        if (conversionRes.status === 'fulfilled' && conversionRes.value) {
+            updateConversionsChart(conversionRes.value);
+            console.log('Conversion data initialized:', conversionRes.value);
+        } else {
+            console.warn('Conversion data not available, using fallback');
+            // Create fallback data structure if needed
+            const fallbackData = {
+                chart: {
+                    series: [65.2],
+                    data: [150, 75] // handle orders, failed orders
+                }
+            };
+            updateConversionsChart(fallbackData);
+        }
+
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+        showErrorMessage('Failed to initialize dashboard. Please refresh the page.');
+    } finally {
+        hideLoadingState();
     }
 }
 
-// Hàm helper để tính conversion rate từ dữ liệu thực
+// Helper function to calculate conversion rate from data
 function calculateConversionRate(data) {
     if (data.length >= 2) {
-        // Sắp xếp theo ngày để so sánh đúng
+        // Sort by date for proper comparison
         const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
         const current = parseFloat(sortedData[0].total_price);
         const previous = parseFloat(sortedData[1].total_price);
 
         if (previous > 0) {
             const rate = ((current - previous) / previous * 100);
-            return Math.abs(rate); // Trả về giá trị tuyệt đối để hiển thị % dương
+            return Math.abs(rate); // Return absolute value for positive display
         }
     }
 
-    // Nếu chỉ có 1 record, tính % dựa trên target hoặc baseline
+    // If only 1 record, calculate % based on target or baseline
     if (data.length === 1) {
         const current = parseFloat(data[0].total_price);
-        // Giả sử target là 10M, tính % đạt được
+        // Assume target is 10M, calculate % achieved
         const target = 10000000;
         return ((current / target) * 100).toFixed(1);
     }
 
-    return 0; // Không có dữ liệu
+    return 0; // No data
 }
 
-// Hàm cập nhật Conversions Chart
-function updateConversionsChart(conversionRate) {
+// Update Conversions Chart function
+// Update Conversions Chart function - Fixed to match API response structure
+function updateConversionsChart(conversionData) {
+    // Destroy existing chart if it exists
+    if (conversionsChart) {
+        conversionsChart.destroy();
+        conversionsChart = null;
+    }
+
+    // Ensure we have valid data structure
+    if (!conversionData || !conversionData.current_month || !conversionData.last_month) {
+        console.error('Invalid conversion data structure');
+        return;
+    }
+
+    // Get return rate from current month data
+    const currentReturnRate = parseFloat(conversionData.current_month.return_rate) || 0;
+
     var options = {
         chart: {
             height: 292,
@@ -146,8 +251,8 @@ function updateConversionsChart(conversionRate) {
             dashArray: 4
         },
         colors: ["#ff6c2f", "#22c55e"],
-        series: [parseFloat(conversionRate['chart']['series'][0])], // Sử dụng dữ liệu từ API
-        labels: ['Tỉ lệ thành công '],
+        series: [currentReturnRate], // Use return_rate from current_month
+        labels: ['Tỉ lệ khách hàng quay trở lại'],
         responsive: [{
             breakpoint: 380,
             options: {
@@ -164,32 +269,157 @@ function updateConversionsChart(conversionRate) {
                 left: 0
             }
         }
+    };
+
+    // Update DOM elements with data from API response
+    const handleOrderEl = document.getElementById('handleOrder');
+    const failOrderEl = document.getElementById('failOrder');
+
+    if (handleOrderEl && conversionData.current_month.returning_customers) {
+        handleOrderEl.textContent = conversionData.current_month.returning_customers;
+    }
+    if (failOrderEl && conversionData.last_month.returning_customers) {
+        failOrderEl.textContent = conversionData.last_month.returning_customers;
     }
 
-    document.getElementById('handleOrder').textContent = conversionRate.chart.data[0];
-    document.getElementById('failOrder').textContent = conversionRate.chart.data[1];
-     var chart = new ApexCharts(
+    // Update additional stats if elements exist
+    const currentMonthEl = document.getElementById('currentMonthStats');
+    const lastMonthEl = document.getElementById('lastMonthStats');
+    const trendEl = document.getElementById('trendIndicator');
+
+    if (currentMonthEl) {
+        currentMonthEl.innerHTML = `
+            <div class="stat-item">
+                <span class="label">Tháng ${conversionData.current_month.month_name}:</span>
+                <span class="value">${conversionData.current_month.returning_customers}/${conversionData.current_month.total_customers} khách hàng</span>
+            </div>
+        `;
+    }
+
+    if (lastMonthEl) {
+        lastMonthEl.innerHTML = `
+            <div class="stat-item">
+                <span class="label">Tháng ${conversionData.last_month.month_name}:</span>
+                <span class="value">${conversionData.last_month.returning_customers}/${conversionData.last_month.total_customers} khách hàng</span>
+            </div>
+        `;
+    }
+
+    if (trendEl) {
+        const trend = conversionData.comparison.trend;
+        const difference = Math.abs(parseFloat(conversionData.comparison.difference));
+        const growthRate = parseFloat(conversionData.comparison.growth_rate);
+
+        let trendClass = 'neutral';
+        let trendIcon = '→';
+
+        if (trend === 'tăng') {
+            trendClass = 'positive';
+            trendIcon = '↑';
+        } else if (trend === 'giảm') {
+            trendClass = 'negative';
+            trendIcon = '↓';
+        }
+
+        trendEl.innerHTML = `
+            <span class="trend ${trendClass}">
+                ${trendIcon} ${trend} ${difference.toFixed(1)}% 
+                (${growthRate >= 0 ? '+' : ''}${growthRate.toFixed(1)}%)
+            </span>
+        `;
+    }
+
+    // Create new chart
+    conversionsChart = new ApexCharts(
         document.querySelector("#conversions"),
         options
     );
 
-    chart.render();
+    conversionsChart.render();
 }
 
-// Performance Chart function - cập nhật với dữ liệu từ API
-function updatePerformanceChart(apiData) {
-    // Xử lý dữ liệu từ API thành format cho chart
-    let chartData = processApiDataForChart(apiData);
+// Initialize charts with updated fallback data structure
+async function initializeCharts() {
+    try {
+        showLoadingState();
+
+        const [chartRes, conversionRes] = await Promise.allSettled([
+            callApiChart('all'),
+            callApiConversion()
+        ]);
+
+        // Handle chart data
+        if (chartRes.status === 'fulfilled' && chartRes.value && chartRes.value.length > 0) {
+            updatePerformanceChart(chartRes.value);
+        } else {
+            console.warn('Chart data not available, using empty data');
+            updatePerformanceChart([]);
+        }
+
+        // Handle conversion data with updated fallback structure
+        if (conversionRes.status === 'fulfilled' && conversionRes.value) {
+            updateConversionsChart(conversionRes.value);
+            console.log('Conversion data initialized:', conversionRes.value);
+        } else {
+            console.warn('Conversion data not available, using fallback');
+            // Create fallback data structure matching API response
+            const fallbackData = {
+                current_month: {
+                    return_rate: 65.2,
+                    total_customers: 150,
+                    returning_customers: 98,
+                    new_customers: 52,
+                    month_name: new Date().toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })
+                },
+                last_month: {
+                    return_rate: 58.3,
+                    total_customers: 120,
+                    returning_customers: 70,
+                    new_customers: 50,
+                    month_name: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })
+                },
+                comparison: {
+                    growth_rate: 6.9,
+                    difference: 6.9,
+                    trend: 'tăng'
+                }
+            };
+            updateConversionsChart(fallbackData);
+        }
+
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+        showErrorMessage('Failed to initialize dashboard. Please refresh the page.');
+    } finally {
+        hideLoadingState();
+    }
+}
+// Performance Chart function - update with data from API
+function updatePerformanceChart(apiData, timeRange = 'all') {
+    // Destroy existing chart if it exists
+    if (performanceChart) {
+        performanceChart.destroy();
+        performanceChart = null;
+    }
+
+    // Process API data into chart format with timeRange
+    let chartData = processApiDataForChart(apiData, timeRange);
+
+    // Determine chart title and labels based on time range
+    const isMonthlyView = timeRange === 1 || timeRange === '1';
+    const xAxisTitle = isMonthlyView ? 'Ngày' : 'Tháng';
+    const seriesName = isMonthlyView ? 'Doanh thu hàng ngày (M VND)' : 'Doanh thu (M VND)';
+    const growthLabel = isMonthlyView ? 'Tỷ lệ tăng trưởng hàng ngày (%)' : 'Tỷ lệ tăng trưởng (%)';
 
     var options = {
         series: [{
-            name: "Doanh thu (M VND)",
+            name: seriesName,
             type: "bar",
             data: chartData.revenues,
             yAxisIndex: 0,
         },
         {
-            name: "Tỷ lệ tăng trưởng (%)",
+            name: growthLabel,
             type: "line",
             data: chartData.growthRates,
             yAxisIndex: 1,
@@ -224,6 +454,14 @@ function updatePerformanceChart(apiData) {
             axisBorder: {
                 show: false,
             },
+            title: {
+                text: xAxisTitle,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    color: '#666'
+                }
+            }
         },
         yaxis: [
             {
@@ -246,7 +484,7 @@ function updatePerformanceChart(apiData) {
             {
                 opposite: true,
                 title: {
-                    text: 'Tỷ lệ tăng trưởng (%)',
+                    text: isMonthlyView ? 'Tỷ lệ tăng trưởng hàng ngày (%)' : 'Tỷ lệ tăng trưởng (%)',
                     style: {
                         color: '#22c55e',
                     }
@@ -300,7 +538,7 @@ function updatePerformanceChart(apiData) {
         },
         plotOptions: {
             bar: {
-                columnWidth: "50%",
+                columnWidth: isMonthlyView ? "60%" : "50%", // Adjust bar width for daily view
                 borderRadius: 4,
             },
         },
@@ -328,8 +566,8 @@ function updatePerformanceChart(apiData) {
             ],
         },
         dataLabels: {
-            enabled: true,
-            enabledOnSeries: [1], // Chỉ hiện label cho growth rate
+            enabled: !isMonthlyView, // Disable labels for daily view to avoid clutter
+            enabledOnSeries: [1], // Only show labels for growth rate
             formatter: function (val, opts) {
                 return val.toFixed(1) + '%';
             },
@@ -337,18 +575,19 @@ function updatePerformanceChart(apiData) {
                 colors: ['#22c55e']
             }
         }
-    }
+    };
 
-    var chart = new ApexCharts(
+    // Create new chart
+    performanceChart = new ApexCharts(
         document.querySelector("#dash-performance-chart"),
         options
     );
 
-    chart.render();
+    performanceChart.render();
 }
 
-// Hàm xử lý dữ liệu API thành format cho Performance Chart
-function processApiDataForChart(apiData) {
+// Process API data into chart format
+function processApiDataForChart(apiData, timeRange = 'all') {
     if (!apiData || apiData.length === 0) {
         return {
             categories: ["Không có dữ liệu"],
@@ -357,33 +596,60 @@ function processApiDataForChart(apiData) {
         };
     }
 
-    // Sắp xếp dữ liệu theo ngày
+    // Sort data by date
     const sortedData = apiData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const categories = [];
     const revenues = [];
     const growthRates = [];
 
-    sortedData.forEach((item, index) => {
-        // Format tháng từ date
-        const date = new Date(item.date);
-        const monthYear = `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
-        categories.push(monthYear);
+    // Check if timeRange is 1 month to show daily data
+    const isMonthlyView = timeRange === 1 || timeRange === '1';
 
-        // Revenue - giữ nguyên giá trị VND, chỉ chia cho 1000 để dễ đọc (nghìn VND)
-        const revenue = parseFloat(item.total_price) / 1000000;
-        revenues.push(revenue);
+    if (isMonthlyView) {
+        // For 1 month view, show daily data
+        sortedData.forEach((item, index) => {
+            const date = new Date(item.date);
+            const dayMonth = `Ngày ${date.getDate()} / ${date.getMonth() + 1}`;
+            categories.push(dayMonth);
 
-        // Tính growth rate so với tháng trước
-        if (index > 0) {
-            const currentRevenue = parseFloat(item.total_price);
-            const prevRevenue = parseFloat(sortedData[index - 1].total_price);
-            const growthRate = prevRevenue > 0 ? ((currentRevenue - prevRevenue) / prevRevenue * 100) : 0;
-            growthRates.push(Number(growthRate.toFixed(1)));
-        } else {
-            growthRates.push(0); // Tháng đầu tiên không có dữ liệu so sánh
-        }
-    });
+            // Revenue - convert to millions for readability
+            const revenue = parseFloat(item.total_price) / 1000000;
+            revenues.push(revenue);
+
+            // Calculate growth rate compared to previous day
+            if (index > 0) {
+                const currentRevenue = parseFloat(item.total_price);
+                const prevRevenue = parseFloat(sortedData[index - 1].total_price);
+                const growthRate = prevRevenue > 0 ? ((currentRevenue - prevRevenue) / prevRevenue * 100) : 0;
+                growthRates.push(Number(growthRate.toFixed(1)));
+            } else {
+                growthRates.push(0); // First day has no comparison data
+            }
+        });
+    } else {
+        // For other time ranges, show monthly data
+        sortedData.forEach((item, index) => {
+            // Format month from date
+            const date = new Date(item.date);
+            const monthYear = `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
+            categories.push(monthYear);
+
+            // Revenue - keep VND value, divide by 1000000 for readability (million VND)
+            const revenue = parseFloat(item.total_price) / 1000000;
+            revenues.push(revenue);
+
+            // Calculate growth rate compared to previous month
+            if (index > 0) {
+                const currentRevenue = parseFloat(item.total_price);
+                const prevRevenue = parseFloat(sortedData[index - 1].total_price);
+                const growthRate = prevRevenue > 0 ? ((currentRevenue - prevRevenue) / prevRevenue * 100) : 0;
+                growthRates.push(Number(growthRate.toFixed(1)));
+            } else {
+                growthRates.push(0); // First period has no comparison data
+            }
+        });
+    }
 
     return {
         categories,
@@ -392,132 +658,55 @@ function processApiDataForChart(apiData) {
     };
 }
 
-class VectorMap {
-    initWorldMapMarker() {
-        const map = new jsVectorMap({
-            map: 'world',
-            selector: '#world-map-markers',
-            zoomOnScroll: true,
-            zoomButtons: true,
-            markersSelectable: true,
-            // Zoom to và focus vào Việt Nam
-            focusOn: {
-                coords: [16.0, 106.0], // Tọa độ trung tâm Việt Nam
-                scale: 8 // Zoom level cao để phóng to
-            },
-            // Chỉ giữ lại 5 chi nhánh chính
-            markers: [
-                { name: "Hà Nội", coords: [21.0285, 105.8542] },
-                { name: "Thành phố Hồ Chí Minh", coords: [10.8231, 106.6297] },
-                { name: "Đà Nẵng", coords: [16.0544, 108.2022] },
-                { name: "Hải Phòng", coords: [20.8449, 106.6881] },
-                { name: "Cần Thơ", coords: [10.0452, 105.7469] }
-            ],
-            markerStyle: {
-                initial: {
-                    fill: "#7f56da",
-                    stroke: "#ffffff",
-                    strokeWidth: 2,
-                    r: 8 // Tăng kích thước marker
-                },
-                selected: {
-                    fill: "#22c55e",
-                    stroke: "#ffffff",
-                    strokeWidth: 3,
-                    r: 10
-                }
-            },
-            labels: {
-                markers: {
-                    render: marker => marker.name,
-                    offsets: function (index) {
-                        return [0, -20]; // Đẩy label lên trên marker
-                    }
-                }
-            },
-            regionStyle: {
-                initial: {
-                    fill: 'rgba(169,183,197, 0.3)',
-                    fillOpacity: 1,
-                    stroke: '#ffffff',
-                    strokeWidth: 1
-                },
-                hover: {
-                    fill: 'rgba(169,183,197, 0.5)'
-                }
-            },
-            // Tùy chỉnh thêm để map focus vào Việt Nam
-            onLoaded: function (map) {
-                // Có thể thêm logic sau khi map load xong
-                console.log('Map loaded successfully');
-            }
-        });
+// Utility functions for loading states
+function showLoadingState() {
+    // Disable buttons during loading
+    document.querySelectorAll('.btnHandleData').forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+    });
 
-        return map;
-    }
-
-    init() {
-        this.map = this.initWorldMapMarker();
-        return this.map;
-    }
+    // You can add loading spinners here
+    console.log('Loading chart data...');
 }
 
-// Khởi tạo khi DOM ready
+function hideLoadingState() {
+    // Re-enable buttons
+    document.querySelectorAll('.btnHandleData').forEach(btn => {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+    });
+}
+
+function showErrorMessage(message) {
+    // You can implement a proper notification system here
+    console.error(message);
+    // Example: show a toast notification or update UI with error state
+}
+
+
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function (e) {
-    // Khởi tạo charts với dữ liệu từ API
-    if (typeof initializeCharts === 'function') {
-        initializeCharts();
-    }
-
-    // Khởi tạo map
-    const vectorMap = new VectorMap().init();
-
-    // Lưu reference để có thể sử dụng sau này
-    window.vectorMapInstance = vectorMap;
+    // Initialize charts with data from API
+    initializeCharts();
 });
 
-// Hàm để refresh charts với time range khác (có thể gọi từ UI)
+// Function to refresh charts with different time range (can be called from UI)
 async function refreshChartsWithTimeRange(timeRange) {
-    if (typeof callApiChart !== 'function') {
-        console.warn('callApiChart function not found');
-        return;
-    }
-
-    const res = await callApiChart(timeRange);
-    if (res && res.length > 0) {
-        const conversionRate = calculateConversionRate(res);
-
-        // Xóa chart cũ trước khi render chart mới
-        const conversionElement = document.querySelector("#conversions");
-        const performanceElement = document.querySelector("#dash-performance-chart");
-
-        if (conversionElement) {
-            conversionElement.innerHTML = '';
-        }
-        if (performanceElement) {
-            performanceElement.innerHTML = '';
-        }
-
-        // Render lại charts với dữ liệu mới
-        if (typeof updateConversionsChart === 'function') {
-            updateConversionsChart(conversionRate);
-        }
-        if (typeof updatePerformanceChart === 'function') {
+    try {
+        const res = await callApiChart(timeRange);
+        if (res && res.length > 0) {
+            // Update charts with new data
             updatePerformanceChart(res);
-        }
-    }
-}
 
-// Hàm tiện ích để zoom đến một marker cụ thể
-function zoomToMarker(markerName) {
-    if (window.vectorMapInstance) {
-        const markers = window.vectorMapInstance.markers;
-        const marker = Object.values(markers).find(m => m.config.name === markerName);
-        if (marker) {
-            window.vectorMapInstance.setFocus({
-                coords: marker.config.coords,
-                scale: 12
-            });
+            // You might need conversion data too
+            const conversionRes = await callApiConversion();
+            if (conversionRes) {
+                updateConversionsChart(conversionRes);
+            }
         }
+    } catch (error) {
+        console.error('Error refreshing charts:', error);
+        showErrorMessage('Failed to refresh charts. Please try again.');
     }
 }
