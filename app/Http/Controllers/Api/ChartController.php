@@ -9,49 +9,88 @@ use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
-    //
     public function getDataToChart(Request $request)
     {
-        $timeRange = $request->input('time', 'all'); // Mặc định 12 tháng
+        $timeRange = $request->input('time', 'all');
         $now = now();
 
-        // Tạo query builder
-        $query = Order::select(
-            DB::raw('DATE(created_at) as date'),
-            DB::raw('SUM(total_price) as total_price')
-        );
-        
-        // Áp dụng filter TRƯỚC khi group by
+        // Khởi tạo query builder cơ bản
+        $query = Order::where('status_payment', '!=', 'chưa thanh toán');
+
         switch ($timeRange) {
             case '1':
-                $query->where('created_at', '>=', $now->copy()->subMonth(1));
+                // Hiển thị doanh thu theo NGÀY trong 1 tháng gần nhất
+                $listDataToChart = $query
+                    ->where('created_at', '>=', $now->copy()->subMonth(1))
+                    ->select(
+                        DB::raw('DATE(created_at) as date'),
+                        DB::raw('SUM(total_price) as total_price')
+                    )
+                    ->groupBy(DB::raw('DATE(created_at)'))
+                    ->orderBy('date', 'asc')
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'date' => $item->date, // Format: YYYY-MM-DD (ví dụ: 2024-01-15)
+                            'total_price' => $item->total_price,
+                        ];
+                    });
                 break;
+
             case '6':
-                $query->where('created_at', '>=', $now->copy()->subMonths(6));
+                // Hiển thị doanh thu theo THÁNG trong 6 tháng gần nhất
+                $listDataToChart = $query
+                    ->where('created_at', '>=', $now->copy()->subMonths(6))
+                    ->select(
+                        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                        DB::raw('SUM(total_price) as total_price')
+                    )
+                    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+                    ->orderBy('month', 'asc')
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'date' => $item->month, // Format: YYYY-MM (ví dụ: 2024-01)
+                            'total_price' => $item->total_price,
+                        ];
+                    });
+                break;
+            case '12':
+                $listDataToChart = $query
+                    ->where('created_at', '>=', $now->copy()->subMonths(12))
+                    ->select(
+                        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                        DB::raw('SUM(total_price) as total_price')
+                    )
+                    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+                    ->orderBy('month', 'asc')
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'date' => $item->month, // Format: YYYY-MM (ví dụ: 2024-01)
+                            'total_price' => $item->total_price,
+                        ];
+                    });
                 break;
             case 'all':
             default:
-                // Không filter
+                // Hiển thị doanh thu theo THÁNG cho toàn bộ thời gian
+                $listDataToChart = $query
+                    ->select(
+                        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                        DB::raw('SUM(total_price) as total_price')
+                    )
+                    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+                    ->orderBy('month', 'asc')
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'date' => $item->month, // Format: YYYY-MM (ví dụ: 2024-01)
+                            'total_price' => $item->total_price,
+                        ];
+                    });
                 break;
         }
-
-        // Thực hiện group by và get data
-       $listDataToChart = $query
-    // ->where('status_payment', '!=', 'Chưa thanh toán') // Nếu cần filter trạng thái
-    ->select(
-        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-        DB::raw('SUM(total_price) as total_price') // Tổng doanh thu theo tháng
-    )
-    ->where('status_payment','!=', 'chưa thanh toán')
-    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
-    ->orderBy('month', 'asc') // Sắp xếp theo tháng tăng dần
-    ->get()
-    ->map(function ($item) {
-        return [
-            'date' => $item->month, // Format: YYYY-MM (ví dụ: 2024-01)
-            'total_price' => $item->total_price,
-        ];
-    });
 
         return response()->json($listDataToChart);
     }
