@@ -580,8 +580,8 @@
                                                 <p class="mb-1 fw-medium text-dark">Voucher đã áp dụng:</p>
                                                 @foreach($appliedVouchers as $voucher)
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                                    <span class="text-muted fs-13">{{ $voucher['name'] ?? $voucher['code'] }}</span>
-                                                    <span class="badge bg-success-subtle text-success fs-11">{{ $voucher['type_label'] ?? $voucher['type'] }}</span>
+                                                    {{-- <span class="text-muted fs-13">{{ $voucher['name'] ?? $voucher['code'] }}</span> --}}
+                                                    {{-- <span class="badge bg-success-subtle text-success fs-11">{{ $voucher['type_label'] ?? $voucher['type'] }}</span> --}}
                                                 </div>
                                                 @endforeach
                                             </div>

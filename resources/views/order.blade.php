@@ -156,6 +156,29 @@
                                                     </div>
                                                 </div>
                                                 <div class="order-footer">
+                                                    @if($order->status_order == 'giao hàng thành công')
+                                                        <form id="statusForm" action="{{route('orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
+                                                            <div class="modal-body">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="order_id" id="orderId">
+                                                                <input type="hidden" name="status" value="hoàn thành">
+                                                                {{-- <div class="mb-3">
+                                                                    <label for="status" class="form-label">Trạng thái</label>
+                                                                    <select name="status" id="status" class="form-select">
+                                                                        <option {{$order->status_order == 'đã hủy' ? 'selected':''}} value="đã hủy">đã hủy</option>
+                                                                        <option {{$order->status_order == 'chờ xử lý' ? 'selected':''}} value="chờ xử lý">chờ xử lý</option>
+                                                                        <option {{$order->status_order == 'đang xử lý' ? 'selected':''}} value="đang xử lý">đang xử lý</option>
+                                                                        <option {{$order->status_order == 'chờ vận chuyển' ? 'selected':''}} value="chờ vận chuyển">chờ vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đang vận chuyển' ? 'selected':''}} value="đang vận chuyển">đang vận chuyển</option>
+                                                                        <option {{$order->status_order == 'đã giao' ? 'selected':''}} value="đã giao">đã giao</option>
+                                                                        
+                                                                    </select>
+                                                                </div> --}} 
+                                                                <button type="submit" style="width:430px" class="btn btn-track">Đã nhận được hàng</button>
+                                                            </div>
+                                                        </form>
+                                                    @endif
                                                     @if ($order->status_order == 'chờ xử lý')
                                                         <form id="statusForm" action="{{route('orders.update-status',$order->id)}}" method="POST"> {{-- Đảm bảo route này chính xác --}}
                                                             <div class="modal-body">
@@ -213,58 +236,102 @@
                                                 <!-- Order Tracking -->
                                                 <div class="collapse tracking-info" id="tracking{{$index}}">
                                                     <div class="tracking-timeline">
-                                                        <div class="timeline-item completed">
+                                                        <div class="timeline-item {{$order->status_order == 'chờ xử lý' || $order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại'  || $order->status_order == 'hoàn thành' ? 'completed' : ''}}">
                                                             <div class="timeline-icon">
-                                                                <i class="bi bi-check-circle-fill"></i>
+                                                                <i class="bi bi-clipboard-check"></i>
                                                             </div>
                                                             <div class="timeline-content">
-                                                                <h5>Order Confirmed</h5>
-                                                                <p>Your order has been received and confirmed</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 10:30 AM</span>
+                                                                <h5>Chờ xử lý</h5>
+                                                                <p>Bạn đã đặt hàng thành công</p>
+                                                                {{-- <span class="timeline-date">Feb 20, 2025 - 10:30 AM</span> --}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="timeline-item completed">
-                                                            <div class="timeline-icon">
-                                                                <i class="bi bi-check-circle-fill"></i>
-                                                            </div>
-                                                            <div class="timeline-content">
-                                                                <h5>Processing</h5>
-                                                                <p>Your order is being prepared for shipment</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 2:45 PM</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="timeline-item active">
+                                                        <div class="timeline-item {{$order->status_order == 'đang xử lý' || $order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' || $order->status_order == 'hoàn thành' ? 'completed': ''}}">
                                                             <div class="timeline-icon">
                                                                 <i class="bi bi-box-seam"></i>
                                                             </div>
                                                             <div class="timeline-content">
-                                                                <h5>Packaging</h5>
-                                                                <p>Your items are being packaged for shipping</p>
-                                                                <span class="timeline-date">Feb 20, 2025 - 4:15 PM</span>
+                                                                <h5>Đang xử lý</h5>
+                                                                <p>Đơn hàng của bạn đang được chuẩn bị để giao hàng</p>
+                                                                {{-- <span class="timeline-date">Feb 20, 2025 - 2:45 PM</span> --}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="timeline-item">
+                                                        <div class="timeline-item {{$order->status_order == 'đang vận chuyển' || $order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' || $order->status_order == 'hoàn thành' ? 'completed': ''}}">
                                                             <div class="timeline-icon">
                                                                 <i class="bi bi-truck"></i>
                                                             </div>
                                                             <div class="timeline-content">
-                                                                <h5>In Transit</h5>
-                                                                <p>Expected to ship within 24 hours</p>
+                                                                <h5>Đang vận chuyển</h5>
+                                                                <p>Các mặt hàng của bạn đang được vận chuyển</p>
+                                                                {{-- <span class="timeline-date">Feb 20, 2025 - 4:15 PM</span> --}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="timeline-item">
+                                                        <div class="timeline-item {{$order->status_order == 'đang giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' || $order->status_order == 'hoàn thành' ? 'completed': ''}}">
+                                                            <div class="timeline-icon">
+                                                                <i class="bi bi-gift"></i>
+                                                            </div>
+                                                            <div class="timeline-content">
+                                                                <h5>Đang giao</h5>
+                                                                <p>Đơn hàng đang trên đường giao</p>
+                                                            </div>
+                                                        </div>
+
+                                                        {{-- <div class="timeline-item {{$order->status_order == 'đã giao' || $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? 'completed': ''}}">
                                                             <div class="timeline-icon">
                                                                 <i class="bi bi-house-door"></i>
                                                             </div>
                                                             <div class="timeline-content">
-                                                                <h5>Delivery</h5>
-                                                                <p>Estimated delivery: Feb 22, 2025</p>
+                                                                <h5>Đã giao</h5>
+                                                                <p>Đơn hàng đã được giao đến bạn</p>
+                                                                
+                                                            </div>
+                                                        </div> --}}
+                                                        <div class="timeline-item {{ $order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' || $order->status_order == 'hoàn thành' ? 'completed': ''}}">
+                                                            <div class="timeline-icon">
+                                                                <i class="bi bi-check-circle-fill"></i>
+                                                            </div>
+                                                            <div class="timeline-content">
+                                                                <h5>{{$order->status_order == 'giao hàng thành công' || $order->status_order == 'giao hàng thất bại' ? $order->status_order : 'đã giao'}}</h5>
+                                                                <p>Đơn hàng đã được giao đến bạn</p>
                                                             </div>
                                                         </div>
+                                                        {{-- @if($order->status_order == 'giao hàng thành công' || $order->status_order == 'hoàn thành')
+                                                            <div class="timeline-item mb-5 completed">
+                                                                <div class="timeline-icon">
+                                                                    <i class="bi bi-check-circle-fill"></i>
+                                                                </div>
+                                                                <div class="timeline-content">
+                                                                    <h5>Giao hàng thành công</h5>
+                                                                    <p>Đơn hàng đã được giao đến bạn</p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if($order->status_order == 'giao hàng thất bại' && $order->status_order == 'hoàn thành')
+                                                            <div class="timeline-item mb-5 active">
+                                                                <div class="timeline-icon">
+                                                                    <i class="bi bi-check-circle-fill"></i>
+                                                                </div>
+                                                                <div class="timeline-content">
+                                                                    <h5>Giao hàng thất bại</h5>
+                                                                    <p>Đơn hàng đã được giao đến bạn</p>
+                                                                </div>
+                                                            </div>
+                                                        @endif --}}
+                                                        @if($order->status_order == 'hoàn thành')
+                                                            <div class="timeline-item completed">
+                                                                <div class="timeline-icon">
+                                                                    <i class="bi bi-check-circle-fill"></i>
+                                                                    {{-- <p>Dự kiến giao hàng trong vòng 24 giờ</p> --}}
+                                                                </div>
+                                                                <div class="timeline-content">
+                                                                    <h5>Hoàn thành</h5>
+                                                                    <p>Bạn đã nhận hàng</p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
 

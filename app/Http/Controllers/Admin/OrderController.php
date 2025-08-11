@@ -103,6 +103,10 @@ class OrderController extends Controller
     }
     public function indexClient(Request $request)
     {
+        // Kiểm tra người dùng đã đăng nhập chưa
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thực hiện hành động!');
+        }
         // Lấy ID của khách hàng đang đăng nhập
         if (Auth::check()) {
             $userId = Auth::id();
@@ -133,21 +137,22 @@ class OrderController extends Controller
             // Sắp xếp mới nhất và phân trang
             $orders = $query->orderBy('id', 'desc')->paginate(5);
             return view('order', compact('orders', 'data'));
-        } else {
-            $order_code = session('order_code', []);
+        } 
+        // else {
+        //     $order_code = session('order_code', []);
 
-            // Khởi tạo biến $orders
-            $orders = collect(); // Collection rỗng để tránh lỗi nếu không có đơn hàng
+        //     // Khởi tạo biến $orders
+        //     $orders = collect(); // Collection rỗng để tránh lỗi nếu không có đơn hàng
 
-            // Kiểm tra nếu $order_code là mảng và không rỗng
-            if (is_array($order_code) && !empty($order_code)) {
-                $orders = Order::with(['orderDetail.variant'])
-                    ->whereIn('id', $order_code) // Lấy tất cả đơn hàng có id trong mảng $order_code
-                    ->orderBy('id','desc')
-                    ->get();
-            }
-            return view('order', compact('orders'));
-        }
+        //     // Kiểm tra nếu $order_code là mảng và không rỗng
+        //     if (is_array($order_code) && !empty($order_code)) {
+        //         $orders = Order::with(['orderDetail.variant'])
+        //             ->whereIn('id', $order_code) // Lấy tất cả đơn hàng có id trong mảng $order_code
+        //             ->orderBy('id','desc')
+        //             ->get();
+        //     }
+        //     return view('order', compact('orders'));
+        // }
         // return view('account', compact('order_code'));
 
     }
