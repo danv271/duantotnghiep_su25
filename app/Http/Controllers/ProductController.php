@@ -239,7 +239,6 @@ class ProductController extends Controller
     {
         // Khởi tạo query để lấy sản phẩm
         $query = Product::with('images');
-
         // Lấy danh mục cha và danh mục con
         $category = null;
         if ($categoryId) {

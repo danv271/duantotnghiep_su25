@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         URL::forceScheme('https');
-        Paginator::useBootstrapFive();
+        Paginator::useBootstrapFour();
 
         // Alias cho middleware CheckUserRole
         Route::aliasMiddleware('check.role', CheckUserRole::class);

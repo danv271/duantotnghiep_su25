@@ -92,6 +92,7 @@ Route::middleware('auth')->group(function () {
     // User's Orders
 Route::prefix('orders')->name('orders.')->group(function () {
     Route::get('/', [AdminOrderController::class, "indexClient"])->name('index'); // Đặt tên controller rõ hơn nếu đây là user order
+    Route::put ('/{id}/update-status', [AdminOrderController::class, "update_status"])->name('update-status');
 });
 // --- Cart Routes ---
 Route::prefix('cart')->name('cart.')->group(function () {
@@ -216,3 +217,28 @@ Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(functio
     //     Route::delete('/{id}', 'destroy')->name('destroy');
     // });
 });
+// routes/web.php
+Route::get('/provinces.php', function () {
+    $json = file_get_contents('https://provinces.open-api.vn/api/v1/?depth=2');
+    return response($json)->header('Content-Type', 'application/json');
+});
+
+Route::get('/districts.php', function () {
+    $province_code = request('province_code');
+    if (!$province_code) {
+        return response()->json(['error' => 'Thiếu mã tỉnh']);
+    }
+    $json = file_get_contents("https://provinces.open-api.vn/api/v1/p/{$province_code}?depth=2");
+    $data = json_decode($json, true);
+    return response()->json($data['districts'] ?? []);
+});
+
+Route::get('/wards.php', function () {
+    $district_code = request('district_code');
+    if (!$district_code) {
+        return response()->json(['error' => 'Thiếu mã quận']);
+    }
+    $json = file_get_contents("https://provinces.open-api.vn/api/v1/d/{$district_code}?depth=2");
+    $data = json_decode($json, true);
+    return response()->json($data['wards'] ?? []);
+}); 

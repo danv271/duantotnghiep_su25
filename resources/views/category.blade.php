@@ -87,7 +87,7 @@
                     </div>
                   </div>
                   <div class="filter-actions mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary w-100">Apply Filter</button>
+                    <button type="submit" class="btn btn-sm btn-primary w-100">Áp dụng lọc</button>
                   </div>
                 </div>
               </form>

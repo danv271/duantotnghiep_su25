@@ -9,6 +9,8 @@ use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Models\Variant;
 
+use function PHPUnit\Framework\isArray;
+
 class CartController extends Controller
 {
  public function index()
@@ -159,8 +161,40 @@ class CartController extends Controller
 }
 public function add(Request $request)
 {
-    $variantId = $request->input('variant_id');
-    $quantity = (int) $request->input('quantity', 1);
+    if($request->has('item')){
+        $items = $request->input('item');
+        foreach($items as $item){
+            $variantId = $item['variant_id'];
+            $quantity = $item['quantity'];
+            $variant = \App\Models\Variant::with('product','attributesValue.attribute')->findOrFail($variantId);
+            $userId = Auth::id();
+
+            $cart = Cart::firstOrCreate(['user_id' => $userId ]);
+
+            $cartItem = CartItem::where('cart_id', $cart->id)
+                ->where('variant_id', $variantId)
+                ->first();
+
+            $currentCartQuantity = $cartItem ? $cartItem->quantity : 0;
+            $totalAfterAdd = $currentCartQuantity + $quantity;
+
+            if ($totalAfterAdd > $variant->stock_quantity) {
+                return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã có trong giỏ: {$currentCartQuantity}");
+            }
+
+            if ($cartItem) {
+                $cartItem->update(['quantity' => $totalAfterAdd]);
+            } else {
+                CartItem::create([
+                    'cart_id' => $cart->id,
+                    'variant_id' => $variantId,
+                    'quantity' => $quantity,
+                ]);
+            }
+        }
+    }else{
+        $variantId = $request->input('variant_id');
+        $quantity = (int) $request->input('quantity', 1);
 
     $variant = \App\Models\Variant::with('product','attributesValue.attribute')->findOrFail($variantId);
 
@@ -192,36 +226,38 @@ public function add(Request $request)
         }
     }
     // Người dùng chưa đăng nhập — dùng session
-    else {
-        $cart = session()->get('cart', []);
+    // else {
+    //     $cart = session()->get('cart', []);
 
-        // Nếu sản phẩm đã có trong giỏ
-        if (isset($cart[$variantId])) {
-            $newQuantity = $cart[$variantId]['quantity'] + $quantity;
+    //     // Nếu sản phẩm đã có trong giỏ
+    //     if (isset($cart[$variantId])) {
+    //         $newQuantity = $cart[$variantId]['quantity'] + $quantity;
 
-            if ($newQuantity > $variant->stock_quantity) {
-                return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã có trong giỏ: {$cart[$variantId]['quantity']}");
-            }
+    //         if ($newQuantity > $variant->stock_quantity) {
+    //             return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã có trong giỏ: {$cart[$variantId]['quantity']}");
+    //         }
 
-            $cart[$variantId]['quantity'] = $newQuantity;
-        } else {
-            if ($quantity > $variant->stock_quantity) {
-                return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}");
-            }
+    //         $cart[$variantId]['quantity'] = $newQuantity;
+    //     } else {
+    //         if ($quantity > $variant->stock_quantity) {
+    //             return back()->with('error', "Số lượng vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}");
+    //         }
 
-            $cart[$variantId] = [
-                'product_name' => $variant->product->name,
-                'price' => $variant->price,
-                'quantity' => $quantity,
-                'variant_id' => $variant->id,
-                'image_path' => $variant->product->images->first()->path
-            ];
-        }
+    //         $cart[$variantId] = [
+    //             'product_name' => $variant->product->name,
+    //             'price' => $variant->price,
+    //             'quantity' => $quantity,
+    //             'variant_id' => $variant->id,
+    //             'image_path' => $variant->product->images->first()->path
+    //         ];
+    //     }
 
-        session()->put('cart', $cart);
+    //     session()->put('cart', $cart);
+    // }
+
+   
     }
-
-    return redirect()->route('cart.index')->with('success', 'Đã thêm vào giỏ hàng!');
+     return redirect()->route('cart.index')->with('success', 'Đã thêm vào giỏ hàng!');
 }
 
  public function removeSession($variantId)
