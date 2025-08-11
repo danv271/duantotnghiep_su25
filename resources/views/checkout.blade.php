@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="section-content">
                                     <div class="form-group">
-                                        <label for="address">Địa chỉ</label>
+                                        <label for="address">Địa chỉ cụ thể</label>
                                         <input type="text" class="form-control" name="address" id="address" value="{{ Auth::check() ? $user->address : old('address') }}" required>
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
@@ -140,6 +140,7 @@
                                             <select class="form-control" name="thanhPho" id="thanhPho" required>
                                                 <option value="">Chọn Tỉnh/Thành phố</option>
                                             </select>
+                                            <input type="hidden" name="thanhPho_name" id="thanhPho_name">
                                             @error('thanhPho')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -149,6 +150,7 @@
                                             <select class="form-control" name="quanHuyen" id="quanHuyen" required disabled>
                                                 <option value="">Chọn Quận/Huyện</option>
                                             </select>
+                                            <input type="hidden" name="quanHuyen_name" id="quanHuyen_name">
                                             @error('quanHuyen')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -158,6 +160,7 @@
                                             <select class="form-control" name="xaPhuong" id="xaPhuong" required disabled>
                                                 <option value="">Chọn Phường/Xã</option>
                                             </select>
+                                            <input type="hidden" name="xaPhuong_name" id="xaPhuong_name">
                                             @error('xaPhuong')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -933,93 +936,126 @@
         });
 
         // Address API Integration
-        document.addEventListener('DOMContentLoaded', function() {
-            const provinceSelect = document.getElementById('thanhPho');
-            const districtSelect = document.getElementById('quanHuyen');
-            const wardSelect = document.getElementById('xaPhuong');
+document.addEventListener('DOMContentLoaded', function() {
+    const provinceSelect = document.getElementById('thanhPho');
+    const districtSelect = document.getElementById('quanHuyen');
+    const wardSelect = document.getElementById('xaPhuong');
+    const provinceNameInput = document.getElementById('thanhPho_name');
+    const districtNameInput = document.getElementById('quanHuyen_name');
+    const wardNameInput = document.getElementById('xaPhuong_name');
 
-            // Load provinces on page load
-            fetch('/provinces.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        showVoucherMessage('Không thể tải danh sách tỉnh/thành', 'danger');
-                        return;
-                    }
-                    provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
-                    data.forEach(province => {
-                        const option = document.createElement('option');
-                        option.value = province.name;
-                        option.textContent = province.name;
-                        provinceSelect.appendChild(option);
-                    });
-                    provinceSelect.disabled = false;
-                })
-                .catch(error => {
-                    console.error('Error loading provinces:', error);
-                    showVoucherMessage('Lỗi khi tải tỉnh/thành', 'danger');
-                });
+    // Hàm hiển thị thông báo lỗi
+    function showError(message) {
+        showVoucherMessage(message, 'danger');
+    }
 
-            // Load districts when province changes
-            provinceSelect.addEventListener('change', function() {
-                const provinceCode = this.value;
-                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
-                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
-                districtSelect.disabled = true;
-                wardSelect.disabled = true;
-
-                if (provinceCode) {
-                    fetch(`/districts.php?province_code=${provinceCode}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.error) {
-                                showVoucherMessage('Không thể tải danh sách quận/huyện', 'danger');
-                                return;
-                            }
-                            data.forEach(district => {
-                                const option = document.createElement('option');
-                                option.value = district.name;
-                                option.textContent = district.name;
-                                districtSelect.appendChild(option);
-                            });
-                            districtSelect.disabled = false;
-                        })
-                        .catch(error => {
-                            console.error('Error loading districts:', error);
-                            showVoucherMessage('Lỗi khi tải quận/huyện', 'danger');
-                        });
-                }
+    // Load provinces
+    fetch('/provinces.php')
+        .then(response => {
+            if (!response.ok) throw new Error('Lỗi kết nối API tỉnh/thành');
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                showError('Không thể tải danh sách tỉnh/thành');
+                return;
+            }
+            provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+            data.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code;
+                option.textContent = province.name;
+                option.dataset.name = province.name; // Lưu tên để dùng sau
+                provinceSelect.appendChild(option);
             });
-
-            // Load wards when district changes
-            districtSelect.addEventListener('change', function() {
-                const districtCode = this.value;
-                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
-                wardSelect.disabled = true;
-
-                if (districtCode) {
-                    fetch(`/wards.php?district_code=${districtCode}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.error) {
-                                showVoucherMessage('Không thể tải danh sách phường/xã', 'danger');
-                                return;
-                            }
-                            data.forEach(ward => {
-                                const option = document.createElement('option');
-                                option.value = ward.name ;
-                                option.textContent = ward.name;
-                                wardSelect.appendChild(option);
-                            });
-                            wardSelect.disabled = false;
-                        })
-                        .catch(error => {
-                            console.error('Error loading wards:', error);
-                            showVoucherMessage('Lỗi khi tải phường/xã', 'danger');
-                        });
-                }
-            });
+            provinceSelect.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error loading provinces:', error);
+            showError('Lỗi khi tải tỉnh/thành');
         });
+
+    // Load districts when province changes
+    provinceSelect.addEventListener('change', function() {
+        const provinceCode = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        provinceNameInput.value = provinceCode ? selectedOption.dataset.name : ''; // Lưu tên tỉnh
+        districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+        districtSelect.disabled = true;
+        wardSelect.disabled = true;
+        districtNameInput.value = ''; // Reset tên quận
+        wardNameInput.value = ''; // Reset tên phường
+
+        if (!provinceCode) return;
+
+        fetch(`/districts.php?province_code=${provinceCode}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Lỗi kết nối API quận/huyện');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    showError('Không thể tải danh sách quận/huyện');
+                    return;
+                }
+                data.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.code;
+                    option.textContent = district.name;
+                    option.dataset.name = district.name; // Lưu tên quận
+                    districtSelect.appendChild(option);
+                });
+                districtSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error loading districts:', error);
+                showError('Lỗi khi tải quận/huyện');
+            });
+    });
+
+    // Load wards when district changes
+    districtSelect.addEventListener('change', function() {
+        const districtCode = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        districtNameInput.value = districtCode ? selectedOption.dataset.name : ''; // Lưu tên quận
+        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+        wardSelect.disabled = true;
+        wardNameInput.value = ''; // Reset tên phường
+
+        if (!districtCode) return;
+
+        fetch(`/wards.php?district_code=${districtCode}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Lỗi kết nối API phường/xã');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    showError('Không thể tải danh sách phường/xã');
+                    return;
+                }
+                data.forEach(ward => {
+                    const option = document.createElement('option');
+                    option.value = ward.code;
+                    option.textContent = ward.name;
+                    option.dataset.name = ward.name; // Lưu tên phường
+                    wardSelect.appendChild(option);
+                });
+                wardSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error loading wards:', error);
+                showError('Lỗi khi tải phường/xã');
+            });
+    });
+
+    // Lưu tên phường khi chọn
+    wardSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        wardNameInput.value = this.value ? selectedOption.dataset.name : ''; // Lưu tên phường
+    });
+});
     </script>
 @endpush
 <style>

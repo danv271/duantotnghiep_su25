@@ -275,7 +275,7 @@ class CheckoutController extends Controller
                 'user_name' => $request->name,
                 'user_email' => $request->email,
                 'user_phone' => $request->phone,
-                'user_address' => $request->address.'<br>'.$request->xaPhuong.','.$request->quanHuyen.','.$request->thanhPho,
+                'user_address' => $request->address.' | '.$request->xaPhuong_name.','.$request->quanHuyen_name.','.$request->thanhPho_name,
                 'user_note' => $request->note,
                 'type_payment' => $request->payment_method,
                 'total_price' => $finalTotal,
@@ -622,13 +622,13 @@ if ($userId) {
                             "Số lượng sản phẩm {$variant->product->name} vượt quá tồn kho! Tồn kho: {$variant->stock_quantity}, đã chọn: {$item->quantity}");
                     }
                 }
-                //$request->address.'<br>'.$request->xaPhuong.','.$request->quanHuyen.','.$request->thanhPho
+                //$request->xaPhuong_name.','.$request->quanHuyen_name.','.$request->thanhPho_name
                 $order = Order::create([
                     'user_id' => $userId,
                     'user_name' => $checkoutData['name'],
                     'user_email' => $checkoutData['email'],
                     'user_phone' => $checkoutData['phone'],
-                    'user_address' => $checkoutData['address'].'<br>'.$checkoutData['xaPhuong'].','.$checkoutData['quanHuyen'].','.$checkoutData['thanhPho'],
+                    'user_address' => $checkoutData['address'].' | '.$checkoutData['xaPhuong_name'].','.$checkoutData['quanHuyen_name'].','.$checkoutData['thanhPho_name'],
                     'user_note' => $checkoutData['note'] ?? '',
                     'type_payment' => 'VNPAY',
                     'status_order' => 'đang xử lý',
