@@ -206,6 +206,7 @@ class CheckoutController extends Controller
             'shipping_discount' => $shippingDiscount,
             'final_shipping' => $finalShipping
         ]);
+        //dd(session('checkout_data'));
 
         if ($request->payment_method === 'transfer') {
             return $this->redirectToVNPAY();
@@ -454,6 +455,9 @@ $checkoutData = [
     'name' => $sessionData['name'],
     'phone' => $sessionData['phone'],
     'address' => $sessionData['address'],
+    'xaPhuong_name' => $sessionData['xaPhuong_name'],
+    'quanHuyen_name' => $sessionData['quanHuyen_name'],
+    'thanhPho_name' => $sessionData['thanhPho_name'],
     'note' => $sessionData['note'] ?? '',
     'total' => $totalAmount,
     'items' => [],
