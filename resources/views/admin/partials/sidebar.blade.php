@@ -255,7 +255,7 @@
                     <span class="nav-icon">
                         <iconify-icon icon="solar:user-speak-rounded-bold-duotone"></iconify-icon>
                     </span>
-                    <span class="nav-text"> Roles </span>
+                    <span class="nav-text"> Vai Trò </span>
                 </a>
                 <div class="collapse" id="sidebarRoles">
                     <ul class="nav sub-navbar-nav">
