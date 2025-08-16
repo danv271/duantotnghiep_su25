@@ -26,68 +26,68 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="footer-widget footer-about">
                         <a href="{{ url('/') }}" class="logo">
-                            <span class="sitename">eStore</span>
+                            <span class="sitename">ViStar</span>
                         </a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in nibh vehicula, facilisis magna ut, consectetur lorem.</p>
+                        <p>Cửa hàng Vistar chuyên cung cấp các thiết bị điện tử hiện đại, uy tín và chất lượng, đáp ứng nhu cầu học tập, làm việc và giải trí của mọi khách hàng.</p>
                         <div class="footer-contact mt-4">
                             <div class="contact-item">
                                 <i class="bi bi-geo-alt"></i>
-                                <span>123 Fashion Street, New York, NY 10001</span>
+                                <span>Cổng số 2, 13 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội</span>
                             </div>
                             <div class="contact-item">
                                 <i class="bi bi-telephone"></i>
-                                <span>+1 (555) 123-4567</span>
+                                <span>0338.134.988</span>
                             </div>
                             <div class="contact-item">
                                 <i class="bi bi-envelope"></i>
-                                <span>hello@example.com</span>
+                                <span>vistar@gmail.com</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 col-sm-6">
                     <div class="footer-widget">
-                        <h4>Shop</h4>
+                        <h4>Mua sắm</h4>
                         <ul class="footer-links">
-                            <li><a href="{{ url('category') }}">New Arrivals</a></li>
-                            <li><a href="{{ url('category') }}">Bestsellers</a></li>
-                            <li><a href="{{ url('category') }}">Women's Clothing</a></li>
-                            <li><a href="{{ url('category') }}">Men's Clothing</a></li>
-                            <li><a href="{{ url('category') }}">Accessories</a></li>
-                            <li><a href="{{ url('category') }}">Sale</a></li>
+                            <li><a href="{{ url('category') }}">Sản phẩm mới</a></li>
+                            <li><a href="{{ url('category') }}">Sản phẩm bán chạy</a></li>
+                            <li><a href="{{ url('category') }}">Sản phẩm yêu thích</a></li>
+                            <li><a href="{{ url('category') }}">Âm thanh</a></li>
+                            <li><a href="{{ url('category') }}">Phụ kiện điện thoại</a></li>
+                            <li><a href="{{ url('category') }}">Giảm giá</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 col-sm-6">
                     <div class="footer-widget">
-                        <h4>Support</h4>
+                        <h4>Hỗ trợ khách hàng</h4>
                         <ul class="footer-links">
-                            <li><a href="{{ url('support') }}">Help Center</a></li>
-                            <li><a href="{{ url('account') }}">Order Status</a></li>
-                            <li><a href="{{ url('shipping-info') }}">Shipping Info</a></li>
-                            <li><a href="{{ url('return-policy') }}">Returns & Exchanges</a></li>
-                            <li><a href="#">Size Guide</a></li>
-                            <li><a href="{{ url('contact') }}">Contact Us</a></li>
+                            <li><a href="{{ url('support') }}">Trung tâm hỗ trợ</a></li>
+                            <li><a href="{{ url('account') }}">Trạng thái đơn hàng</a></li>
+                            <li><a href="{{ url('shipping-info') }}">Thông tin giao hàng</a></li>
+                            <li><a href="{{ url('return-policy') }}">Đổi trả sản phẩm</a></li>
+                            <li><a href="#">Tư vấn sản phẩm</a></li>
+                            <li><a href="{{ url('contact') }}">Liên hệ với chúng tôi</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 col-sm-6">
                     <div class="footer-widget">
-                        <h4>Company</h4>
+                        <h4>Công ty</h4>
                         <ul class="footer-links">
-                            <li><a href="{{ url('about') }}">About Us</a></li>
-                            <li><a href="{{ url('about') }}">Careers</a></li>
-                            <li><a href="{{ url('about') }}">Press</a></li>
-                            <li><a href="{{ url('about') }}">Affiliates</a></li>
-                            <li><a href="{{ url('about') }}">Responsibility</a></li>
-                            <li><a href="{{ url('about') }}">Investors</a></li>
+                            <li><a href="{{ url('about') }}">Về chúng tôi</a></li>
+                            <li><a href="{{ url('about') }}">Đội ngũ</a></li>
+                            <li><a href="{{ url('about') }}">Đối tác</a></li>
+                            <li><a href="{{ url('about') }}">Tiếp thị sản phẩm</a></li>
+                            <li><a href="{{ url('about') }}">Trách nhiệm</a></li>
+                            <li><a href="{{ url('about') }}">Hóa đơn</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer-widget">
-                        <h4>Download Our App</h4>
-                        <p>Shop on the go with our mobile app</p>
+                        <h4>Tải ứng dụng của chúng tôi</h4>
+                        <p>Mua sắm với ứng dụng của chúng tôi</p>
                         <div class="app-buttons">
                             <a href="#" class="app-btn">
                                 <i class="bi bi-apple"></i>
@@ -99,7 +99,7 @@
                             </a>
                         </div>
                         <div class="social-links mt-4">
-                            <h5>Follow Us</h5>
+                            <h5>Theo dõi chúng tôi</h5>
                             <div class="social-icons">
                                 <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                                 <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
@@ -117,7 +117,7 @@
     <div class="footer-bottom">
         <div class="container">
             <div class="payment-methods d-flex align-items-center justify-content-center">
-                <span>We Accept:</span>
+                <span>Thanh toán:</span>
                 <div class="payment-icons">
                     <i class="bi bi-credit-card" aria-label="Credit Card"></i>
                     <i class="bi bi-paypal" aria-label="PayPal"></i>
@@ -128,16 +128,16 @@
                 </div>
             </div>
             <div class="legal-links">
-                <a href="{{ url('tos') }}">Terms of Service</a>
-                <a href="{{ url('privacy') }}">Privacy Policy</a>
-                <a href="{{ url('tos') }}">Cookies Settings</a>
+                <a href="{{ url('tos') }}">Điều khoản dịch vụ</a>
+                <a href="{{ url('privacy') }}">Chính sách bảo mậy</a>
+                <a href="{{ url('tos') }}">Cài đặt cookie</a>
             </div>
             <div class="copyright text-center">
-                <p>© <span>Copyright</span> <strong class="sitename">eStore</strong>. All Rights Reserved.</p>
+                <p>© <span>Copyright</span> <strong class="sitename">doantotnghiep_su25</strong>. All Rights Reserved.</p>
             </div>
-            <div class="credits">
+            {{-- <div class="credits">
                 Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </footer>
