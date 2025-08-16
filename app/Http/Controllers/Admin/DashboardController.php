@@ -40,7 +40,8 @@ class DashboardController extends Controller
             now()->subMonth()->endOfMonth()
         ])->sum('total_price');
         $data['growthRatePrice'] = growthRate($data['tolTalPrice'], $lastMonthPrice);
-        $data['tolTalPrice'] = formatToText($data['tolTalPrice']);
+        // $data['tolTalPrice'] = formatToText($data['tolTalPrice']);
+        $data['tolTalPrice'] = number_format($data['tolTalPrice'], 0, ',', '.');
         $data['bestSellingProducts'] = OrderDetail::with('variant.product.images')->select('variant_id', OrderDetail::raw('SUM(quantity) as total_quantity', Variant::raw('SUM(stock_quantity) as total_stock')))
             ->groupBy('variant_id')
             ->orderByDesc('total_quantity')
@@ -77,7 +78,7 @@ class DashboardController extends Controller
             ->select('product_id', DB::raw('SUM(stock_quantity) as total_stock'))
             ->groupBy('product_id')
             ->orderBy('total_stock', 'asc')
-            ->paginate(7);
+            ->paginate(5);
 
         $data['listOrders'] = Order::whereNotIn('status_order', ['Đã giao', 'Đã hủy'])
             ->paginate(10);

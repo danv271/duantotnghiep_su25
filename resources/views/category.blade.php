@@ -57,7 +57,7 @@
 
             <!-- Pricing Range Widget -->
             <div class="pricing-range-widget widget-item">
-              <h3 class="widget-title">Price Range</h3>
+              <h3 class="widget-title">Khoảng giá</h3>
               <form method="GET" action="{{ route('products.index', $category->id ?? '') }}">
                 <div class="price-range-container">
                   <div class="current-range mb-3">

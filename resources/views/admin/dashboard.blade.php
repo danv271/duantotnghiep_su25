@@ -4,41 +4,38 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xxl-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="avatar-md bg-soft-primary rounded">
-                                        <iconify-icon icon="solar:cart-5-bold-duotone"
-                                            class="avatar-title fs-32 text-primary"></iconify-icon>
-                                    </div>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate"> Đơn Hàng</p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $data['totalOrders'] }}</h3>
-                                </div>
+        <div class="col-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-md bg-soft-primary rounded">
+                                <iconify-icon icon="solar:cart-5-bold-duotone"
+                                    class="avatar-title fs-32 text-primary"></iconify-icon>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span
-                                        class="{{ $data['growthRate']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
-                                        <i class="bx bxs-{{ $data['growthRate']['trend'] }}-arrow fs-12"></i>
-                                        {{ $data['growthRate']['growth_rate'] }}%</span>
-                                    <span class="text-muted ms-1 fs-12">Tuần trước </span>
-                                </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">View More</a>
-                            </div>
+                        <div class="col-6 text-end">
+                            <p class="text-muted mb-0 text-truncate"> Đơn Hàng</p>
+                            <h3 class="text-dark mt-1 mb-0">{{ $data['totalOrders'] }}</h3>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="card overflow-hidden">
+                <div class="card-footer py-2 bg-light bg-opacity-50">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span
+                                class="{{ $data['growthRate']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
+                                <i class="bx bxs-{{ $data['growthRate']['trend'] }}-arrow fs-12"></i>
+                                {{ $data['growthRate']['growth_rate'] }}%</span>
+                            <span class="text-muted ms-1 fs-12">Tuần trước </span>
+                        </div>
+                        <a href="" class="text-reset fw-semibold fs-12">Xem thêm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+<div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
@@ -61,14 +58,13 @@
                                         {{ $data['growthRateUser']['growth_rate'] }}%</span>
                                     <span class="text-muted ms-1 fs-12">Tháng trước</span>
                                 </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">View More</a>
+                                <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card overflow-hidden">
+        </div>
+        <div class="col-3">
+            <div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
@@ -91,24 +87,23 @@
                                         {{ $data['growthRateDeals']['growth_rate'] }}%</span>
                                     <span class="text-muted ms-1 fs-12">Tháng trước</span>
                                 </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">View More</a>
+                                <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card overflow-hidden">
+        </div>
+        <div class="col-3">
+            <div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="avatar-md bg-soft-primary rounded">
                                         <i class="bx bx-dollar-circle avatar-title text-primary fs-24"></i>
                                     </div>
                                 </div>
-                                <div class="col-6 text-end">
+                                <div class="col-8 text-end">
                                     <p class="text-muted mb-0 text-truncate"> Doanh Thu</p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalPrice'] }} vnđ</h3>
+                                    <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalPrice'] }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -121,35 +116,51 @@
                                         {{ $data['growthRatePrice']['growth_rate'] }}%</span>
                                     <span class="text-muted ms-1 fs-12">Tháng trước</span>
                                 </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">View More</a>
+                                <a href="" class="text-reset fw-semibold fs-12">Xem thêm</a>
                             </div>
                         </div>
                     </div>
+        </div>
+        {{-- <div class="col-xxl-5">
+            <div class="row">
+                <div class="col-md-6">
+                    
+                </div>
+
+                <div class="col-md-6">
+                    
+                </div>
+
+                <div class="col-md-6">
+                    
+                </div>
+
+                <div class="col-md-6">
+                    
                 </div>
             </div>
-        </div>
-
-        <div class="col-xxl-7">
+        </div> --}}
+    </div>
+    <div class="row">
+        <div class="col-xxl">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Doanh Thu</h4>
                         <div class="chart-controls">
-                            <button data-time="1" class="btn btn-sm btn-outline-light btnHandleData">1M</button>
-                            <button data-time="6" class="btn btn-sm btn-outline-light btnHandleData">6M</button>
-                            <button data-time="12" class="btn btn-sm btn-outline-light btnHandleData">1Y</button>
-                            <button data-time="all" class="btn btn-sm btn-outline-light btnHandleData active">All</button>
+                            <button data-time="1" class="btn btn-sm btn-outline-light btnHandleData">1 tháng</button>
+                            <button data-time="6" class="btn btn-sm btn-outline-light btnHandleData">6 tháng</button>
+                            <button data-time="12" class="btn btn-sm btn-outline-light btnHandleData">1 năm</button>
+                            <button data-time="all" class="btn btn-sm btn-outline-light btnHandleData active">Tất cả</button>
                         </div>
                     </div>
                     <div dir="ltr">
                         <div id="dash-performance-chart" class="apex-charts"></div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-6">
             <div class="card">

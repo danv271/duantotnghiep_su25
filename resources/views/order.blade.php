@@ -9,11 +9,11 @@
         <!-- Page Title -->
         <div class="page-title light-background">
             <div class="container d-lg-flex justify-content-between align-items-center">
-                <h1 class="mb-2 mb-lg-0">Account</h1>
+                <h1 class="mb-2 mb-lg-0">Tài khoản</h1>
                 <nav class="breadcrumbs">
                     <ol>
-                        <li><a href="index.html">Home</a></li>
-                        <li class="current">Account</li>
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li class="current">Tài khoản</li>
                     </ol>
                 </nav>
             </div>
@@ -44,10 +44,10 @@
                                     <img src="https://media.istockphoto.com/id/1223671392/vi/vec-to/%E1%BA%A3nh-h%E1%BB%93-s%C6%A1-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-h%C3%ACnh-%C4%91%E1%BA%A1i-di%E1%BB%87n-ch%E1%BB%97-d%C3%A0nh-s%E1%BA%B5n-cho-%E1%BA%A3nh-minh-h%E1%BB%8Da-vect%C6%A1.jpg?s=612x612&w=0&k=20&c=l9x3h9RMD16-z4kNjo3z7DXVEORzkxKCMn2IVwn9liI=" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
-                                <h4>Sarah Anderson</h4>
+                                <h4>{{Auth::user()->name}}</h4>
                                 <div class="user-status">
                                     <i class="bi bi-award"></i>
-                                    <span>Premium Member</span>
+                                    <span>Khách hàng cao cấp</span>
                                 </div>
                             </div>
 
@@ -89,7 +89,7 @@
                                 <div class="menu-footer">
                                     <a href="#" class="logout-link">
                                         <i class="bi bi-box-arrow-right"></i>
-                                        <span>Log Out</span>
+                                        <span>Đăng xuất</span>
                                     </a>
                                 </div>
                             </nav>
