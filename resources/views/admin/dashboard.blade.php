@@ -508,10 +508,10 @@
                             <thead class="bg-light bg-opacity-50">
                                 <tr>
                                     <th class="text-muted ps-3">Mã Sản Phẩm </th>
+                                    <th class="text-muted">Ảnh </th>
                                     <th class="text-muted">Tên Sản Phẩm </th>
                                     <th class="text-muted">Bán Ra</th>
                                     <th class="text-muted">Tổng Tiền </th>
-                                    <th class="text-muted">Ảnh </th>
                                     <th class="text-muted">Hành Động</th>
                                 </tr>
                             </thead>
