@@ -42,12 +42,22 @@ class DashboardController extends Controller
         $data['growthRatePrice'] = growthRate($data['tolTalPrice'], $lastMonthPrice);
         // $data['tolTalPrice'] = formatToText($data['tolTalPrice']);
         $data['tolTalPrice'] = number_format($data['tolTalPrice'], 0, ',', '.');
-        $data['bestSellingProducts'] = OrderDetail::with('variant.product.images')->select('variant_id', OrderDetail::raw('SUM(quantity) as total_quantity', Variant::raw('SUM(stock_quantity) as total_stock')))
-            ->groupBy('variant_id')
+        $data['bestSellingProducts'] = OrderDetail::select(
+            'products.id as product_id',
+            'products.name as product_name',
+            'products.base_price',
+            DB::raw('(SELECT path FROM products_images WHERE product_id = products.id ORDER BY id ASC LIMIT 1) as image_path'),
+            DB::raw('SUM(order_details.quantity) as total_quantity'),
+            DB::raw('SUM(variants.stock_quantity) as total_stock') // Tổng stock của tất cả variants
+        )
+            ->join('variants', 'order_details.variant_id', '=', 'variants.id')
+            ->join('products', 'variants.product_id', '=', 'products.id')
+            ->groupBy('products.id', 'products.name')
             ->orderByDesc('total_quantity')
             ->limit(10)
             ->get();
 
+        // dd($data['bestSellingProducts']);
         $data['listDeals'] = Order::where('type_payment',  'vnpay')->whereBetween('created_at', [
             now()->startOfMonth(),
             now()->endOfMonth()
@@ -82,14 +92,17 @@ class DashboardController extends Controller
 
         $data['listOrders'] = Order::whereNotIn('status_order', ['Đã giao', 'Đã hủy'])
             ->paginate(10);
-        $data['productRevenueStatistics'] = OrderDetail::with('variant.product.images')
-            ->select(
-                'variant_id',
-                DB::raw('SUM(quantity) as total_quantity'),
-                DB::raw('SUM(quantity * variant_price) as total_revenue')
-            )
-            ->groupBy('variant_id')
-            ->orderByDesc('total_quantity')
+        $data['productRevenueStatistics'] = OrderDetail::select(
+            'products.id',
+            'products.name',
+            DB::raw('(SELECT path FROM products_images WHERE product_id = products.id ORDER BY id ASC LIMIT 1) as image_path'),
+            DB::raw('SUM(order_details.quantity) as total_quantity'),
+            DB::raw('SUM(order_details.quantity * order_details.variant_price) as total_revenue')
+        )
+            ->join('variants', 'order_details.variant_id', '=', 'variants.id')
+            ->join('products', 'variants.product_id', '=', 'products.id')
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_revenue')
             ->paginate(10);
         return view('admin.dashboard', compact('data')); // Return the view for the admin dashboard
     }
