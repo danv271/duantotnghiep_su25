@@ -17,12 +17,43 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // lấy danh sách sản phẩm với các quan hệ category, images và variants
-        // sử dụng eager loading để giảm số lượng truy vấn và cải thiện hiệu suất
-        $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->orderBy('id','desc')->paginate(10);
-        return view('admin.products.list', compact('products'));
+        if(!$request->has('outOfStock')){
+            // lấy danh sách sản phẩm với các quan hệ category, images và variants
+            // sử dụng eager loading để giảm số lượng truy vấn và cải thiện hiệu suất
+            $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->orderBy('id','desc')->paginate(10);
+            $totalProduct = Product::all()->count();
+            $outOfStock=0;
+            foreach($products as $product){
+                foreach ($product->variants as $variant) {
+                    $total=0;
+                    $total+=$variant->stock_quantity;
+                    if($total==0){
+                        $outOfStock+=1;
+                    }
+                }
+            }
+        }else{
+            $products = Product::with('category', 'images', 'variants.attributesValue.attribute')
+            ->whereHas('variants', function($query) {
+                $query->where('stock_quantity', '=', 0);
+            })
+            ->orderBy('id','desc')
+            ->paginate(10);
+            $totalProduct = Product::all()->count();
+            $outOfStock=0;
+            foreach($products as $product){
+                foreach ($product->variants as $variant) {
+                    $total=0;
+                    $total+=$variant->stock_quantity;
+                    if($total==0){
+                        $outOfStock+=1;
+                    }
+                }
+            }
+        }
+        return view('admin.products.list', compact('products','totalProduct','outOfStock'));
     }
 
     /**
@@ -289,5 +320,19 @@ class ProductController extends Controller
     return view('product-detail', compact('product','totalProduct'));
 }
 
+public function deleteProduct($id){
+    $product = Product::find($id);
+    $product->delete();
+    return redirect()->route('admin.products.list')->with('success', 'Sản phẩm đã được xóa thành công!');
+}
+public function recycleProduct(){
+    $products = Product::with('category', 'images', 'variants.attributesValue.attribute')->orderBy('deleted_at','desc')->onlyTrashed()->paginate(10);
+    return view('admin.products.recycle', compact('products'));
+}
+public function restoreProduct($id){
+    $product = Product::withTrashed()->find($id);
+    $product->restore();
+    return redirect()->route('admin.products.recycle')->with('success', 'Khôi phục thành công!');
+}
 }
     
