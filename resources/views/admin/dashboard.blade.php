@@ -508,17 +508,22 @@
                             <thead class="bg-light bg-opacity-50">
                                 <tr>
                                     <th class="text-muted ps-3">Mã Sản Phẩm </th>
+                                    <th class="text-muted">Ảnh </th>
                                     <th class="text-muted">Tên Sản Phẩm </th>
                                     <th class="text-muted">Sản Phẩm Bán Ra </th>
                                     <th class="text-muted">Tổng Tiền </th>
-                                    <th class="text-muted">Ảnh </th>
                                     <th class="text-muted">Hành Động</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($data['productRevenueStatistics'] as $index=>$product)
                                     <tr>
-                                        <td>#{{ $product->id }}</td>
+                                        <td>{{ $product->variant->id }}</td>
+                                        <td> <img
+                                                src="{{ isset($product->variant->product->images->first()->path) ? asset('storage/' . $product->variant->product->images->first()->path) : "asset('images/no-image.png')" }}"
+                                                alt="{{ $product->variant->product->name }}" class="img-fluid rounded"
+                                                width="50">
+                                        </td>
                                         <td>{{ $product->variant->product->name }}</td>
                                         <td>
                                             {{ $product->total_quantity }}
@@ -526,11 +531,7 @@
                                         <td>
                                             {{ number_format($product->total_revenue, 0, ',', '.') }} VNĐ
                                         </td>
-                                        <td> <img
-                                                src="{{ isset($product->variant->product->images->first()->path) ? asset('storage/' . $item->variant->product->images->first()->path) : asset('images/no-image.png') }}"
-                                                alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
-                                                width="50">
-                                        </td>
+                                        
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <a href="{{ route('admin.products.detail', $product->variant->product->id) }}"
