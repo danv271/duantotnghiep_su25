@@ -44,7 +44,10 @@
                             <a class="sub-nav-link" href="{{route('admin.products.list')}}">Danh sách</a>
                         </li>
                         <li class="sub-nav-item">
-                            <a class="sub-nav-link" href="{{ url('admin.products.create') }}">Thêm mới</a>
+                            <a class="sub-nav-link" href="{{route('admin.products.create')}}">Thêm mới</a>
+                        </li>
+                        <li class="sub-nav-item">
+                            <a class="sub-nav-link" href="{{ route('admin.products.recycle') }}">Thùng rác</a>
                         </li>
                         {{-- <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ url('/admin/products/detail') }}">Details</a>
@@ -75,7 +78,7 @@
                         <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.categories.create') }}">Thêm mới</a>
                         </li>
-                        <li class="sub-nav-item">
+                        {{-- <li class="sub-nav-item">
                             <a class="sub-nav-link menu-arrow" href="#sidebarCategoryEdit" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarCategoryEdit">
                                 <span>Sửa</span>
@@ -91,7 +94,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
                          <li class="sub-nav-item">
                             <a class="sub-nav-link" href="{{ route('admin.categories.trashed') }}">Thùng rác</a>
                         </li>

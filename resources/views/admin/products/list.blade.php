@@ -3,17 +3,74 @@
 @section('title', 'Product List')
 
 @section('content')
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <h4 class="mb-0">Quản lý sản phẩm</h4>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Sản phẩm</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Start Stats Cards -->
+    <div class="row">
+        <div class="col-md-6 col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Tổng sản phẩm</h5>
+                            <h2 class="mb-0">{{$totalProduct}}</h2>
+                        </div>
+                        <div class="avatar-sm">
+                            <a href="{{route('admin.products.list')}}">
+                                <span class="avatar-title bg-primary-subtle rounded">
+                                    <iconify-icon icon="solar:folder-broken" class="text-primary fs-24"></iconify-icon>
+                                </span>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Sản phẩm hết hàng</h5>
+                            <h2 class="mb-0">{{$outOfStock}}</h2>
+                        </div>
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-secondary-subtle rounded">
+                                <form action="{{route('admin.products.list')}}" method="get">
+                                    <input type="hidden" name="outOfStock" value="hết hàng">
+                                    <button class="btn"><iconify-icon icon="solar:folder-broken" class="text-secondary fs-24"></iconify-icon></button>
+                                </form>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                    <h4 class="card-title flex-grow-1">All Product List</h4>
+                    <h4 class="card-title flex-grow-1">Tất cả sản phẩm</h4>
 
                     <a href="{{route('admin.products.create')}}" class="btn btn-sm btn-primary">
-                        Add Product
+                        Thêm sản phẩm
                     </a>
-
-                    <div class="dropdown">
+                    {{-- <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-sm btn-outline-light" data-bs-toggle="dropdown" aria-expanded="false">
                             This Month
                         </a>
@@ -22,7 +79,7 @@
                             <a href="javascript:void(0);" class="dropdown-item">Export</a>
                             <a href="javascript:void(0);" class="dropdown-item">Import</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -64,26 +121,37 @@
                                             <div>
                                                 <a href="{{ url('product-details') }}" class="text-dark fw-medium fs-15">{{$product->name}}</a>
                                                 <p class="text-muted mb-0 mt-1 fs-13">
-                                                    @foreach ($product->variants as $variant)
-                                                        @foreach ($variant->attributesValue as $attributeValue)
-                                                             <span>{{ $attributeValue->value }} | </span>
-                                                        @endforeach
-                                                    @endforeach
+                                                    @php
+                                                    $totalVariant=0;
+                                                    foreach ($product->variants as $variant){
+                                                        $totalVariant+=1;
+                                                    }
+                                                    @endphp
+                                                    <span>{{$totalVariant}} biến thể</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{$product->base_price}}</td>
+                                    <td>{{number_format($product->base_price,0,',','.')}}</td>
                                     <td>
                                         @php
                                             $index = 0;
                                             foreach ($product->variants as $variant) {
+                                                if($variant->stock_quantity==0){
+                                                    $index = 0;
+                                                }
                                                 $index+=$variant->stock_quantity;
                                             }
                                         @endphp
-                                        <p class="mb-1 text-muted"><span class="text-dark fw-medium">{{ $index }}</span> còn lại</p>
-                                            
-                                        <p class="mb-0 text-muted">0 đã bán</p>
+                                        @if($index!=0)
+                                            <p class="mb-1 text-muted"><span class="text-dark fw-medium">{{ $index }}</span> còn lại</p>
+                                        @endif
+                                        @if($index==0)
+                                            <span class="badge bg-{{ $index != 0 ? 'success' : 'danger' }}-subtle text-{{ $index != 0 ? 'success' : 'danger' }}">
+                                                {{ $index != 0 ? 'còn hàng' : 'hết hàng' }}
+                                            </span>
+                                        @endif
+                                        {{-- <p class="mb-0 text-muted">0 đã bán</p> --}}
                                     </td>
                                     <td>{{$product->category->category_name}}</td>
                                     <td>
@@ -94,7 +162,7 @@
                                             <a href="{{ route('admin.products.edit',$product->id) }}" class="btn btn-soft-primary btn-sm">
                                                 <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
                                             </a>
-                                            <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm">
+                                            <a href="{{ route('admin.products.delete',$product->id) }}" class="btn btn-soft-danger btn-sm">
                                                 <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
                                             </a>
                                         </div>

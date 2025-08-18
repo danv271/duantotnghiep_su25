@@ -135,6 +135,9 @@ Route::prefix('admin')->name('admin.')->middleware('check.admin')->group(functio
         Route::get('/edit/{id}', 'edit')->name('edit'); // admin.products.edit (Show edit form)
         Route::put('/update/{id}', 'update')->name('update'); // admin.products.update (Update data)
         Route::get('/detail/{id}', 'show')->name('detail'); // admin.products.detail (Show detail)
+        Route::get('/delete/{id}', 'deleteProduct')->name('delete'); //
+        Route::get('/recycleProduct', 'recycleProduct')->name('recycle'); //
+        Route::patch('/restoreProduct/{id}', 'restoreProduct')->name('restore'); //
 
         // Variants (thuộc về sản phẩm, nên đặt trong nhóm products)
         Route::put('/variant/update/{id}', [VariantController::class, 'update'])->name('variant-update');
