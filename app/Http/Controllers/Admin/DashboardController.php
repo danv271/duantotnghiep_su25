@@ -88,10 +88,10 @@ class DashboardController extends Controller
             ->select('product_id', DB::raw('SUM(stock_quantity) as total_stock'))
             ->groupBy('product_id')
             ->orderBy('total_stock', 'asc')
-            ->paginate(5);
+            ->paginate(5,['*'],'inventory');
 
         $data['listOrders'] = Order::whereNotIn('status_order', ['Đã giao', 'Đã hủy'])
-            ->paginate(10);
+            ->paginate(10,['*'],'listOrders');
         $data['productRevenueStatistics'] = OrderDetail::select(
             'products.id',
             'products.name',
@@ -103,7 +103,7 @@ class DashboardController extends Controller
             ->join('products', 'variants.product_id', '=', 'products.id')
             ->groupBy('products.id', 'products.name')
             ->orderByDesc('total_revenue')
-            ->paginate(10);
+            ->paginate(10,['*'],'productRevenueStatistics');
         return view('admin.dashboard', compact('data')); // Return the view for the admin dashboard
     }
 }

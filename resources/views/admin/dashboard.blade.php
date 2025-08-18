@@ -237,7 +237,7 @@
 
                     </table>
                     <div class="mt-3 pagination m-0">
-                        {{ $data['inventory']->links() }}
+                        {{ $data['inventory']->appends(request()->except('inventory'))->links() }}
                     </div>
                     <style>
                         /* Apply pagination-rounded style cho Laravel pagination */
@@ -489,7 +489,7 @@
                             </tbody>
                         </table>
                         <div class="mt-3 pagination m-0">
-                            {{ $data['listOrders']->links() }}
+                            {{ $data['listOrders']->appends(request()->except('listOrders'))->links() }}
                         </div>
                     </div>
                 </div>
@@ -543,7 +543,7 @@
                             </tbody>
                         </table>
                         <div class="mt-3 pagination m-0">
-                            {{ $data['productRevenueStatistics']->links() }}
+                            {{ $data['productRevenueStatistics']->appends(request()->except('productRevenueStatistics'))->links() }}
                         </div>
                     </div>
                 </div>
