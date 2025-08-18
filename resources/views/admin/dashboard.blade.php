@@ -23,8 +23,7 @@
                 <div class="card-footer py-2 bg-light bg-opacity-50">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <span
-                                class="{{ $data['growthRate']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
+                            <span class="{{ $data['growthRate']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
                                 <i class="bx bxs-{{ $data['growthRate']['trend'] }}-arrow fs-12"></i>
                                 {{ $data['growthRate']['growth_rate'] }}%</span>
                             <span class="text-muted ms-1 fs-12">Tuần trước </span>
@@ -35,91 +34,88 @@
             </div>
         </div>
         <div class="col-3">
-<div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="avatar-md bg-soft-primary rounded">
-                                        <i class="bx bx-award avatar-title fs-24 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Tài khoản mới </p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $data['listNewUser'] }}</h3>
-                                </div>
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-md bg-soft-primary rounded">
+                                <i class="bx bx-award avatar-title fs-24 text-primary"></i>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span
-                                        class="{{ $data['growthRateUser']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
-                                        <i class="bx bxs-{{ $data['growthRateUser']['trend'] }}-arrow fs-12"></i>
-                                        {{ $data['growthRateUser']['growth_rate'] }}%</span>
-                                    <span class="text-muted ms-1 fs-12">Tháng trước</span>
-                                </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
-                            </div>
+                        <div class="col-6 text-end">
+                            <p class="text-muted mb-0 text-truncate">Tài khoản mới </p>
+                            <h3 class="text-dark mt-1 mb-0">{{ $data['listNewUser'] }}</h3>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer py-2 bg-light bg-opacity-50">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="{{ $data['growthRateUser']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
+                                <i class="bx bxs-{{ $data['growthRateUser']['trend'] }}-arrow fs-12"></i>
+                                {{ $data['growthRateUser']['growth_rate'] }}%</span>
+                            <span class="text-muted ms-1 fs-12">Tháng trước</span>
+                        </div>
+                        <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-3">
             <div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="avatar-md bg-soft-primary rounded">
-                                        <i class="bx bxs-backpack avatar-title fs-24 text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <p class="text-muted mb-0 text-truncate">Giao dịch </p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $data['listDeals'] }}</h3>
-                                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="avatar-md bg-soft-primary rounded">
+                                <i class="bx bxs-backpack avatar-title fs-24 text-primary"></i>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span
-                                        class="{{ $data['growthRateDeals']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
-                                        <i class="bx bxs-{{ $data['growthRateDeals']['trend'] }}-arrow fs-12"></i>
-                                        {{ $data['growthRateDeals']['growth_rate'] }}%</span>
-                                    <span class="text-muted ms-1 fs-12">Tháng trước</span>
-                                </div>
-                                <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
-                            </div>
+                        <div class="col-6 text-end">
+                            <p class="text-muted mb-0 text-truncate">Giao dịch </p>
+                            <h3 class="text-dark mt-1 mb-0">{{ $data['listDeals'] }}</h3>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer py-2 bg-light bg-opacity-50">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="{{ $data['growthRateDeals']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
+                                <i class="bx bxs-{{ $data['growthRateDeals']['trend'] }}-arrow fs-12"></i>
+                                {{ $data['growthRateDeals']['growth_rate'] }}%</span>
+                            <span class="text-muted ms-1 fs-12">Tháng trước</span>
+                        </div>
+                        <a href="index.html#!" class="text-reset fw-semibold fs-12">Xem thêm</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-3">
             <div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="avatar-md bg-soft-primary rounded">
-                                        <i class="bx bx-dollar-circle avatar-title text-primary fs-24"></i>
-                                    </div>
-                                </div>
-                                <div class="col-8 text-end">
-                                    <p class="text-muted mb-0 text-truncate"> Doanh Thu</p>
-                                    <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalPrice'] }}</h3>
-                                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="avatar-md bg-soft-primary rounded">
+                                <i class="bx bx-dollar-circle avatar-title text-primary fs-24"></i>
                             </div>
                         </div>
-                        <div class="card-footer py-2 bg-light bg-opacity-50">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <span
-                                        class="{{ $data['growthRatePrice']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
-                                        <i class="bx bxs-{{ $data['growthRatePrice']['trend'] }}-arrow fs-12"></i>
-                                        {{ $data['growthRatePrice']['growth_rate'] }}%</span>
-                                    <span class="text-muted ms-1 fs-12">Tháng trước</span>
-                                </div>
-                                <a href="" class="text-reset fw-semibold fs-12">Xem thêm</a>
-                            </div>
+                        <div class="col-8 text-end">
+                            <p class="text-muted mb-0 text-truncate"> Doanh Thu</p>
+                            <h3 class="text-dark mt-1 mb-0">{{ $data['tolTalPrice'] }}</h3>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer py-2 bg-light bg-opacity-50">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="{{ $data['growthRatePrice']['trend'] == 'up' ? 'text-success' : 'text-danger' }}">
+                                <i class="bx bxs-{{ $data['growthRatePrice']['trend'] }}-arrow fs-12"></i>
+                                {{ $data['growthRatePrice']['growth_rate'] }}%</span>
+                            <span class="text-muted ms-1 fs-12">Tháng trước</span>
+                        </div>
+                        <a href="" class="text-reset fw-semibold fs-12">Xem thêm</a>
+                    </div>
+                </div>
+            </div>
         </div>
         {{-- <div class="col-xxl-5">
             <div class="row">
@@ -151,7 +147,8 @@
                             <button data-time="1" class="btn btn-sm btn-outline-light btnHandleData">1 tháng</button>
                             <button data-time="6" class="btn btn-sm btn-outline-light btnHandleData">6 tháng</button>
                             <button data-time="12" class="btn btn-sm btn-outline-light btnHandleData">1 năm</button>
-                            <button data-time="all" class="btn btn-sm btn-outline-light btnHandleData active">Tất cả</button>
+                            <button data-time="all" class="btn btn-sm btn-outline-light btnHandleData active">Tất
+                                cả</button>
                         </div>
                     </div>
                     <div dir="ltr">
@@ -491,9 +488,82 @@
                                 @endforelse
                             </tbody>
                         </table>
-                         <div class="mt-3 pagination m-0">
-                           {{ $data['listOrders']->links() }}
-                       </div>
+                        <div class="mt-3 pagination m-0">
+                            {{ $data['listOrders']->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between gap-2">
+                    <h4 class="card-title">Thống kê doanh thu theo sản phẩm </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-nowrap table-centered m-0">
+                            <thead class="bg-light bg-opacity-50">
+                                <tr>
+                                    <th class="text-muted ps-3">Mã Sản Phẩm </th>
+                                    <th class="text-muted">Tên Sản Phẩm </th>
+                                    <th class="text-muted">Sản Phẩm Bán Ra </th>
+                                    <th class="text-muted">Tổng Tiền </th>
+                                    <th class="text-muted">Ảnh </th>
+                                    <th class="text-muted">Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($data['productRevenueStatistics'] as $index=>$product)
+                                    <tr>
+                                        <td>#{{ $product->id }}</td>
+                                        <td>{{ $product->variant->product->name }}</td>
+                                        <td>
+                                            {{ $product->total_quantity }}
+                                        </td>
+                                        <td>
+                                            {{ number_format($product->total_revenue, 0, ',', '.') }} VNĐ
+                                        </td>
+                                        <td> <img
+                                                src="{{ isset($product->variant->product->images->first()->path) ? asset('storage/' . $item->variant->product->images->first()->path) : asset('images/no-image.png') }}"
+                                                alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
+                                                width="50">
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ route('admin.products.detail', $product->variant->product->id) }}"
+                                                    class="btn btn-light btn-sm">
+                                                    Xem chi tiết
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{-- Modal để cập nhật trạng thái đơn hàng --}}
+                                    <div class="modal fade" id="statusModal{{ $index }}" tabindex="-1"
+                                        aria-labelledby="statusModalLabel{{ $index }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="statusModalLabel{{ $index }}">Cập
+                                                        nhật trạng thái đơn hàng</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">Không có đơn hàng nào.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        <div class="mt-3 pagination m-0">
+                            {{ $data['productRevenueStatistics']->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

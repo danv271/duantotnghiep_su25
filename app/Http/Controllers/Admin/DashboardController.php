@@ -82,6 +82,15 @@ class DashboardController extends Controller
 
         $data['listOrders'] = Order::whereNotIn('status_order', ['Đã giao', 'Đã hủy'])
             ->paginate(10);
+        $data['productRevenueStatistics'] = OrderDetail::with('variant.product.images')
+            ->select(
+                'variant_id',
+                DB::raw('SUM(quantity) as total_quantity'),
+                DB::raw('SUM(quantity * variant_price) as total_revenue')
+            )
+            ->groupBy('variant_id')
+            ->orderByDesc('total_quantity')
+            ->paginate(10);
         return view('admin.dashboard', compact('data')); // Return the view for the admin dashboard
     }
 }
