@@ -342,18 +342,18 @@
                                 @foreach ($data['bestSellingProducts'] as $item)
                                     <tr>
                                         <td class="ps-3">
-                                            <img src="{{ asset('storage/' . $item->variant->product->images->first()->path) }}"
-                                                alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
+                                            <img src="{{ asset('storage/' . $item->image_path) }}"
+                                                alt="{{ $item->image_path }}" class="img-fluid rounded"
                                                 width="50">
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.products.detail', $item->variant->product->id) }}"
-                                                class="text-muted">{{ $item->variant->product->name }}</a>
+                                            <a href="{{ route('admin.products.detail', $item->product_id) }}"
+                                                class="text-muted">{{ $item->product_name }}</a>
                                         </td>
-                                        <td>{{ $item->variant->product->base_price }}</td>
+                                        <td>{{ number_format($item->base_price) }} VNĐ</td>
                                         <td>{{ $item->total_quantity }}</td>
                                         <td><span
-                                                class="{{ $item->variant->stock_quantity ? 'badge badge-soft-success' : 'badge badge-soft-danger' }}">{{ $item->variant->stock_quantity ? 'Còn Hàng ' : 'Hết Hàng ' }}</span>
+                                                class="{{ $item->total_stock ? 'badge badge-soft-success' : 'badge badge-soft-danger' }}">{{ $item->total_stock ? 'Còn Hàng ' : 'Hết Hàng ' }}</span>
                                         </td>
                                         <td>
                                             <div class="dropdown">
@@ -363,10 +363,10 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li><a class="dropdown-item"
-                                                            href="{{ route('admin.products.detail', $item->variant->product->id) }}">View</a>
+                                                            href="{{ route('admin.products.detail', $item->product_id) }}">View</a>
                                                     </li>
                                                     <li><a class="dropdown-item"
-                                                            href="{{ route('admin.products.edit', $item->variant->product->id) }}">Edit</a>
+                                                            href="{{ route('admin.products.edit', $item->product_id) }}">Edit</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -509,54 +509,35 @@
                                 <tr>
                                     <th class="text-muted ps-3">Mã Sản Phẩm </th>
                                     <th class="text-muted">Tên Sản Phẩm </th>
-                                    <th class="text-muted">Sản Phẩm Bán Ra </th>
+                                    <th class="text-muted">Bán Ra</th>
                                     <th class="text-muted">Tổng Tiền </th>
                                     <th class="text-muted">Ảnh </th>
                                     <th class="text-muted">Hành Động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($data['productRevenueStatistics'] as $index=>$product)
+                                @forelse($data['productRevenueStatistics'] as $index => $product)
                                     <tr>
                                         <td>#{{ $product->id }}</td>
-                                        <td>{{ $product->variant->product->name }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td class="text-center">{{ $product->total_quantity }}</td>
+                                        <td>{{ number_format($product->total_revenue, 0, ',', '.') }} VNĐ</td>
                                         <td>
-                                            {{ $product->total_quantity }}
-                                        </td>
-                                        <td>
-                                            {{ number_format($product->total_revenue, 0, ',', '.') }} VNĐ
-                                        </td>
-                                        <td> <img
-                                                src="{{ isset($product->variant->product->images->first()->path) ? asset('storage/' . $item->variant->product->images->first()->path) : asset('images/no-image.png') }}"
-                                                alt="{{ $item->variant->product->name }}" class="img-fluid rounded"
-                                                width="50">
+                                            <img src="{{ isset($product->image_path) && $product->image_path ? asset('storage/' . $product->image_path) : asset('images/no-image.png') }}"
+                                                alt="{{ $product->name }}" class="img-fluid rounded" width="50">
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
-                                                <a href="{{ route('admin.products.detail', $product->variant->product->id) }}"
+                                                <a href="{{ route('admin.products.detail', $product->id) }}"
                                                     class="btn btn-light btn-sm">
                                                     Xem chi tiết
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    {{-- Modal để cập nhật trạng thái đơn hàng --}}
-                                    <div class="modal fade" id="statusModal{{ $index }}" tabindex="-1"
-                                        aria-labelledby="statusModalLabel{{ $index }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="statusModalLabel{{ $index }}">Cập
-                                                        nhật trạng thái đơn hàng</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">Không có đơn hàng nào.</td>
+                                        <td colspan="6" class="text-center">Không có sản phẩm nào.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
