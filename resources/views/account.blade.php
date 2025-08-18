@@ -42,10 +42,10 @@
                             <div class="user-info aos-init aos-animate" data-aos="fade-right">
                                 <div class="user-avatar">
 
-                                    <img src="" alt="Profile" loading="lazy">
+                                    <img src="{{asset('storege/'.$data['avatar'])}}" alt="Profile" loading="lazy">
                                     <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                                 </div>
-                                <h4>Sarah Anderson</h4>
+                                <h4>{{$data['name']}}</h4>
                                 <div class="user-status">
                                     <i class="bi bi-award"></i>
                                     <span>Premium Member</span>
@@ -159,7 +159,7 @@
                                                         <div class="info-row">
                                                             <span>Trạng thái</span>
                                                             <span
-                                                                class="status {{ $order->status_order == 'đã giao' ? 'delivered' : processing }}">
+                                                                class="status processing">
                                                                 {{ $order->status_order }}
                                                             </span>
                                                         </div>
